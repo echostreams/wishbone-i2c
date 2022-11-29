@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+#ghdl
+*.cf
+_Log.txt
+_Alert.txt
