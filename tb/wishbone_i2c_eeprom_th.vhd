@@ -3,7 +3,7 @@
 -- Wishbone I2C
 -----------------------------------------------------------------------------
 --
---    unit    name:                        wishbone i2c with tmp175 sim model
+--    unit    name:                        wishbone i2c with eeprom
 --
 --    description:
 --
@@ -46,14 +46,14 @@ use bitvis_vip_wishbone.wishbone_bfm_pkg.all;
 library bitvis_vip_clock_generator;
 use bitvis_vip_clock_generator.vvc_methods_pkg.all;
 
-entity wishbone_i2c_tmp175_th is
+entity wishbone_i2c_eeprom_th is
   port
   (
     int_o : out std_logic
   );
-end wishbone_i2c_tmp175_th;
+end wishbone_i2c_eeprom_th;
 
-architecture arch of wishbone_i2c_tmp175_th is
+architecture arch of wishbone_i2c_eeprom_th is
 
   constant c_WIDTH      : natural := 32;
   constant c_ADDR_WIDTH : natural := 3;
@@ -64,7 +64,7 @@ architecture arch of wishbone_i2c_tmp175_th is
   constant c_CLK_PERIOD : time    := 20 ns;
   constant c_CLOCK_GEN  : natural := 1;
 
-  constant c_SLAVE_ADDRESS        : unsigned(9 downto 0) := "0001001000";
+  constant c_SLAVE_ADDRESS          : unsigned(9 downto 0) := "0001010000";
   constant c_SLAVE_ADDRESS_10_BIT : unsigned(9 downto 0) := "1100100110";
 
   constant c_BIT_TIME : time := 10 us;
@@ -233,17 +233,19 @@ begin
       gpo_o     => gpo_test
     );
 
-  i_tmp175_simmodel : entity work.tmp175_simmodel
-    generic map
-    (
-        i2c_clk => 200_000  --i2c bus frequency in Hz
-    )
-    port map
-    (
-        sda     => sda_test,
-        scl     => scl_test
-    );
-
+  eeprom : entity work.I2C_EEPROM
+	generic map (
+		device => "24C01"
+		)
+	port map (
+		STRETCH => 5 ns,
+		E0      => 'L',
+		E1      => 'L',
+		E2      => 'L',
+		WC      => 'L',
+		SCL     => scl_test,
+		SDA     => sda_test
+		);
 
   -----------------------------------------------------------------------------
   -- Wishbone

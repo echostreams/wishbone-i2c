@@ -71,6 +71,9 @@ architecture arch of transaction_controller is
   );
   signal state_reg, state_next : t_state;
 
+  signal state_int : integer := t_state'POS(state_reg);
+  signal state_next_int : integer := t_state'POS(state_next);
+
   signal data_clk      : std_logic;
   signal data_clk_prev : std_logic;
   signal data_sda      : std_logic;
@@ -78,7 +81,7 @@ architecture arch of transaction_controller is
   signal rep_strt      : std_logic;
   signal rep_strt_prev : std_logic;
   signal low_delay     : std_logic;
-  signal busy          : std_logic;
+  -- signal busy          : std_logic; -- not used
   signal ack           : std_logic := '0';
   signal rst_count     : std_logic := '0';
   signal arb_lost      : std_logic := '0';
@@ -109,13 +112,16 @@ architecture arch of transaction_controller is
   signal rep_st_ld_reg, rep_st_ld_next   : std_logic := '0';
 
 begin
-
+	
+	state_next_int <= t_state'POS(state_next);
+	
   -- control path: state register
   process(clk_i, rst_i)
   begin
 
     if rst_i = '1' then
       state_reg <= idle;
+      state_int <= t_state'POS(idle);
       count <= 0;
     elsif rising_edge(clk_i) then
 
@@ -138,7 +144,7 @@ begin
       end if;
 
       state_reg <= state_next;
-
+      state_int <= t_state'POS(state_next);
     end if;
   end process;
 

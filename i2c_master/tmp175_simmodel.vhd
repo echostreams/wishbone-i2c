@@ -19,12 +19,8 @@ entity tmp175_simmodel is
   generic(
     i2c_clk : integer := 200_000);      --i2c bus frequency in Hz
   port(
-
-    --sda : inout std_logic := 'Z';       --serial data output of i2c bus
-    --scl : inout std_logic := 'Z');      --serial clock output of i2c bus
-    sda : inout std_logic := 'H';
-    scl : inout std_logic := 'H');
-
+    sda : inout std_logic := 'Z';       --serial data output of i2c bus
+    scl : inout std_logic := 'Z');      --serial clock output of i2c bus
 end tmp175_simmodel;
 
 architecture logic of tmp175_simmodel is
@@ -55,21 +51,17 @@ begin
   addr <= addr_rnw(7 downto 1);
   rnw  <= addr_rnw(0);
 
-  --scl <= 'Z';
-  scl <= 'H';
+  scl <= 'Z';
 
-  --scl_in <= '1' when scl = 'Z' else '0';
-  scl_in <= '1' when scl = 'H' else '0';
+  scl_in <= '1' when scl = 'Z' else '0';
 
 
   sda <= '0' when state = sACK1 else
          '0' when state = sACK2 else
-         '0' when ((state = sWRITE_DATA_TO_MASTER) and (sda_out = '0')) 
-  --     else 'Z';
-         else 'H';
+         '0' when ((state = sWRITE_DATA_TO_MASTER) and (sda_out = '0')) else 'Z';
 
-  --sda_in <= '1' when sda = 'Z' else '0';
-  sda_in <= '1' when sda = 'H' else '0';
+  sda_in <= '1' when sda = 'Z' else '0';
+
 
 -------------------------------------------------------------------------------
 -- Detect start and stop conditions

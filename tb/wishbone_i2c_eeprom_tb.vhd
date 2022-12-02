@@ -3,7 +3,7 @@
 -- Wishbone I2C
 -----------------------------------------------------------------------------
 --
---    unit    name:                        wishbone i2c testbench with tmp175
+--    unit    name:                        wishbone i2c testbench with eeprom
 --
 --    description:
 --
@@ -59,10 +59,10 @@ use bitvis_vip_clock_generator.td_vvc_framework_common_methods_pkg.all;
 
 use work.register_pkg.all;
 
-entity wishbone_i2c_tmp175_tb is
-end wishbone_i2c_tmp175_tb;
+entity wishbone_i2c_eeprom_tb is
+end wishbone_i2c_eeprom_tb;
 
-architecture arch of wishbone_i2c_tmp175_tb is
+architecture arch of wishbone_i2c_eeprom_tb is
 
   constant c_SCOPE : string := "WISHBONE I2C IP CORE";
 
@@ -106,8 +106,8 @@ architecture arch of wishbone_i2c_tmp175_tb is
   );
 
   constant c_TEST_VECTOR_A_2 : t_byte_array := (
-    x"A7",
-    x"0B",
+    x"01",
+    x"60",
     x"6F"
   );
 
@@ -133,15 +133,17 @@ architecture arch of wishbone_i2c_tmp175_tb is
   signal interrupt : std_logic;
 
   --TMP175 address values
-  constant i2c_addr_tmp175 : std_logic_vector(6 downto 0) := "1001000";
+  constant i2c_addr_tmp175 : std_logic_vector(6 downto 0) := "1010000";
   constant reg_addr_temp   : std_logic_vector(7 downto 0) := "00000000";    -- Temperature register (Read only)
   constant reg_addr_config : std_logic_vector(7 downto 0) := "00000001";    -- Configuration register
   constant reg_addr_tlow   : std_logic_vector(7 downto 0) := "00000010";    -- TLOW register
   constant reg_addr_thigh  : std_logic_vector(7 downto 0) := "00000011";    -- THIGH register
 
+  --alias i2c_busy is << signal wishbone_i2c_eeprom_tb.i_wishbone_i2c_eeprom.i_wishbone_i2c_ip_core.busy :  std_logic >>;
+
 begin
 
-  i_wishbone_i2c_tmp175 : entity work.wishbone_i2c_tmp175_th
+  i_wishbone_i2c_eeprom : entity work.wishbone_i2c_eeprom_th
     port map
     (
       int_o => interrupt
@@ -227,42 +229,49 @@ begin
     -- enable I2C and select master mode
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CTRL, c_CTRL_I2C_EN_MASTER, c_MSG_CTR_REG_EN_MST);
 
-    --Preform check of config.register (1 byte)
-    log(ID_LOG_HDR, "Setting and check TMP175 config register", C_SCOPE);
+    log(ID_LOG_HDR, "Test write register 0x01 (1 byte)", c_SCOPE);
     -----------------------------------------------------------------------------
-    write_buffer("00000010");
+    --write_buffer("00000010");
+    --write_buffer(i2c_addr_tmp175 & "0");
+    --write_buffer(reg_addr_config);
+    --write_buffer("01100000");
+    --wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
+    --wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
+
+    --i2c_slave_check(I2C_VVCT, 1, c_TEST_VECTOR_A, c_MSG_I2C_SLAVE_CHECK);
+
+    write_buffer("00000011");
     write_buffer(i2c_addr_tmp175 & "0");
     write_buffer(reg_addr_config);
-    write_buffer("01100000");
+    write_buffer(c_TEST_VECTOR_A_2(1));
+    write_buffer(c_TEST_VECTOR_A_2(2));
+
+    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
+    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
+
+    i2c_slave_check(I2C_VVCT, 1, c_TEST_VECTOR_A_2, c_MSG_I2C_SLAVE_CHECK);
+
+    await_completion(I2C_VVCT, 1, 11 * 11 * c_SCL_PERIOD);
+    -----------------------------------------------------------------------------
+
+    wait for 50 us;
+
+    log(ID_LOG_HDR, "Test read register 0x01", c_SCOPE);
+    -----------------------------------------------------------------------------
+    write_buffer("00000001");
+    write_buffer(i2c_addr_tmp175 & "0");
+    write_buffer(reg_addr_config);
 
     -- command register
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
-
-    --i2c_slave_check(I2C_VVCT, 1, c_TEST_VECTOR_A, c_MSG_I2C_SLAVE_CHECK);
-
-    await_completion(I2C_VVCT, 1, 3 * 11 * c_SCL_PERIOD);
-    -----------------------------------------------------------------------------
-
-    wait for 400 us;
-
-    log(ID_LOG_HDR, "Test read config.register", c_SCOPE);
-    -----------------------------------------------------------------------------
-    -- write_buffer("00000001");
-    -- write_buffer(i2c_addr_tmp175 & "0");
-    -- write_buffer(reg_addr_config);
-
-    -- command register
-    -- wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
-    -- wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
 
     -- set new data in TX
     write_buffer("00000001");
     write_buffer(i2c_addr_tmp175 & "1");
 
     -- set repeated start
-    -- wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_REP_START,   c_MSG_CMD_REG_REP_STR);
-    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
+    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_REP_START,   c_MSG_CMD_REG_REP_STR);
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
 
     -- wait for I2C completion
@@ -277,43 +286,40 @@ begin
     -- wishbone read from RX buffer and check
     check_buffer("01100000");
 
+    wait for 500 us;
+    --wait until i2c_busy = '0';
     -----------------------------------------------------------------------------
-    --Preform check of thigh register (2 byte)
-    log(ID_LOG_HDR, "Setting and check TMP175 THIGH register", C_SCOPE);
-    write_buffer("00000011");
-    write_buffer(i2c_addr_tmp175 & "0");
-    write_buffer(reg_addr_thigh);
-    write_buffer("00010001");     --MSB
-    write_buffer("00110011");     --LSB
-    -- command register
-    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
-    wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
-
-    --i2c_slave_check(I2C_VVCT, 1, c_TEST_VECTOR_A, c_MSG_I2C_SLAVE_CHECK);
-    await_completion(I2C_VVCT, 1,  10 * 11 * c_SCL_PERIOD);
-    
-    
-    wait for 400 us;
+ 
     write_buffer("00000001");
     write_buffer(i2c_addr_tmp175 & "0");
-    write_buffer(reg_addr_thigh);
+    write_buffer(reg_addr_config);
+
     -- command register
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_I2C_START,   c_MSG_CMD_REG_START);
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
 
-    write_buffer("00000010");  -- read 2 bytes
+    -- set new data in TX
+    write_buffer("00000010");
     write_buffer(i2c_addr_tmp175 & "1");
 
     -- set repeated start
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_REP_START,   c_MSG_CMD_REG_REP_STR);
     wishbone_write(WISHBONE_VVCT, 1, c_REG_CMD, c_CMD_DISABLE_ALL, c_MSG_CMD_REG_DISABLE);
 
-    await_completion(I2C_VVCT, 1, 20 * 10 * c_SCL_PERIOD);
+    -- wait for I2C completion
+    await_completion(I2C_VVCT, 1, 4 * 10 * c_SCL_PERIOD);
 
-    wait for 800 us;
+    -- slave write data
+    -- i2c_slave_transmit(I2C_VVCT, 1, c_TEST_VECTOR_A, c_MSG_I2C_SLAVE_TRAN);
+    await_completion(I2C_VVCT, 1, 10 * 10 * c_SCL_PERIOD);
 
-    check_buffer("00010001");
-    check_buffer("00110011");
+    wait for 1000 us;
+
+    -- wishbone read from RX buffer and check
+    check_buffer("01100000");
+    check_buffer(x"6F");
+
+    wait for 500 us;
 
     -----------------------------------------------------------------------------
     -- Ending the simulation
