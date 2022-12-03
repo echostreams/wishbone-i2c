@@ -139,19 +139,19 @@ entity i2c_master_bit_ctrl is
         rst      : in  std_logic;
         nReset   : in  std_logic;
         clk_cnt  : in  std_logic_vector(15 downto 0);	-- clock prescale value
-        ena      : in  std_logic;						-- core enable signal
+        ena      : in  std_logic;			-- core enable signal
         cmd      : in  std_logic_vector(3 downto 0);
-        cmd_ack  : out std_logic;						-- command complete acknowledge
-        busy     : out std_logic;						-- i2c bus busy
-        al       : out std_logic;						-- i2c bus arbitration lost
+        cmd_ack  : out std_logic;			-- command complete acknowledge
+        busy     : out std_logic;			-- i2c bus busy
+        al       : out std_logic;			-- i2c bus arbitration lost
         din      : in  std_logic;
         dout     : out std_logic;
-        scl_i    : in  std_logic;						-- i2c clock line input
-        scl_o    : out std_logic;						-- i2c clock line output
-        scl_oen  : out std_logic;						-- i2c clock line output enable (active low)
-        sda_i    : in  std_logic;						-- i2c data line input
-        sda_o    : out std_logic;						-- i2c data line output
-        sda_oen  : out std_logic						-- i2c data line output enable (active low)
+        scl_i    : in  std_logic;			-- i2c clock line input
+        scl_o    : out std_logic;			-- i2c clock line output
+        scl_oen  : out std_logic;			-- i2c clock line output enable (active low)
+        sda_i    : in  std_logic;			-- i2c data line input
+        sda_o    : out std_logic;			-- i2c data line output
+        sda_oen  : out std_logic			-- i2c data line output enable (active low)
         );
         
  
@@ -165,8 +165,8 @@ architecture arch of i2c_master_bit_ctrl is
 
 signal sSCL, sSDA : std_logic;	-- synchronized SCL and SDA inputs
 signal dscl_oen : std_logic;	-- delayed scl_oen
-signal sda_chk : std_logic;		-- check SDA output (Multi-master arbitration)
-signal clk_en : std_logic;		-- clock generation signals
+signal sda_chk : std_logic;	-- check SDA output (Multi-master arbitration)
+signal clk_en : std_logic;	-- clock generation signals
 signal slave_wait : std_logic;
 
 -- bus status controller signals
@@ -192,8 +192,8 @@ constant start_c 	: std_logic_vector(16 downto 0) := "00000000000000100";
 constant start_d 	: std_logic_vector(16 downto 0) := "00000000000001000";
 constant start_e 	: std_logic_vector(16 downto 0) := "00000000000010000";
 constant stop_a 	: std_logic_vector(16 downto 0) := "00000000000100000";
-constant stop_b	 	: std_logic_vector(16 downto 0) := "00000000001000000";
-constant stop_c	 	: std_logic_vector(16 downto 0) := "00000000010000000";
+constant stop_b	: std_logic_vector(16 downto 0) := "00000000001000000";
+constant stop_c	: std_logic_vector(16 downto 0) := "00000000010000000";
 constant stop_d 	: std_logic_vector(16 downto 0) := "00000000100000000";
 constant rd_a	 	: std_logic_vector(16 downto 0) := "00000001000000000";
 constant rd_b 		: std_logic_vector(16 downto 0) := "00000010000000000";

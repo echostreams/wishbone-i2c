@@ -64,9 +64,9 @@ use ieee.std_logic_unsigned.all;
 
 entity i2c_master_byte_ctrl is
   port (
-        clk      : in  std_logic;						-- master clock
-        rst      : in  std_logic;						-- synchronous active high reset
-        nReset   : in  std_logic;						-- asynchronous active low reset
+        clk      : in  std_logic;			-- master clock
+        rst      : in  std_logic;			-- synchronous active high reset
+        nReset   : in  std_logic;			-- asynchronous active low reset
         clk_cnt  : in  std_logic_vector(15 downto 0);	-- 4x SCL
 		-- control inputs
         start    : in  std_logic;
@@ -77,14 +77,14 @@ entity i2c_master_byte_ctrl is
         din      : in  std_logic_vector(7 downto 0);
 		-- status outputs
         cmd_ack  : out std_logic;
-        ack_out  : out std_logic;						-- i2c clock line input
+        ack_out  : out std_logic;			-- i2c clock line input
         dout     : out std_logic_vector(7 downto 0);
         i2c_al   : in  std_logic;
 		-- signals for bit_controller
-		core_cmd : out std_logic_vector(3 downto 0);
-		core_txd : out std_logic;
-		core_rxd : in  std_logic;
-		core_ack : in  std_logic
+	core_cmd : out std_logic_vector(3 downto 0);
+	core_txd : out std_logic;
+	core_rxd : in  std_logic;
+	core_ack : in  std_logic
         );
 end;
 
@@ -101,7 +101,7 @@ constant ST_IDLE	: std_logic_vector(4 downto 0) := "00000";
 constant ST_START	: std_logic_vector(4 downto 0) := "00001";
 constant ST_READ	: std_logic_vector(4 downto 0) := "00010";
 constant ST_WRITE	: std_logic_vector(4 downto 0) := "00100";
-constant ST_ACK		: std_logic_vector(4 downto 0) := "01000";
+constant ST_ACK	: std_logic_vector(4 downto 0) := "01000";
 constant ST_STOP	: std_logic_vector(4 downto 0) := "10000";
 
 signal c_state : std_logic_vector(4 downto 0);

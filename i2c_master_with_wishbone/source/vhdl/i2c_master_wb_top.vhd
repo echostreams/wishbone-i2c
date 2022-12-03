@@ -64,8 +64,8 @@ use ieee.std_logic_unsigned.all;
 
 entity i2c_master_wb_top is
   generic (
-		ARST_LVL : integer := 0
-		);
+	ARST_LVL : integer := 0
+	);
   port (
         wb_clk_i : in  std_logic;
         wb_rst_i : in  std_logic;
@@ -91,27 +91,27 @@ component i2c_master_bit_ctrl
         rst      : in  std_logic;
         nReset   : in  std_logic;
         clk_cnt  : in  std_logic_vector(15 downto 0);	-- clock prescale value
-        ena      : in  std_logic;						-- core enable signal
+        ena      : in  std_logic;			-- core enable signal
         cmd      : in  std_logic_vector(3 downto 0);
-        cmd_ack  : out std_logic;						-- command complete acknowledge
-        busy     : out std_logic;						-- i2c bus busy
-        al       : out std_logic;						-- i2c bus arbitration lost
+        cmd_ack  : out std_logic;			-- command complete acknowledge
+        busy     : out std_logic;			-- i2c bus busy
+        al       : out std_logic;			-- i2c bus arbitration lost
         din      : in  std_logic;
         dout     : out std_logic;
-        scl_i    : in  std_logic;						-- i2c clock line input
-        scl_o    : out std_logic;						-- i2c clock line output
-        scl_oen  : out std_logic;						-- i2c clock line output enable (active low)
-        sda_i    : in  std_logic;						-- i2c data line input
-        sda_o    : out std_logic;						-- i2c data line output
-        sda_oen  : out std_logic						-- i2c data line output enable (active low)
+        scl_i    : in  std_logic;			-- i2c clock line input
+        scl_o    : out std_logic;			-- i2c clock line output
+        scl_oen  : out std_logic;			-- i2c clock line output enable (active low)
+        sda_i    : in  std_logic;			-- i2c data line input
+        sda_o    : out std_logic;			-- i2c data line output
+        sda_oen  : out std_logic			-- i2c data line output enable (active low)
         );
 end component;
 
 component i2c_master_byte_ctrl
   port (
-        clk      : in  std_logic;						-- master clock
-        rst      : in  std_logic;						-- synchronous active high reset
-        nReset   : in  std_logic;						-- asynchronous active low reset
+        clk      : in  std_logic;			-- master clock
+        rst      : in  std_logic;			-- synchronous active high reset
+        nReset   : in  std_logic;			-- asynchronous active low reset
         clk_cnt  : in  std_logic_vector(15 downto 0);	-- 4x SCL
 		-- control inputs
         start    : in  std_logic;
@@ -122,14 +122,14 @@ component i2c_master_byte_ctrl
         din      : in  std_logic_vector(7 downto 0);
 		-- status outputs
         cmd_ack  : out std_logic;
-        ack_out  : out std_logic;						-- i2c clock line input
+        ack_out  : out std_logic;			-- i2c clock line input
         dout     : out std_logic_vector(7 downto 0);
         i2c_al   : in  std_logic;
 		-- signals for bit_controller
-		core_cmd : out std_logic_vector(3 downto 0);
-		core_txd : out std_logic;
-		core_rxd : in  std_logic;
-		core_ack : in  std_logic
+	core_cmd : out std_logic_vector(3 downto 0);
+	core_txd : out std_logic;
+	core_rxd : in  std_logic;
+	core_ack : in  std_logic
         );
 end component;
 
@@ -149,7 +149,7 @@ component i2c_master_registers
         ctr      : out std_logic_vector(7 downto 0);	-- control register
         txr      : out std_logic_vector(7 downto 0);	-- transmit register
         cr       : out std_logic_vector(7 downto 0);	-- command register
-        sr       : out std_logic_vector(7 downto 0)		-- status register
+        sr       : out std_logic_vector(7 downto 0)	-- status register
         );
 end component;
 
@@ -253,17 +253,17 @@ end process;
 
 byte_controller: i2c_master_byte_ctrl port map(
 	clk 		=> wb_clk_i,
-	rst			=> wb_rst_i,
+	rst		=> wb_rst_i,
 	nReset		=> rst_i,
-	clk_cnt		=> prer,
+	clk_cnt	=> prer,
 	start		=> sta,
 	stop		=> sto,
 	read		=> rd,
 	write		=> wr,
 	ack_in		=> ack,
-	din			=> txr,
-	cmd_ack		=> done,
-	ack_out		=> irxack,
+	din		=> txr,
+	cmd_ack	=> done,
+	ack_out	=> irxack,
 	dout		=> rxr,
 	i2c_al		=> i2c_al,
 	core_cmd	=> core_cmd,
@@ -272,40 +272,40 @@ byte_controller: i2c_master_byte_ctrl port map(
 	core_rxd	=> core_rxd);
 
 bit_controller: i2c_master_bit_ctrl port map(
-	clk			=> wb_clk_i,
-	rst			=> wb_rst_i,
+	clk		=> wb_clk_i,
+	rst		=> wb_rst_i,
 	nReset		=> rst_i,
-	ena			=> core_en,
-	clk_cnt		=> prer,
-	cmd			=> core_cmd,
-	cmd_ack		=> core_ack,
+	ena		=> core_en,
+	clk_cnt	=> prer,
+	cmd		=> core_cmd,
+	cmd_ack	=> core_ack,
 	busy		=> i2c_busy,
-	al			=> i2c_al,
-	din			=> core_txd,
+	al		=> i2c_al,
+	din		=> core_txd,
 	dout		=> core_rxd,
 	scl_i		=> scl_pad_i,
 	scl_o		=> scl_pad_o,
-	scl_oen		=> scl_padoen_o,
+	scl_oen	=> scl_padoen_o,
 	sda_i		=> sda_pad_i,
 	sda_o		=> sda_pad_o,
-	sda_oen		=> sda_padoen_o);
+	sda_oen	=> sda_padoen_o);
 
 registers: i2c_master_registers port map(
 	wb_clk_i	=> wb_clk_i,
 	rst_i		=> rst_i,
 	wb_rst_i	=> wb_rst_i,
 	wb_dat_i	=> wb_dat_i,
-	wb_wacc		=> wb_wacc,
+	wb_wacc	=> wb_wacc,
 	wb_adr_i	=> wb_adr_i,
 	i2c_al		=> i2c_al,
 	i2c_busy	=> i2c_busy,
 	done		=> done,
 	irxack		=> irxack,
 	prer		=> prer,
-	ctr			=> ctr,
-	txr			=> txr,
-	cr			=> cr,
-	sr			=> sr);
+	ctr		=> ctr,
+	txr		=> txr,
+	cr		=> cr,
+	sr		=> sr);
 
 
 scl <= scl_pad_o when (scl_padoen_o = '0') else 'Z';

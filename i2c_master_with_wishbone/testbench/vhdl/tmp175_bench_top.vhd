@@ -35,7 +35,7 @@
 --                  email: techsupport@latticesemi.com
 --
 ---------------------------------------------------------------------------
--- Name:  tst_bench_top.v   
+-- Name:  tmp175_bench_top.v   
 -- 
 -- Description: This module is the top-level testbench, which controls the 
 -- flow of the wb v.s. i2c transmit and receive procedures. 
@@ -59,12 +59,18 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
 use std.textio.all;
-use work.wb_master_model.all;  	
+use work.wb_master_model.all;  
 
-entity tst_bench_top is
-end tst_bench_top;
+library STD;
+use std.env.all;
 
-architecture ben of tst_bench_top is
+library uvvm_util;
+context uvvm_util.uvvm_util_context;	
+
+entity tmp175_bench_top is
+end tmp175_bench_top;
+
+architecture ben of tmp175_bench_top is
 	 
 	component i2c_master_wb_top port(
 		-- wishbone interface
@@ -86,12 +92,22 @@ architecture ben of tst_bench_top is
 	); 
 end component;
 
+/*
 component i2c_slave_model generic(debug:std_logic;
                                   I2C_ADR:std_logic_vector(6 downto 0));
     port (
        scl: inout std_logic;
        sda:inout std_logic
 );         
+end component;
+*/
+
+component tmp175_simmodel
+  generic(
+    i2c_clk : integer := 200_000);      --i2c bus frequency in Hz
+  port(
+    sda : inout std_logic := 'Z';       --serial data output of i2c bus
+    scl : inout std_logic := 'Z');      --serial clock output of i2c bus
 end component;
 
 signal clk:std_logic; --master clock from wb
@@ -121,7 +137,8 @@ constant CR_R:std_logic_vector(2 downto 0):="110";--undocumented / reserved outp
 
 constant RD:std_logic:='1';
 constant WR:std_logic:='0';
-constant SADR:std_logic_vector(6 downto 0):="0010000";
+--constant SADR:std_logic_vector(6 downto 0):="0010000";
+constant SADR:std_logic_vector(6 downto 0):="1001000";
 
 signal stb0 : std_logic;
 signal sda_pullup_ctrl : std_logic;
@@ -131,6 +148,12 @@ signal readout_data:std_logic_vector(7 downto 0);
 signal bool:std_logic:='0';
 
 begin
+
+	-- Print the configuration to the log: report/enable logging/alert conditions
+    report_global_ctrl(VOID);
+    report_msg_id_panel(VOID);
+    enable_log_msg(ALL_MESSAGES);
+    disable_log_msg(ID_POS_ACK);        --make output a bit cleaner
 	
 	-- generate clock	
 	clk_gen:process
@@ -165,13 +188,18 @@ begin
       scl=>scl,
       sda=>sda
   	); 
-  	
+/*  	
   	i2c_slave: i2c_slave_model generic map('0',SADR)
   	     port map(
   		      scl=>scl,
   		      sda=>sda
   	);
-  
+*/
+	i2c_slave: tmp175_simmodel
+		port map (
+			scl => scl,
+			sda => sda	
+	);
   --pullup sda line
   process (sda)
   begin
@@ -249,30 +277,30 @@ begin
    	wait for 2 ns;
    	rstn<='0'; --// assert reset
 
---	  	 wait until clk'event and clk = '1';
-    wait for 8 ns;
-	  rstn<= '1'; --// negate reset 	
-	  report "status: done reset";
-	  wait until clk'event and clk = '1';
+	--	  	 wait until clk'event and clk = '1';
+    	wait for 8 ns;
+	rstn<= '1'; --// negate reset 	
+	report "status: done reset";
+	wait until clk'event and clk = '1';
 	  
-	  --// program core
+	--// program core
   	
   	--// program internal registers	  
-	  wb_write(1, '0' & PRER_LO,"01100100",clk,ack,adr,dat_o,cyc,stb,we); --/ load prescaler lo-byte
+	  wb_write(1, '0' & PRER_LO,"01100100",clk,ack,adr,dat_o,cyc,stb,we); --// load prescaler lo-byte
 	  wb_write(1, '0' & PRER_HI,"00000000",clk,ack,adr,dat_o,cyc,stb,we); --// load prescaler hi-byte
-	  report "status:  programmed registers";
+	  report "status: programmed registers";
 	  
 	  --// verify prescaler lo-byte
 	  wb_read(0, '0' & PRER_LO,readout_data,clk,ack,dat_i,adr,dat_o,cyc,stb,we);
 --	  wait for 1 ns; 
 	  if (readout_data /= "01100100") then
-			report "Data compare error. Received:" & slv8_xstr(readout_data) &", expected:64  ";
+		report "Data compare error. Received:" & slv8_xstr(readout_data) &", expected:64  ";
 	  end if;
 	  --verify prescaler hi-byte
 	  wb_read(0, '0' & PRER_HI,readout_data,clk,ack,dat_i,adr,dat_o,cyc,stb,we); 
 --	  wait for 1 ns;
 	  if (readout_data /= "00000000") then
-			report "Data compare error. Received :" & slv8_xstr(readout_data) & ", expected:00 ";
+		report "Data compare error. Received :" & slv8_xstr(readout_data) & ", expected:00 ";
 	  end if;
 	  report "status: verified registers";
 	  
@@ -282,7 +310,7 @@ begin
 	  --// access slave (write)
 	  
 	  --// drive slave address
-	  wb_write(1,'0' & TXR,(SADR & WR),clk,ack,adr,dat_o,cyc,stb,we); --/ present slave address, set write-bit
+	  wb_write(1,'0' & TXR,(SADR & WR),clk,ack,adr,dat_o,cyc,stb,we); --// present slave address, set write-bit
 	  wb_write(0,'0' & CR,"10010000",clk,ack,adr,dat_o,cyc,stb,we); --// set command (start, write)
 	  report "status: generate 'start', write cmd 20 (slave address+write)";
 	  
@@ -291,19 +319,19 @@ begin
 	  while(check_SR(1)='1') loop
 	  	 wb_read(0,'0' & SR,check_SR,clk,ack,dat_i,adr,dat_o,cyc,stb,we); --// poll it until it is zero
 	  end loop;
-	  report "status:  tip==0";
+	  report "status: tip==0";
 	  
 	  --// send memory address
-	  wb_write(1,'0' & TXR,"00000001",clk,ack,adr,dat_o,cyc,stb,we); --/ // present slave's memory address
+	  wb_write(1,'0' & TXR,"00000011",clk,ack,adr,dat_o,cyc,stb,we); --/ // present slave's memory address
 	  wb_write(0,'0' & CR,"00010000",clk,ack,adr,dat_o,cyc,stb,we); --/ // set command (write)
-	  report "status:  write slave memory address 01";
+	  report "status: write slave memory address 11";
 	  
 	  -- check tip bit
 	  wb_read(1,'0' & SR,check_SR,clk,ack,dat_i,adr,dat_o,cyc,stb,we); 
 	  while(check_SR(1)='1') loop
 	  	 wb_read(0,'0' & SR,check_SR,clk,ack,dat_i,adr,dat_o,cyc,stb,we); --// poll it until it is zero
 	  end loop;
-	  report "status:  tip==0";
+	  report "status: tip==0";
 	  
 	  --// send memory contents
 	  wb_write(1,'0' & TXR,"10100101",clk,ack,adr,dat_o,cyc,stb,we); --/ // present data
@@ -323,7 +351,7 @@ begin
 	  while(check_SR(1)='1') loop
 	  	 wb_read(1,'0' & SR,check_SR,clk,ack,dat_i,adr,dat_o,cyc,stb,we); --// poll it until it is zero
 	  end loop;
-	  report "status:  tip==0";
+	  report "status: tip==0";
 	  
 	  --// send memory contents for next memory address (auto_inc)
 	  wb_write(1,'0' & TXR,"01011010",clk,ack,adr,dat_o,cyc,stb,we); --/ // present data
@@ -354,7 +382,7 @@ begin
 	  report "status:  tip==0";
 	  
 	  --// send memory address
-	  wb_write(1,'0' & TXR,"00000001",clk,ack,adr,dat_o,cyc,stb,we); --/ //  present slave's memory address
+	  wb_write(1,'0' & TXR,"00000011",clk,ack,adr,dat_o,cyc,stb,we); --/ //  present slave's memory address
 	  wb_write(0,'0' & CR,"00010000",clk,ack,adr,dat_o,cyc,stb,we); --/ // sset command (write)
 	  report "status:  write slave address 01";
 	  
@@ -394,9 +422,9 @@ begin
 	   	 report "ERROR: Expected a5, received:" & slv8_xstr(data_rxr)  ;
 	   else
 	     report "status:  received: " & slv8_xstr(data_rxr)  ;
-     end if;
+     	   end if;
      
-     --// read data from slave	     
+     	   --// read data from slave	     
 	   wb_write(1,'0' & CR,"00100000",clk,ack,adr,dat_o,cyc,stb,we); --/ //  set command (read, ack_read) 
 	   report "status:  read + ack";
 	   
@@ -413,7 +441,7 @@ begin
 	   	 report "ERROR: Expected 5a, received :" & slv8_xstr(data_rxr)  ;
 	   else
 	     report "status:  received :" & slv8_xstr(data_rxr);
-     end if;
+     	   end if;
 	   
 	   --// read data from slave
 	   wb_write(1,'0' & CR,"00101000",clk,ack,adr,dat_o,cyc,stb,we); --/ //  set command (read, nack_read)
@@ -477,8 +505,9 @@ begin
 	   wait for 250000 ns; --// wait 250us   
 	   report "status:  Testbench done";
 	   
-	  wait;
-	  
+	   wait for 100 ns;
+	   finish;
+	   
  end process;	  
 end ben;	  	 
 	  	 
