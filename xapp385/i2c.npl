@@ -1,0 +1,41 @@
+JDF F
+// Created by Project Navigator ver 1.0
+PROJECT Untitled
+DESIGN i2c Normal
+DEVFAM xbr
+DEVFAMTIME 0
+DEVICE xc2c256
+DEVICETIME 1037393578
+DEVPKG TQ144
+DEVPKGTIME 315558000
+DEVSPEED -5
+DEVSPEEDTIME 1039792503
+FLOW XST VHDL
+FLOWTIME 315558000
+STIMULUS upcnt4_tb_post.vhd Normal
+STIMULUS upcnt4_tb.vhd Normal
+STIMULUS micro_test.vhd Normal
+STIMULUS micro_test_post.vhd Normal
+MODULE i2c.vhd
+MODSTYLE i2c Normal
+MODULE upcnt4.vhd
+MODSTYLE upcnt4 Normal
+MODULE uc_interface.vhd
+MODSTYLE uc_interface Normal
+MODULE i2c_control.vhd
+MODSTYLE i2c_control Normal
+MODULE shift.vhd
+MODSTYLE shift8 Normal
+[Normal]
+p_VhdlSimDesignUnitName_postPar=xstvhd, xbr, Module VHDL Test Bench.t_MSimulatePostPlace&RouteVhdlModel, 1016470963, i2c
+xcpldFitDesVolt=xstvhd, xbr, Implementation.t_vm6File, 1037404074, LVCMOS33
+_SynthOptEffort=xstvhd, xbr, Schematic.t_synthesize, 969634766, High
+_VhdlSimCustom_behav=xstvhd, xpla3, Module VHDL Test Bench.t_MSimulateBehavioralVhdlModel, 1016469496, micro_test.do
+_VhdlSimCustom_postPar=xstvhd, xbr, Module VHDL Test Bench.t_MSimulatePostPlace&RouteVhdlModel, 1016469945, micro_test_post.do
+_VhdlSimDo_behav=xstvhd, xpla3, Module VHDL Test Bench.t_MSimulateBehavioralVhdlModel, 969633101, False
+_VhdlSimDo_postPar=xstvhd, xbr, Module VHDL Test Bench.t_MSimulatePostPlace&RouteVhdlModel, 1016471248, False
+[STATUS-ALL]
+i2c.ngcFile=WARNINGS,1040427424
+i2c.postParVHDLSimModel=WARNINGS,1040427424
+[STRATEGY-LIST]
+Normal=True

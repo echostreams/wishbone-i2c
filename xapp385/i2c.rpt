@@ -1,0 +1,2331 @@
+ 
+cpldfit:  version F.26                              Xilinx Inc.
+                                  Fitter Report
+Design Name: i2c                                 Date: 12-20-2002,  4:26PM
+Device Used: XC2C256-5-TQ144
+Fitting Status: Successful
+
+****************************  Resource Summary  ****************************
+
+Macrocells     Product Terms    Registers      Pins           Function Block 
+Used           Used             Used           Used           Inputs Used    
+127/256 ( 50%) 352 /896  ( 39%) 110/256 ( 43%) 42 /118 ( 36%) 305/640 ( 48%)
+
+PIN RESOURCES:
+
+Signal Type    Required     Mapped  |  Pin Type            Used   Remaining 
+------------------------------------|---------------------------------------
+Input         :   27          27    |  I/O              :    34       74
+Output        :    3           3    |  GCK/IO           :     3        0
+Bidirectional :    8           8    |  GTS/IO           :     4        0
+GCK           :    3           3    |  GSR/IO           :     1        0
+GTS           :    0           0    |
+GSR           :    1           1    |
+                 ----        ----
+        Total     42          42
+
+MACROCELL RESOURCES:
+
+Total Macrocells Available                   256
+Registered Macrocells                        110
+Non-registered Macrocell driving I/O           1
+
+GLOBAL RESOURCES:
+
+Signal 'scl' mapped onto global clock net GCK0.
+Signal 'clk' mapped onto global clock net GCK1.
+Signal 'sda' mapped onto global clock net GCK2.
+Signal 'uc_ctrl_prs_state_ffd1_MC.GLB' mapped onto global output enable net GTS2.
+Signal 'reset' mapped onto global set/reset net GSR.
+
+End of Resource Summary
+***************Resources Used by Successfully Mapped Logic******************
+
+** LOGIC **
+Signal              Total Signals Loc     Slew Pin  Pin       Pin     Reg     I/O      I/O       Reg Init
+Name                Pt    Used            Rate #    Type      Use     Use     STD      Style     State
+N_PZ_562            3       6     FB2_16            (b)       (b)                                
+N_PZ_564            1       3     FB2_2             (b)       (b)                                
+N_PZ_565            1       3     FB2_15       10   I/O       I                                  
+N_PZ_569            1       3     FB2_14       9    I/O       I                                  
+N_PZ_652            2       3     FB7_13       22   I/O       I                                  
+N_PZ_654            2       3     FB5_11            (b)       (b)                                
+N_PZ_665            1       2     FB6_9             (b)       (b)                                
+N_PZ_672            2       3     FB4_5        15   I/O       I                                  
+N_PZ_687            4       7     FB10_15           (b)       (b)                                
+N_PZ_892            1       2     FB9_5             (b)       (b)                                
+N_PZ_896            1       2     FB7_11       24   I/O       I                                  
+N_PZ_897            1       2     FB5_9             (b)       (b)                                
+data_bus<0>         5       12    FB2_4   FAST 4    I/O       I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<1>         5       12    FB2_5   FAST 5    GTS/I/O   I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<2>         6       13    FB2_13  FAST 7    I/O       I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<3>         5       12    FB2_12  FAST 6    GTS/I/O   I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<4>         6       13    FB6_2   FAST 35   CDR/I/O   I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<5>         6       13    FB6_12  FAST 39   DGE/I/O   I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<6>         6       13    FB6_13  FAST 40   I/O       I/O     DFF     LVCMOS33 KPR       RESET
+data_bus<7>         6       13    FB6_1   FAST 34   I/O       I/O     DFF     LVCMOS33 KPR       RESET
+dtack               1       2     FB2_3   FAST 3    GTS/I/O   O       DFF     LVCMOS33 KPR       RESET
+i2c_ctrl__n0073     2       3     FB7_12       23   I/O       I                                  
+i2c_ctrl__n0153     7       8     FB4_10            (b)       (b)     DFF                        RESET
+i2c_ctrl__n0159     3       8     FB8_15            (b)       (b)     TFF                        RESET
+i2c_ctrl__n0170     5       9     FB9_3             (b)       (b)                                
+i2c_ctrl__n0171     2       6     FB6_11            (b)       (b)                                
+i2c_ctrl_arb_lost   4       7     FB3_5        133  I/O       I       DFF                        RESET
+i2c_ctrl_bit_cnt<0> 3       7     FB4_6        16   I/O       (b)     TFF                        RESET
+i2c_ctrl_bit_cnt<1> 3       5     FB8_10            (b)       (b)     TFF                        RESET
+i2c_ctrl_bit_cnt<2> 3       7     FB8_14            (b)       (b)     TFF                        RESET
+i2c_ctrl_bus_busy   3       3     FB5_10            (b)       (b)     DEFF                       RESET
+i2c_ctrl_bus_busy_d1                    2       2     FB3_6             (b)       (b)     DFF                        RESET
+i2c_ctrl_clk_cnt<0> 6       10    FB3_1        136  I/O       I       TFF                        RESET
+i2c_ctrl_clk_cnt<1> 5       6     FB4_9             (b)       (b)     DFF                        RESET
+i2c_ctrl_clk_cnt<2> 8       11    FB4_13            (b)       (b)     DFF                        RESET
+i2c_ctrl_detect_start                    2       2     FB5_15            (b)       (b)     DFF                        RESET
+i2c_ctrl_detect_stop                    2       2     FB5_13            (b)       (b)     DFF                        RESET
+i2c_ctrl_gen_start  3       5     FB3_4             (b)       (b)     DFF                        RESET
+i2c_ctrl_gen_stop   3       6     FB3_16       131  I/O       I       DFF                        RESET
+i2c_ctrl_i2c_header<0>                    3       3     FB5_8             (b)       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<1>                    3       3     FB5_7             (b)       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<2>                    3       3     FB5_3             (b)       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<3>                    3       3     FB5_1             (b)       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<4>                    3       3     FB5_14       28   I/O       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<5>                    3       3     FB5_5        31   I/O       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header<6>                    3       3     FB5_4        32   GCK/I/O   GCK     DEFF                       RESET
+i2c_ctrl_i2c_header<7>                    3       3     FB5_2        33   I/O       (b)     DEFF                       RESET
+i2c_ctrl_i2c_header_en                    3       4     FB7_2             (b)       (b)     DFF                        RESET
+i2c_ctrl_maas       4       7     FB8_8             (b)       (b)     TFF                        RESET
+i2c_ctrl_mal        3       3     FB6_8             (b)       (b)     DEFF                       RESET
+i2c_ctrl_master_sda 4       7     FB7_16       19   I/O       I       DFF                        RESET
+i2c_ctrl_master_slave                    3       3     FB3_7             (b)       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<0>                    3       4     FB8_4             (b)       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<1>                    3       4     FB8_13       52   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<2>                    3       4     FB8_12       51   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<3>                    3       4     FB8_11       50   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<4>                    3       4     FB8_6        49   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<5>                    3       4     FB8_5        48   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<6>                    3       4     FB8_3        46   I/O       (b)     DEFF                       RESET
+i2c_ctrl_mbdr_i2c<7>                    3       4     FB7_14       21   I/O       I       DEFF                       RESET
+i2c_ctrl_mif        3       3     FB6_10            (b)       (b)     DEFF                       RESET
+i2c_ctrl_msta_d1    2       2     FB3_8             (b)       (b)     DFF                        RESET
+i2c_ctrl_msta_rst   5       8     FB3_14       132  I/O       I       DFF                        RESET
+i2c_ctrl_rxak       2       3     FB7_3             (b)       (b)     DEFF                       RESET
+i2c_ctrl_scl_in     2       2     FB5_16            (b)       (b)     DFF                        RESET
+i2c_ctrl_scl_state_ffd1                    6       12    FB3_3        134  I/O       I       DFF                        RESET
+i2c_ctrl_scl_state_ffd2                    6       10    FB4_15            (b)       (b)     TFF                        RESET
+i2c_ctrl_scl_state_ffd3                    11      14    FB4_11            (b)       (b)     DFF                        RESET
+i2c_ctrl_sda_out_reg                    15      16    FB3_2        135  I/O       I       DFF                        RESET
+i2c_ctrl_sda_out_reg_d1                    2       2     FB5_12            (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_out  4       6     FB9_16            (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<0>                    4       6     FB8_2        45   I/O       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<1>                    4       6     FB8_1        44   I/O       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<2>                    4       6     FB9_7             (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<3>                    4       6     FB9_8             (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<4>                    4       6     FB9_9             (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<5>                    4       6     FB9_10            (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg<6>                    4       6     FB9_11            (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg_en                    3       5     FB7_1             (b)       (b)     DFF                        RESET
+i2c_ctrl_shift_reg_ld                    6       9     FB4_12       17   I/O       (b)     DFF                        RESET
+i2c_ctrl_slave_sda  4       7     FB7_15       20   I/O       I       DFF                        RESET
+i2c_ctrl_sm_stop    4       9     FB8_7             (b)       (b)     TFF                        RESET
+i2c_ctrl_srw        3       5     FB8_9             (b)       (b)     DEFF                       RESET
+i2c_ctrl_state_ffd1 6       10    FB4_14       18   I/O       (b)     DFF                        RESET
+i2c_ctrl_state_ffd2 6       17    FB4_7             (b)       (b)     DFF                        RESET
+i2c_ctrl_state_ffd3 5       9     FB8_16            (b)       (b)     DFF                        RESET
+i2c_ctrl_stop_scl_reg                    8       10    FB4_8             (b)       (b)     DFF                        RESET
+irq                 1       2     FB9_2   FAST 113  I/O       O               LVCMOS33 KPR/OD    
+mcf                 2       5     FB9_1   FAST 112  I/O       O       DFF     LVCMOS33           RESET
+n7426               1       2     FB7_6        25   I/O       I                                  
+scl                 3       4     FB5_6   FAST 30   GCK/I/O   GCK/I/O DFF     LVCMOS33 KPR/OD    RESET
+sda                 4       6     FB6_4   FAST 38   GCK/I/O   GCK/I/O DFF     LVCMOS33 KPR/OD    RESET
+uc_ctrl_addr_en     1       9     FB7_10            (b)       (b)     DFF                        RESET
+uc_ctrl_address_match                    1       18    FB7_4             (b)       (b)     DFF                        RESET
+uc_ctrl_as_int      0       0     FB1_4        142  I/O       I       DFF                        RESET
+uc_ctrl_as_int_d1   1       1     FB1_16            (b)       (b)     DFF                        RESET
+uc_ctrl_cntrl_en    1       9     FB7_9             (b)       (b)     DFF                        RESET
+uc_ctrl_data_en     1       9     FB7_8             (b)       (b)     DFF                        RESET
+uc_ctrl_ds_int      14      14    FB1_6        140  I/O       I       DFF                        RESET
+uc_ctrl_madr<0>     1       2     FB1_15            (b)       (b)     DFF                        RESET
+uc_ctrl_madr<1>     2       3     FB1_11            (b)       (b)     DFF                        RESET
+uc_ctrl_madr<2>     2       3     FB1_10            (b)       (b)     DFF                        RESET
+uc_ctrl_madr<3>     2       3     FB1_9             (b)       (b)     DFF                        RESET
+uc_ctrl_madr<4>     2       3     FB1_8             (b)       (b)     DFF                        RESET
+uc_ctrl_madr<5>     2       3     FB1_7             (b)       (b)     DFF                        RESET
+uc_ctrl_madr<6>     2       3     FB1_5             (b)       (b)     DFF                        RESET
+uc_ctrl_madr<7>     2       3     FB1_2             (b)       (b)     DFF                        RESET
+uc_ctrl_mal_bit_reset                    4       7     FB2_11            (b)       (b)     DFF                        RESET
+uc_ctrl_mbcr_wr     3       4     FB2_8             (b)       (b)     DFF                        RESET
+uc_ctrl_mbdr_micro<0>                    2       3     FB3_15            (b)       (b)     DFF                        RESET
+uc_ctrl_mbdr_micro<1>                    2       3     FB1_1             (b)       (b)     DFF                        RESET
+uc_ctrl_mbdr_micro<2>                    2       3     FB1_14       137  I/O       I       DFF                        RESET
+uc_ctrl_mbdr_micro<3>                    2       3     FB1_13       138  I/O       I       DFF                        RESET
+uc_ctrl_mbdr_micro<4>                    2       3     FB1_12       139  I/O       I       DFF                        RESET
+uc_ctrl_mbdr_micro<5>                    2       3     FB1_3        143  GSR/I/O   GSR     DFF                        RESET
+uc_ctrl_mbdr_micro<6>                    2       3     FB3_13            (b)       (b)     DFF                        RESET
+uc_ctrl_mbdr_micro<7>                    2       3     FB3_12            (b)       (b)     DFF                        RESET
+uc_ctrl_men         2       3     FB3_11            (b)       (b)     DFF                        RESET
+uc_ctrl_mien        2       3     FB3_10            (b)       (b)     DFF                        RESET
+uc_ctrl_mif_bit_reset                    4       7     FB2_10            (b)       (b)     DFF                        RESET
+uc_ctrl_msta        2       4     FB3_9             (b)       (b)     DFF                        RESET
+uc_ctrl_mtx         2       3     FB2_7             (b)       (b)     DFF                        RESET
+uc_ctrl_prs_state_ffd1                    3       5     FB2_1        2    GTS/I/O   I       DFF                        RESET
+uc_ctrl_prs_state_ffd2                    2       5     FB2_9             (b)       (b)     DFF                        RESET
+uc_ctrl_rsta        4       6     FB4_16            (b)       (b)     DFF                        RESET
+uc_ctrl_stat_en     1       9     FB7_7             (b)       (b)     DFF                        RESET
+uc_ctrl_txak        2       3     FB2_6             (b)       (b)     DFF                        RESET
+
+** INPUTS **
+Signal                            Loc          Pin  Pin       Pin     Reg     I/O      I/O       
+Name                                           #    Type      Use     Use     STD      Style     
+addr_bus<0>                       FB7_5        26   I/O       I               LVCMOS33 KPR
+addr_bus<10>                      FB3_1        136  I/O       I               LVCMOS33 KPR
+addr_bus<11>                      FB3_2        135  I/O       I               LVCMOS33 KPR
+addr_bus<12>                      FB3_3        134  I/O       I               LVCMOS33 KPR
+addr_bus<13>                      FB3_5        133  I/O       I               LVCMOS33 KPR
+addr_bus<14>                      FB3_14       132  I/O       I               LVCMOS33 KPR
+addr_bus<15>                      FB3_16       131  I/O       I               LVCMOS33 KPR
+addr_bus<16>                      FB1_12       139  I/O       I               LVCMOS33 KPR
+addr_bus<17>                      FB1_13       138  I/O       I               LVCMOS33 KPR
+addr_bus<18>                      FB1_14       137  I/O       I               LVCMOS33 KPR
+addr_bus<19>                      FB2_14       9    I/O       I               LVCMOS33 KPR
+addr_bus<1>                       FB7_6        25   I/O       I               LVCMOS33 KPR
+addr_bus<20>                      FB2_15       10   I/O       I               LVCMOS33 KPR
+addr_bus<21>                      FB4_1        11   I/O       I               LVCMOS33 KPR
+addr_bus<22>                      FB4_2        12   I/O       I               LVCMOS33 KPR
+addr_bus<23>                      FB4_3        13   I/O       I               LVCMOS33 KPR
+addr_bus<2>                       FB7_11       24   I/O       I               LVCMOS33 KPR
+addr_bus<3>                       FB7_12       23   I/O       I               LVCMOS33 KPR
+addr_bus<4>                       FB7_13       22   I/O       I               LVCMOS33 KPR
+addr_bus<5>                       FB7_14       21   I/O       I               LVCMOS33 KPR
+addr_bus<6>                       FB7_15       20   I/O       I               LVCMOS33 KPR
+addr_bus<7>                       FB7_16       19   I/O       I               LVCMOS33 KPR
+addr_bus<8>                       FB4_4        14   I/O       I               LVCMOS33 KPR
+addr_bus<9>                       FB4_5        15   I/O       I               LVCMOS33 KPR
+as                                FB1_4        142  I/O       I               LVCMOS33 KPR
+clk                               FB5_4        32   GCK/I/O   GCK             LVCMOS33 KPR
+ds                                FB1_6        140  I/O       I               LVCMOS33 KPR
+r_w                               FB2_1        2    GTS/I/O   I               LVCMOS33 KPR
+reset                             FB1_3        143  GSR/I/O   GSR             LVCMOS33 KPR
+
+End of Resources Used by Successfully Mapped Logic
+
+Legend:
+I/O Style - OD    - OpenDrain
+          - PU    - Pullup
+          - KPR   - Keeper
+          - S     - SchmittTrigger
+          - DG    - DataGate
+Reg Use   - LATCH - Transparent latch
+          - DFF   - D-flip-flop
+          - DEFF  - D-flip-flop with clock enable
+          - TFF   - T-flip-flop
+          - TDFF  - Dual-edge-triggered T-flip-flop
+          - DDFF  - Dual-edge-triggered flip-flop
+          - DDEFF - Dual-edge-triggered flip-flop with clock enable
+          /S (after any above flop/latch type) indicates initial state is Set
+
+*********************Function Block Resource Summary***********************
+Function    # of        FB Inputs   Signals     Total       O/IO      IO    
+Block       Macrocells  Used        Used        Pt Used     Req       Avail 
+FB1          16          30          30           40         0/0        6   
+FB2          16          38          38           44         1/4        8   
+FB3          16          37          37           50         0/0        6   
+FB4          12          33          33           56         0/0        8   
+FB5          16          20          20           31         0/1        5   
+FB6           9          38          38           33         0/5        8   
+FB7          15          38          38           26         0/0        8   
+FB8          16          32          32           41         0/0        8   
+FB9          10          32          32           27         2/0        8   
+FB10          1           7           7            4         0/0        9   
+FB11          0           0           0            0         0/0        8   
+FB12          0           0           0            0         0/0        6   
+FB13          0           0           0            0         0/0        8   
+FB14          0           0           0            0         0/0        8   
+FB15          0           0           0            0         0/0        7   
+FB16          0           0           0            0         0/0        7   
+            ----                                -----       -----     ----- 
+            127                                  352         3/10     118   
+*********************************** FB1 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  30
+Number of function block inputs used/remaining:               30/10
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   40/16
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+uc_ctrl_mbdr_micro<1>             2       FB1_1         (b)      (b)   
+uc_ctrl_madr<7>                   2       FB1_2         (b)      (b)   
+uc_ctrl_mbdr_micro<5>             2       FB1_3   143   GSR/I/O  GSR   
+uc_ctrl_as_int                    0       FB1_4   142   I/O      I     
+uc_ctrl_madr<6>                   2       FB1_5         (b)      (b)   
+uc_ctrl_ds_int                    14      FB1_6   140   I/O      I     
+uc_ctrl_madr<5>                   2       FB1_7         (b)      (b)   
+uc_ctrl_madr<4>                   2       FB1_8         (b)      (b)   
+uc_ctrl_madr<3>                   2       FB1_9         (b)      (b)   
+uc_ctrl_madr<2>                   2       FB1_10        (b)      (b)   
+uc_ctrl_madr<1>                   2       FB1_11        (b)      (b)   
+uc_ctrl_mbdr_micro<4>             2       FB1_12  139   I/O      I     
+uc_ctrl_mbdr_micro<3>             2       FB1_13  138   I/O      I     
+uc_ctrl_mbdr_micro<2>             2       FB1_14  137   I/O      I     
+uc_ctrl_madr<0>                   1       FB1_15        (b)      (b)   
+uc_ctrl_as_int_d1                 1       FB1_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: N_PZ_564          11: "i2c_ctrl_i2c_header<2>" 
+                                             21: "uc_ctrl_madr<3>" 
+  2: N_PZ_565          12: "i2c_ctrl_i2c_header<3>" 
+                                             22: "uc_ctrl_madr<4>" 
+  3: "data_bus<1>".PIN 13: "i2c_ctrl_i2c_header<4>" 
+                                             23: "uc_ctrl_madr<5>" 
+  4: "data_bus<2>".PIN 14: "i2c_ctrl_i2c_header<5>" 
+                                             24: "uc_ctrl_madr<6>" 
+  5: "data_bus<3>".PIN 15: "i2c_ctrl_i2c_header<6>" 
+                                             25: "uc_ctrl_madr<7>" 
+  6: "data_bus<4>".PIN 16: "i2c_ctrl_i2c_header<7>" 
+                                             26: "uc_ctrl_mbdr_micro<1>" 
+  7: "data_bus<5>".PIN 17: uc_ctrl_as_int    27: "uc_ctrl_mbdr_micro<2>" 
+  8: "data_bus<6>".PIN 18: "uc_ctrl_madr<0>" 28: "uc_ctrl_mbdr_micro<3>" 
+  9: "data_bus<7>".PIN 19: "uc_ctrl_madr<1>" 29: "uc_ctrl_mbdr_micro<4>" 
+ 10: "i2c_ctrl_i2c_header<1>" 
+                       20: "uc_ctrl_madr<2>" 30: "uc_ctrl_mbdr_micro<5>" 
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+uc_ctrl_mbdr_micro<1> 
+                  X.X......................X.............. 3       3
+uc_ctrl_madr<7>   .X......X...............X............... 3       3
+uc_ctrl_mbdr_micro<5> 
+                  X.....X......................X.......... 3       3
+uc_ctrl_madr<6>   .X.....X...............X................ 3       3
+uc_ctrl_ds_int    .........XXXXXXX..XXXXXXX............... 14      14
+uc_ctrl_madr<5>   .X....X...............X................. 3       3
+uc_ctrl_madr<4>   .X...X...............X.................. 3       3
+uc_ctrl_madr<3>   .X..X...............X................... 3       3
+uc_ctrl_madr<2>   .X.X...............X.................... 3       3
+uc_ctrl_madr<1>   .XX...............X..................... 3       3
+uc_ctrl_mbdr_micro<4> 
+                  X....X......................X........... 3       3
+uc_ctrl_mbdr_micro<3> 
+                  X...X......................X............ 3       3
+uc_ctrl_mbdr_micro<2> 
+                  X..X......................X............. 3       3
+uc_ctrl_madr<0>   .X...............X...................... 2       2
+uc_ctrl_as_int_d1 
+                  ................X....................... 1       1
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB2 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  38
+Number of function block inputs used/remaining:               38/2
+Number of function block control terms used/remaining:        1/3
+Number of PLA product terms used/remaining:                   44/12
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+uc_ctrl_prs_state_ffd1            3       FB2_1   2     GTS/I/O  I     
+N_PZ_564                          1       FB2_2         (b)      (b)   
+dtack                             1       FB2_3   3     GTS/I/O  O     
+data_bus<0>                       5       FB2_4   4     I/O      I/O   
+data_bus<1>                       5       FB2_5   5     GTS/I/O  I/O   
+uc_ctrl_txak                      2       FB2_6         (b)      (b)   
+uc_ctrl_mtx                       2       FB2_7         (b)      (b)   
+uc_ctrl_mbcr_wr                   3       FB2_8         (b)      (b)   
+uc_ctrl_prs_state_ffd2            2       FB2_9         (b)      (b)   
+uc_ctrl_mif_bit_reset             4       FB2_10        (b)      (b)   
+uc_ctrl_mal_bit_reset             4       FB2_11        (b)      (b)   
+data_bus<3>                       5       FB2_12  6     GTS/I/O  I/O   
+data_bus<2>                       6       FB2_13  7     I/O      I/O   
+N_PZ_569                          1       FB2_14  9     I/O      I     
+N_PZ_565                          1       FB2_15  10    I/O      I     
+N_PZ_562                          3       FB2_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: N_PZ_562          14: "i2c_ctrl_mbdr_i2c<2>" 
+                                             27: "uc_ctrl_madr<1>" 
+  2: N_PZ_569          15: "i2c_ctrl_mbdr_i2c<3>" 
+                                             28: "uc_ctrl_madr<2>" 
+  3: N_PZ_665          16: i2c_ctrl_mif      29: "uc_ctrl_madr<3>" 
+  4: as                17: i2c_ctrl_rxak     30: uc_ctrl_mal_bit_reset 
+  5: "data_bus<0>"     18: i2c_ctrl_srw      31: uc_ctrl_mbcr_wr 
+  6: "data_bus<1>"     19: r_w               32: uc_ctrl_mif_bit_reset 
+  7: "data_bus<2>"     20: uc_ctrl_addr_en   33: uc_ctrl_mtx 
+  8: "data_bus<2>".PIN 21: uc_ctrl_address_match 
+                                             34: uc_ctrl_prs_state_ffd1 
+  9: "data_bus<3>"     22: uc_ctrl_as_int_d1 35: uc_ctrl_prs_state_ffd2 
+ 10: "data_bus<3>".PIN 23: uc_ctrl_cntrl_en  36: uc_ctrl_rsta 
+ 11: "data_bus<4>".PIN 24: uc_ctrl_data_en   37: uc_ctrl_stat_en 
+ 12: "i2c_ctrl_mbdr_i2c<0>" 
+                       25: uc_ctrl_ds_int    38: uc_ctrl_txak 
+ 13: "i2c_ctrl_mbdr_i2c<1>" 
+                       26: "uc_ctrl_madr<0>"
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+uc_ctrl_prs_state_ffd1 
+                  ....................XX..X........XX..... 5       5
+N_PZ_564          ..X...............X....X................ 3       3
+dtack             .................................XX..... 2       2
+data_bus<0>       X...X......X....X.XX..XX.X.......XX.X... 12      12
+data_bus<1>       X....X......X..X..XX..XX..X......XX.X... 12      12
+uc_ctrl_txak      .X.......X...........................X.. 3       3
+uc_ctrl_mtx       .X........X.....................X....... 3       3
+uc_ctrl_mbcr_wr   .X............................X..XX..... 4       4
+uc_ctrl_prs_state_ffd2 
+                  ...X................XX...........XX..... 5       5
+uc_ctrl_mif_bit_reset 
+                  ..X....X..........X............X.XX.X... 7       7
+uc_ctrl_mal_bit_reset 
+                  ..X.......X.......X..........X...XX.X... 7       7
+data_bus<3>       X.......X.....X...XX..XX....X....XX.XX.. 12      12
+data_bus<2>       X.....X......X...XXX..XX...X.....XXXX... 13      13
+N_PZ_569          ..X...............X...X................. 3       3
+N_PZ_565          ..X...............XX.................... 3       3
+N_PZ_562          ..X...............XX..XX............X... 6       6
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB3 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  37
+Number of function block inputs used/remaining:               37/3
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   50/6
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+i2c_ctrl_clk_cnt<0>               6       FB3_1   136   I/O      I     
+i2c_ctrl_sda_out_reg              15      FB3_2   135   I/O      I     
+i2c_ctrl_scl_state_ffd1           6       FB3_3   134   I/O      I     
+i2c_ctrl_gen_start                3       FB3_4         (b)      (b)   
+i2c_ctrl_arb_lost                 4       FB3_5   133   I/O      I     
+i2c_ctrl_bus_busy_d1              2       FB3_6         (b)      (b)   
+i2c_ctrl_master_slave             3       FB3_7         (b)      (b)   
+i2c_ctrl_msta_d1                  2       FB3_8         (b)      (b)   
+uc_ctrl_msta                      2       FB3_9         (b)      (b)   
+uc_ctrl_mien                      2       FB3_10        (b)      (b)   
+uc_ctrl_men                       2       FB3_11        (b)      (b)   
+uc_ctrl_mbdr_micro<7>             2       FB3_12        (b)      (b)   
+uc_ctrl_mbdr_micro<6>             2       FB3_13        (b)      (b)   
+i2c_ctrl_msta_rst                 5       FB3_14  132   I/O      I     
+uc_ctrl_mbdr_micro<0>             2       FB3_15        (b)      (b)   
+i2c_ctrl_gen_stop                 3       FB3_16  131   I/O      I     
+
+Signals Used by Logic in Function Block
+  1: N_PZ_564          14: i2c_ctrl_detect_start 
+                                             26: i2c_ctrl_sda_out_reg 
+  2: N_PZ_569          15: i2c_ctrl_detect_stop 
+                                             27: i2c_ctrl_sm_stop 
+  3: N_PZ_687          16: i2c_ctrl_gen_start 
+                                             28: i2c_ctrl_state_ffd3 
+  4: "data_bus<0>".PIN 17: i2c_ctrl_gen_stop 29: i2c_ctrl_stop_scl_reg 
+  5: "data_bus<5>".PIN 18: i2c_ctrl_master_sda 
+                                             30: n7426 
+  6: "data_bus<6>".PIN 19: i2c_ctrl_master_slave 
+                                             31: "uc_ctrl_mbdr_micro<0>" 
+  7: "data_bus<7>".PIN 20: i2c_ctrl_msta_d1  32: "uc_ctrl_mbdr_micro<6>" 
+  8: i2c_ctrl__n0153   21: i2c_ctrl_msta_rst 33: "uc_ctrl_mbdr_micro<7>" 
+  9: i2c_ctrl_arb_lost 22: i2c_ctrl_scl_in   34: uc_ctrl_men 
+ 10: i2c_ctrl_bus_busy 23: i2c_ctrl_scl_state_ffd1 
+                                             35: uc_ctrl_mien 
+ 11: "i2c_ctrl_clk_cnt<0>" 
+                       24: i2c_ctrl_scl_state_ffd2 
+                                             36: uc_ctrl_msta 
+ 12: "i2c_ctrl_clk_cnt<1>" 
+                       25: i2c_ctrl_scl_state_ffd3 
+                                             37: uc_ctrl_rsta 
+ 13: "i2c_ctrl_clk_cnt<2>" 
+                      
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+i2c_ctrl_clk_cnt<0> 
+                  .......X..XXX.........XXX...X....X..X... 10      10
+i2c_ctrl_sda_out_reg 
+                  .......XX.XXX...XX....XXXXXX.X...X..X... 16      16
+i2c_ctrl_scl_state_ffd1 
+                  .......X.XXXX..X..X..XXXX........X...... 12      12
+i2c_ctrl_gen_start 
+                  .............X.X...X.............X.X.... 5       5
+i2c_ctrl_arb_lost 
+                  ..X.....X.........X...XXX........X...... 7       7
+i2c_ctrl_bus_busy_d1 
+                  .........X.......................X...... 2       2
+i2c_ctrl_master_slave 
+                  .........X.......................X.X.... 3       3
+i2c_ctrl_msta_d1  .................................X.X.... 2       2
+uc_ctrl_msta      .X..X...............X..............X.... 4       4
+uc_ctrl_mien      .X...X............................X..... 3       3
+uc_ctrl_men       .X....X..........................X...... 3       3
+uc_ctrl_mbdr_micro<7> 
+                  X.....X.........................X....... 3       3
+uc_ctrl_mbdr_micro<6> 
+                  X....X.........................X........ 3       3
+i2c_ctrl_msta_rst 
+                  ..X.....X.........X.X.XXX........X...... 8       8
+uc_ctrl_mbdr_micro<0> 
+                  X..X..........................X......... 3       3
+i2c_ctrl_gen_stop 
+                  ........X.....X.X..X.............X.X.... 6       6
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB4 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  33
+Number of function block inputs used/remaining:               33/7
+Number of function block control terms used/remaining:        1/3
+Number of PLA product terms used/remaining:                   56/0
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB4_1   11    I/O      I     
+(unused)                          0       FB4_2   12    I/O      I     
+(unused)                          0       FB4_3   13    I/O      I     
+(unused)                          0       FB4_4   14    I/O      I     
+N_PZ_672                          2       FB4_5   15    I/O      I     
+i2c_ctrl_bit_cnt<0>               3       FB4_6   16    I/O      (b)   
+i2c_ctrl_state_ffd2               6       FB4_7         (b)      (b)   
+i2c_ctrl_stop_scl_reg             8       FB4_8         (b)      (b)   
+i2c_ctrl_clk_cnt<1>               5       FB4_9         (b)      (b)   
+i2c_ctrl__n0153                   7       FB4_10        (b)      (b)   
+i2c_ctrl_scl_state_ffd3           11      FB4_11        (b)      (b)   
+i2c_ctrl_shift_reg_ld             6       FB4_12  17    I/O      (b)   
+i2c_ctrl_clk_cnt<2>               8       FB4_13        (b)      (b)   
+i2c_ctrl_state_ffd1               6       FB4_14  18    I/O      (b)   
+i2c_ctrl_scl_state_ffd2           6       FB4_15        (b)      (b)   
+uc_ctrl_rsta                      4       FB4_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: N_PZ_569          12: "i2c_ctrl_clk_cnt<0>" 
+                                             23: i2c_ctrl_state_ffd1 
+  2: N_PZ_654          13: "i2c_ctrl_clk_cnt<1>" 
+                                             24: i2c_ctrl_state_ffd2 
+  3: N_PZ_672          14: "i2c_ctrl_clk_cnt<2>" 
+                                             25: i2c_ctrl_state_ffd3 
+  4: N_PZ_897          15: i2c_ctrl_detect_start 
+                                             26: i2c_ctrl_stop_scl_reg 
+  5: "data_bus<2>".PIN 16: i2c_ctrl_gen_stop 27: n7426 
+  6: i2c_ctrl__n0153   17: "i2c_ctrl_i2c_header<0>" 
+                                             28: sda 
+  7: i2c_ctrl__n0159   18: i2c_ctrl_master_slave 
+                                             29: sda.PIN 
+  8: i2c_ctrl_arb_lost 19: i2c_ctrl_scl_state_ffd1 
+                                             30: uc_ctrl_ds_int.COMB 
+  9: "i2c_ctrl_bit_cnt<0>" 
+                       20: i2c_ctrl_scl_state_ffd2 
+                                             31: uc_ctrl_men 
+ 10: "i2c_ctrl_bit_cnt<1>" 
+                       21: i2c_ctrl_scl_state_ffd3 
+                                             32: uc_ctrl_mtx 
+ 11: "i2c_ctrl_bit_cnt<2>" 
+                       22: i2c_ctrl_sm_stop  33: uc_ctrl_rsta 
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+N_PZ_672          ..............X.........X.X............. 3       3
+i2c_ctrl_bit_cnt<0> 
+                  ..X.....X.....X.......XXX.....X......... 7       7
+i2c_ctrl_state_ffd2 
+                  ...X..XXXXX...X.XX....XXX.XXXX.X........ 17      17
+i2c_ctrl_stop_scl_reg 
+                  .......X.......X..XXXX..XXX...X......... 10      10
+i2c_ctrl_clk_cnt<1> 
+                  .X..........X.....XXX.........X......... 6       6
+i2c_ctrl__n0153   .X...X......XX....XXX.........X......... 8       8
+i2c_ctrl_scl_state_ffd3 
+                  .....XXXXXXXXX....XXX.........X.X....... 14      14
+i2c_ctrl_shift_reg_ld 
+                  ..............X.XX....XXX.X...XX........ 9       9
+i2c_ctrl_clk_cnt<2> 
+                  .X...X.....XXX....XXX....X....X.X....... 11      11
+i2c_ctrl_state_ffd1 
+                  ...X...X......X..X....XXX..XXX.......... 10      10
+i2c_ctrl_scl_state_ffd2 
+                  .....X.....XXX....XXX....X....X.X....... 10      10
+uc_ctrl_rsta      X...X.............XXX...........X....... 6       6
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB5 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  20
+Number of function block inputs used/remaining:               20/20
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   31/25
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+i2c_ctrl_i2c_header<3>            3       FB5_1         (b)      (b)   
+i2c_ctrl_i2c_header<7>            3       FB5_2   33    I/O      (b)   
+i2c_ctrl_i2c_header<2>            3       FB5_3         (b)      (b)   
+i2c_ctrl_i2c_header<6>            3       FB5_4   32    GCK/I/O  GCK   
+i2c_ctrl_i2c_header<5>            3       FB5_5   31    I/O      (b)   
+scl                               3       FB5_6   30    GCK/I/O  GCK/I/O
+i2c_ctrl_i2c_header<1>            3       FB5_7         (b)      (b)   
+i2c_ctrl_i2c_header<0>            3       FB5_8         (b)      (b)   
+N_PZ_897                          1       FB5_9         (b)      (b)   
+i2c_ctrl_bus_busy                 3       FB5_10        (b)      (b)   
+N_PZ_654                          2       FB5_11        (b)      (b)   
+i2c_ctrl_sda_out_reg_d1           2       FB5_12        (b)      (b)   
+i2c_ctrl_detect_stop              2       FB5_13        (b)      (b)   
+i2c_ctrl_i2c_header<4>            3       FB5_14  28    I/O      (b)   
+i2c_ctrl_detect_start             2       FB5_15        (b)      (b)   
+i2c_ctrl_scl_in                   2       FB5_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: N_PZ_892           8: "i2c_ctrl_i2c_header<2>" 
+                                             15: i2c_ctrl_scl_state_ffd2 
+  2: N_PZ_896           9: "i2c_ctrl_i2c_header<3>" 
+                                             16: i2c_ctrl_scl_state_ffd3 
+  3: i2c_ctrl__n0073   10: "i2c_ctrl_i2c_header<4>" 
+                                             17: i2c_ctrl_sda_out_reg 
+  4: "i2c_ctrl_clk_cnt<0>" 
+                       11: "i2c_ctrl_i2c_header<5>" 
+                                             18: scl.PIN 
+  5: i2c_ctrl_detect_stop 
+                       12: "i2c_ctrl_i2c_header<6>" 
+                                             19: sda 
+  6: "i2c_ctrl_i2c_header<0>" 
+                       13: i2c_ctrl_i2c_header_en 
+                                             20: uc_ctrl_men 
+  7: "i2c_ctrl_i2c_header<1>" 
+                       14: i2c_ctrl_scl_state_ffd1 
+                                            
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+i2c_ctrl_i2c_header<3> 
+                  .......X....X......X.................... 3       3
+i2c_ctrl_i2c_header<7> 
+                  ...........XX......X.................... 3       3
+i2c_ctrl_i2c_header<2> 
+                  ......X.....X......X.................... 3       3
+i2c_ctrl_i2c_header<6> 
+                  ..........X.X......X.................... 3       3
+i2c_ctrl_i2c_header<5> 
+                  .........X..X......X.................... 3       3
+scl               .............XXX...X.................... 4       4
+i2c_ctrl_i2c_header<1> 
+                  .....X......X......X.................... 3       3
+i2c_ctrl_i2c_header<0> 
+                  ............X.....XX.................... 3       3
+N_PZ_897          ....X..............X.................... 2       2
+i2c_ctrl_bus_busy 
+                  X...X..............X.................... 3       3
+N_PZ_654          ...X.........X.X........................ 3       3
+i2c_ctrl_sda_out_reg_d1 
+                  ................X..X.................... 2       2
+i2c_ctrl_detect_stop 
+                  .X...............X...................... 2       2
+i2c_ctrl_i2c_header<4> 
+                  ........X...X......X.................... 3       3
+i2c_ctrl_detect_start 
+                  ..X..............X...................... 2       2
+i2c_ctrl_scl_in   .................X.X.................... 2       2
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB6 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  38
+Number of function block inputs used/remaining:               38/2
+Number of function block control terms used/remaining:        3/1
+Number of PLA product terms used/remaining:                   33/23
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+data_bus<7>                       6       FB6_1   34    I/O      I/O   
+data_bus<4>                       6       FB6_2   35    CDR/I/O  I/O   
+(unused)                          0       FB6_3         (b)            
+sda                               4       FB6_4   38    GCK/I/O  GCK/I/O
+(unused)                          0       FB6_5         (b)            
+(unused)                          0       FB6_6         (b)            
+(unused)                          0       FB6_7         (b)            
+i2c_ctrl_mal                      3       FB6_8         (b)      (b)   
+N_PZ_665                          1       FB6_9         (b)      (b)   
+i2c_ctrl_mif                      3       FB6_10        (b)      (b)   
+i2c_ctrl__n0171                   2       FB6_11        (b)      (b)   
+data_bus<5>                       6       FB6_12  39    DGE/I/O  I/O   
+data_bus<6>                       6       FB6_13  40    I/O      I/O   
+(unused)                          0       FB6_14  41    I/O            
+(unused)                          0       FB6_15  42    I/O            
+(unused)                          0       FB6_16  43    I/O            
+
+Signals Used by Logic in Function Block
+  1: N_PZ_562          14: "i2c_ctrl_mbdr_i2c<4>" 
+                                             27: "uc_ctrl_madr<5>" 
+  2: "data_bus<4>"     15: "i2c_ctrl_mbdr_i2c<5>" 
+                                             28: "uc_ctrl_madr<6>" 
+  3: "data_bus<5>"     16: "i2c_ctrl_mbdr_i2c<6>" 
+                                             29: "uc_ctrl_madr<7>" 
+  4: "data_bus<6>"     17: "i2c_ctrl_mbdr_i2c<7>" 
+                                             30: uc_ctrl_mal_bit_reset 
+  5: "data_bus<7>"     18: i2c_ctrl_sda_out_reg 
+                                             31: uc_ctrl_men 
+  6: i2c_ctrl__n0170   19: i2c_ctrl_slave_sda 
+                                             32: uc_ctrl_mien 
+  7: i2c_ctrl__n0171   20: i2c_ctrl_stop_scl_reg 
+                                             33: uc_ctrl_mif_bit_reset 
+  8: i2c_ctrl_arb_lost 21: mcf               34: uc_ctrl_msta 
+  9: i2c_ctrl_bus_busy 22: r_w               35: uc_ctrl_mtx 
+ 10: "i2c_ctrl_i2c_header<0>" 
+                       23: uc_ctrl_addr_en   36: uc_ctrl_prs_state_ffd1 
+ 11: i2c_ctrl_maas     24: uc_ctrl_cntrl_en  37: uc_ctrl_prs_state_ffd2 
+ 12: i2c_ctrl_mal      25: uc_ctrl_data_en   38: uc_ctrl_stat_en 
+ 13: i2c_ctrl_master_slave 
+                       26: "uc_ctrl_madr<4>"
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+data_bus<7>       X...X...........X...XXXXX...X.X....XXX.. 13      13
+data_bus<4>       XX.........X.X.......XXXXX........XXXX.. 13      13
+sda               .......X....X....XXX..........X......... 6       6
+i2c_ctrl_mal      .....X.......................XX......... 3       3
+N_PZ_665          ...................................XX... 2       2
+i2c_ctrl_mif      ......X.......................X.X....... 3       3
+i2c_ctrl__n0171   .........XXXX.......X...........X....... 6       6
+data_bus<5>       X.X.....X.....X......XXXX.X......X.XXX.. 13      13
+data_bus<6>       X..X......X....X.....XXXX..X...X...XXX.. 13      13
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB7 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  38
+Number of function block inputs used/remaining:               38/2
+Number of function block control terms used/remaining:        2/2
+Number of PLA product terms used/remaining:                   26/30
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+i2c_ctrl_shift_reg_en             3       FB7_1         (b)      (b)   
+i2c_ctrl_i2c_header_en            3       FB7_2         (b)      (b)   
+i2c_ctrl_rxak                     2       FB7_3         (b)      (b)   
+uc_ctrl_address_match             1       FB7_4         (b)      (b)   
+(unused)                          0       FB7_5   26    I/O      I     
+n7426                             1       FB7_6   25    I/O      I     
+uc_ctrl_stat_en                   1       FB7_7         (b)      (b)   
+uc_ctrl_data_en                   1       FB7_8         (b)      (b)   
+uc_ctrl_cntrl_en                  1       FB7_9         (b)      (b)   
+uc_ctrl_addr_en                   1       FB7_10        (b)      (b)   
+N_PZ_896                          1       FB7_11  24    I/O      I     
+i2c_ctrl__n0073                   2       FB7_12  23    I/O      I     
+N_PZ_652                          2       FB7_13  22    I/O      I     
+i2c_ctrl_mbdr_i2c<7>              3       FB7_14  21    I/O      I     
+i2c_ctrl_slave_sda                4       FB7_15  20    I/O      I     
+i2c_ctrl_master_sda               4       FB7_16  19    I/O      I     
+
+Signals Used by Logic in Function Block
+  1: "addr_bus<0>"     14: "addr_bus<21>"    27: i2c_ctrl_maas 
+  2: "addr_bus<10>"    15: "addr_bus<22>"    28: i2c_ctrl_master_slave 
+  3: "addr_bus<11>"    16: "addr_bus<23>"    29: i2c_ctrl_shift_out 
+  4: "addr_bus<12>"    17: "addr_bus<2>"     30: i2c_ctrl_state_ffd1 
+  5: "addr_bus<13>"    18: "addr_bus<3>"     31: i2c_ctrl_state_ffd2 
+  6: "addr_bus<14>"    19: "addr_bus<4>"     32: i2c_ctrl_state_ffd3 
+  7: "addr_bus<15>"    20: "addr_bus<5>"     33: n7426 
+  8: "addr_bus<16>"    21: "addr_bus<6>"     34: sda 
+  9: "addr_bus<17>"    22: "addr_bus<7>"     35: uc_ctrl_address_match 
+ 10: "addr_bus<18>"    23: "addr_bus<8>"     36: uc_ctrl_as_int_d1 
+ 11: "addr_bus<19>"    24: "addr_bus<9>"     37: uc_ctrl_men 
+ 12: "addr_bus<1>"     25: as                38: uc_ctrl_txak 
+ 13: "addr_bus<20>"    26: i2c_ctrl_detect_start 
+                                            
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+i2c_ctrl_shift_reg_en 
+                  ...........................X.X.XX...X... 5       5
+i2c_ctrl_i2c_header_en 
+                  .........................X.....XX...X... 4       4
+i2c_ctrl_rxak     ...............................XXX...... 3       3
+uc_ctrl_address_match 
+                  .XXXXXXXXXX.XXXX......XXX..........X.... 18      18
+n7426             .............................XX......... 2       2
+uc_ctrl_stat_en   X..........X....XXXXXX............X..... 9       9
+uc_ctrl_data_en   X..........X....XXXXXX............X..... 9       9
+uc_ctrl_cntrl_en  X..........X....XXXXXX............X..... 9       9
+uc_ctrl_addr_en   X..........X....XXXXXX............X..... 9       9
+N_PZ_896          .........................X..........X... 2       2
+i2c_ctrl__n0073   ...............................XX...X... 3       3
+N_PZ_652          .............................XXX........ 3       3
+i2c_ctrl_mbdr_i2c<7> 
+                  ............................XX.X....X... 4       4
+i2c_ctrl_slave_sda 
+                  ..........................X.XXXX....XX.. 7       7
+i2c_ctrl_master_sda 
+                  ............................XXXXX...XX.. 7       7
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB8 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  32
+Number of function block inputs used/remaining:               32/8
+Number of function block control terms used/remaining:        1/3
+Number of PLA product terms used/remaining:                   41/15
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+i2c_ctrl_shift_reg<1>             4       FB8_1   44    I/O      (b)   
+i2c_ctrl_shift_reg<0>             4       FB8_2   45    I/O      (b)   
+i2c_ctrl_mbdr_i2c<6>              3       FB8_3   46    I/O      (b)   
+i2c_ctrl_mbdr_i2c<0>              3       FB8_4         (b)      (b)   
+i2c_ctrl_mbdr_i2c<5>              3       FB8_5   48    I/O      (b)   
+i2c_ctrl_mbdr_i2c<4>              3       FB8_6   49    I/O      (b)   
+i2c_ctrl_sm_stop                  4       FB8_7         (b)      (b)   
+i2c_ctrl_maas                     4       FB8_8         (b)      (b)   
+i2c_ctrl_srw                      3       FB8_9         (b)      (b)   
+i2c_ctrl_bit_cnt<1>               3       FB8_10        (b)      (b)   
+i2c_ctrl_mbdr_i2c<3>              3       FB8_11  50    I/O      (b)   
+i2c_ctrl_mbdr_i2c<2>              3       FB8_12  51    I/O      (b)   
+i2c_ctrl_mbdr_i2c<1>              3       FB8_13  52    I/O      (b)   
+i2c_ctrl_bit_cnt<2>               3       FB8_14        (b)      (b)   
+i2c_ctrl__n0159                   3       FB8_15        (b)      (b)   
+i2c_ctrl_state_ffd3               5       FB8_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: N_PZ_652          12: i2c_ctrl_master_slave 
+                                             23: i2c_ctrl_state_ffd1 
+  2: N_PZ_672          13: "i2c_ctrl_shift_reg<0>" 
+                                             24: i2c_ctrl_state_ffd2 
+  3: N_PZ_897          14: "i2c_ctrl_shift_reg<1>" 
+                                             25: i2c_ctrl_state_ffd3 
+  4: i2c_ctrl__n0159   15: "i2c_ctrl_shift_reg<2>" 
+                                             26: sda 
+  5: i2c_ctrl_arb_lost 16: "i2c_ctrl_shift_reg<3>" 
+                                             27: sda.PIN 
+  6: "i2c_ctrl_bit_cnt<0>" 
+                       17: "i2c_ctrl_shift_reg<4>" 
+                                             28: uc_ctrl_ds_int.COMB 
+  7: "i2c_ctrl_bit_cnt<1>" 
+                       18: "i2c_ctrl_shift_reg<5>" 
+                                             29: uc_ctrl_mbcr_wr 
+  8: "i2c_ctrl_bit_cnt<2>" 
+                       19: "i2c_ctrl_shift_reg<6>" 
+                                             30: "uc_ctrl_mbdr_micro<0>" 
+  9: i2c_ctrl_detect_start 
+                       20: i2c_ctrl_shift_reg_en 
+                                             31: "uc_ctrl_mbdr_micro<1>" 
+ 10: "i2c_ctrl_i2c_header<0>" 
+                       21: i2c_ctrl_shift_reg_ld 
+                                             32: uc_ctrl_men 
+ 11: i2c_ctrl_maas     22: i2c_ctrl_sm_stop 
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+i2c_ctrl_shift_reg<1> 
+                  ............XX.....XX.........XX........ 6       6
+i2c_ctrl_shift_reg<0> 
+                  ............X......XX....X...X.X........ 6       6
+i2c_ctrl_mbdr_i2c<6> 
+                  ..................X...X.X......X........ 4       4
+i2c_ctrl_mbdr_i2c<0> 
+                  ............X.........X.X......X........ 4       4
+i2c_ctrl_mbdr_i2c<5> 
+                  .................X....X.X......X........ 4       4
+i2c_ctrl_mbdr_i2c<4> 
+                  ................X.....X.X......X........ 4       4
+i2c_ctrl_sm_stop  ..X.X......X.........XXXXXX............. 9       9
+i2c_ctrl_maas     ..........X...........XXX..XX..X........ 7       7
+i2c_ctrl_srw      .........X............XXX......X........ 5       5
+i2c_ctrl_bit_cnt<1> 
+                  XX...XX........................X........ 5       5
+i2c_ctrl_mbdr_i2c<3> 
+                  ...............X......X.X......X........ 4       4
+i2c_ctrl_mbdr_i2c<2> 
+                  ..............X.......X.X......X........ 4       4
+i2c_ctrl_mbdr_i2c<1> 
+                  .............X........X.X......X........ 4       4
+i2c_ctrl_bit_cnt<2> 
+                  XX...XXXX......................X........ 7       7
+i2c_ctrl__n0159   XX.X.XXXX......................X........ 8       8
+i2c_ctrl_state_ffd3 
+                  ..XX.XXXX.............XXX............... 9       9
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB9 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  32
+Number of function block inputs used/remaining:               32/8
+Number of function block control terms used/remaining:        1/3
+Number of PLA product terms used/remaining:                   27/29
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+mcf                               2       FB9_1   112   I/O      O     
+irq                               1       FB9_2   113   I/O      O     
+i2c_ctrl__n0170                   5       FB9_3         (b)      (b)   
+(unused)                          0       FB9_4   114   I/O            
+N_PZ_892                          1       FB9_5         (b)      (b)   
+(unused)                          0       FB9_6   115   I/O            
+i2c_ctrl_shift_reg<2>             4       FB9_7         (b)      (b)   
+i2c_ctrl_shift_reg<3>             4       FB9_8         (b)      (b)   
+i2c_ctrl_shift_reg<4>             4       FB9_9         (b)      (b)   
+i2c_ctrl_shift_reg<5>             4       FB9_10        (b)      (b)   
+i2c_ctrl_shift_reg<6>             4       FB9_11        (b)      (b)   
+(unused)                          0       FB9_12  116   I/O            
+(unused)                          0       FB9_13  117   I/O            
+(unused)                          0       FB9_14  118   I/O            
+(unused)                          0       FB9_15  119   I/O            
+i2c_ctrl_shift_out                4       FB9_16        (b)      (b)   
+
+Signals Used by Logic in Function Block
+  1: i2c_ctrl__n0159   12: i2c_ctrl_mif      23: uc_ctrl_mal_bit_reset 
+  2: i2c_ctrl_arb_lost 13: i2c_ctrl_shift_out 
+                                             24: "uc_ctrl_mbdr_micro<2>" 
+  3: "i2c_ctrl_bit_cnt<0>" 
+                       14: "i2c_ctrl_shift_reg<1>" 
+                                             25: "uc_ctrl_mbdr_micro<3>" 
+  4: "i2c_ctrl_bit_cnt<1>" 
+                       15: "i2c_ctrl_shift_reg<2>" 
+                                             26: "uc_ctrl_mbdr_micro<4>" 
+  5: "i2c_ctrl_bit_cnt<2>" 
+                       16: "i2c_ctrl_shift_reg<3>" 
+                                             27: "uc_ctrl_mbdr_micro<5>" 
+  6: i2c_ctrl_bus_busy_d1 
+                       17: "i2c_ctrl_shift_reg<4>" 
+                                             28: "uc_ctrl_mbdr_micro<6>" 
+  7: i2c_ctrl_detect_start 
+                       18: "i2c_ctrl_shift_reg<5>" 
+                                             29: "uc_ctrl_mbdr_micro<7>" 
+  8: i2c_ctrl_detect_stop 
+                       19: "i2c_ctrl_shift_reg<6>" 
+                                             30: uc_ctrl_men 
+  9: i2c_ctrl_gen_start 
+                       20: i2c_ctrl_shift_reg_en 
+                                             31: uc_ctrl_mien 
+ 10: i2c_ctrl_gen_stop 21: i2c_ctrl_shift_reg_ld 
+                                             32: uc_ctrl_rsta 
+ 11: i2c_ctrl_master_slave 
+                       22: i2c_ctrl_sm_stop 
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+mcf               X.XXX........................X.......... 5       5
+irq               ...........X..................X......... 2       2
+i2c_ctrl__n0170   .X...X.XXXX..........XX........X........ 9       9
+N_PZ_892          ......XX................................ 2       2
+i2c_ctrl_shift_reg<2> 
+                  .............XX....XX..X.....X.......... 6       6
+i2c_ctrl_shift_reg<3> 
+                  ..............XX...XX...X....X.......... 6       6
+i2c_ctrl_shift_reg<4> 
+                  ...............XX..XX....X...X.......... 6       6
+i2c_ctrl_shift_reg<5> 
+                  ................XX.XX.....X..X.......... 6       6
+i2c_ctrl_shift_reg<6> 
+                  .................XXXX......X.X.......... 6       6
+i2c_ctrl_shift_out 
+                  ............X.....XXX.......XX.......... 6       6
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB10 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  7
+Number of function block inputs used/remaining:               7/33
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   4/52
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB10_1  111   I/O            
+(unused)                          0       FB10_2  110   I/O            
+(unused)                          0       FB10_3  107   I/O            
+(unused)                          0       FB10_4  106   I/O            
+(unused)                          0       FB10_5  105   I/O            
+(unused)                          0       FB10_6  104   I/O            
+(unused)                          0       FB10_7        (b)            
+(unused)                          0       FB10_8        (b)            
+(unused)                          0       FB10_9        (b)            
+(unused)                          0       FB10_10       (b)            
+(unused)                          0       FB10_11       (b)            
+(unused)                          0       FB10_12 103   I/O            
+(unused)                          0       FB10_13       (b)            
+(unused)                          0       FB10_14 102   I/O            
+N_PZ_687                          4       FB10_15       (b)      (b)   
+(unused)                          0       FB10_16 101   I/O            
+
+Signals Used by Logic in Function Block
+  1: N_PZ_652           4: i2c_ctrl_state_ffd1 
+                                              6: scl.PIN 
+  2: i2c_ctrl_scl_in    5: i2c_ctrl_state_ffd2 
+                                              7: sda 
+  3: i2c_ctrl_sda_out_reg_d1 
+                      
+
+Signal                     1         2         3         4 Signals FB
+Name             0----+----0----+----0----+----0----+----0 Used    Inputs
+N_PZ_687          XXXXXXX................................. 7       7
+                 0----+----1----+----2----+----3----+----4
+                           0         0         0         0
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB11 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB11_1        (b)            
+(unused)                          0       FB11_2        (b)            
+(unused)                          0       FB11_3        (b)            
+(unused)                          0       FB11_4        (b)            
+(unused)                          0       FB11_5  120   I/O            
+(unused)                          0       FB11_6  121   I/O            
+(unused)                          0       FB11_7        (b)            
+(unused)                          0       FB11_8        (b)            
+(unused)                          0       FB11_9        (b)            
+(unused)                          0       FB11_10       (b)            
+(unused)                          0       FB11_11 124   I/O            
+(unused)                          0       FB11_12 125   I/O            
+(unused)                          0       FB11_13 126   I/O            
+(unused)                          0       FB11_14 128   I/O            
+(unused)                          0       FB11_15 129   I/O            
+(unused)                          0       FB11_16 130   I/O            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB12 ***********************************
+This function block is part of I/O Bank number:               2
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB12_1        (b)            
+(unused)                          0       FB12_2  100   I/O            
+(unused)                          0       FB12_3        (b)            
+(unused)                          0       FB12_4        (b)            
+(unused)                          0       FB12_5        (b)            
+(unused)                          0       FB12_6        (b)            
+(unused)                          0       FB12_7        (b)            
+(unused)                          0       FB12_8        (b)            
+(unused)                          0       FB12_9        (b)            
+(unused)                          0       FB12_10       (b)            
+(unused)                          0       FB12_11 98    I/O            
+(unused)                          0       FB12_12 97    I/O            
+(unused)                          0       FB12_13 96    I/O            
+(unused)                          0       FB12_14 95    I/O            
+(unused)                          0       FB12_15 94    I/O            
+(unused)                          0       FB12_16       (b)            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB13 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB13_1  75    I/O            
+(unused)                          0       FB13_2  76    I/O            
+(unused)                          0       FB13_3  77    I/O            
+(unused)                          0       FB13_4        (b)            
+(unused)                          0       FB13_5  78    I/O            
+(unused)                          0       FB13_6  79    I/O            
+(unused)                          0       FB13_7        (b)            
+(unused)                          0       FB13_8        (b)            
+(unused)                          0       FB13_9        (b)            
+(unused)                          0       FB13_10       (b)            
+(unused)                          0       FB13_11       (b)            
+(unused)                          0       FB13_12 80    I/O            
+(unused)                          0       FB13_13 81    I/O            
+(unused)                          0       FB13_14 82    I/O            
+(unused)                          0       FB13_15       (b)            
+(unused)                          0       FB13_16       (b)            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB14 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB14_1  74    I/O            
+(unused)                          0       FB14_2  71    I/O            
+(unused)                          0       FB14_3  70    I/O            
+(unused)                          0       FB14_4  69    I/O            
+(unused)                          0       FB14_5        (b)            
+(unused)                          0       FB14_6  68    I/O            
+(unused)                          0       FB14_7        (b)            
+(unused)                          0       FB14_8        (b)            
+(unused)                          0       FB14_9        (b)            
+(unused)                          0       FB14_10       (b)            
+(unused)                          0       FB14_11       (b)            
+(unused)                          0       FB14_12       (b)            
+(unused)                          0       FB14_13 66    I/O            
+(unused)                          0       FB14_14 64    I/O            
+(unused)                          0       FB14_15       (b)            
+(unused)                          0       FB14_16 61    I/O            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB15 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB15_1        (b)            
+(unused)                          0       FB15_2  83    I/O            
+(unused)                          0       FB15_3        (b)            
+(unused)                          0       FB15_4        (b)            
+(unused)                          0       FB15_5        (b)            
+(unused)                          0       FB15_6        (b)            
+(unused)                          0       FB15_7        (b)            
+(unused)                          0       FB15_8        (b)            
+(unused)                          0       FB15_9        (b)            
+(unused)                          0       FB15_10       (b)            
+(unused)                          0       FB15_11 85    I/O            
+(unused)                          0       FB15_12 86    I/O            
+(unused)                          0       FB15_13 87    I/O            
+(unused)                          0       FB15_14 88    I/O            
+(unused)                          0       FB15_15 91    I/O            
+(unused)                          0       FB15_16 92    I/O            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+*********************************** FB16 ***********************************
+This function block is part of I/O Bank number:               1
+Number of signals used by logic mapping into function block:  0
+Number of function block inputs used/remaining:               0/40
+Number of function block control terms used/remaining:        0/4
+Number of PLA product terms used/remaining:                   0/56
+Signal                            Total   Loc     Pin   Pin      Pin   
+Name                              Pt               #    Type     Use   
+(unused)                          0       FB16_1        (b)            
+(unused)                          0       FB16_2        (b)            
+(unused)                          0       FB16_3        (b)            
+(unused)                          0       FB16_4        (b)            
+(unused)                          0       FB16_5  60    I/O            
+(unused)                          0       FB16_6  59    I/O            
+(unused)                          0       FB16_7        (b)            
+(unused)                          0       FB16_8        (b)            
+(unused)                          0       FB16_9        (b)            
+(unused)                          0       FB16_10       (b)            
+(unused)                          0       FB16_11 58    I/O            
+(unused)                          0       FB16_12 57    I/O            
+(unused)                          0       FB16_13 56    I/O            
+(unused)                          0       FB16_14       (b)            
+(unused)                          0       FB16_15 54    I/O            
+(unused)                          0       FB16_16 53    I/O            
+Legend:
+Total Pt     - Total product terms used by the macrocell signal
+Loc          - Location where logic was mapped in device
+Pin Type/Use - I  - Input             GCK - Global clock
+               O  - Output            GTS - Global Output Enable
+              (b) - Buried macrocell  GSR - Global Set/Reset
+;;-----------------------------------------------------------------;;
+; Implemented Equations.
+
+"data_bus<0>" := "data_bus<0>" * N_PZ_562
+	# r_w * "i2c_ctrl_mbdr_i2c<0>" * 
+	uc_ctrl_prs_state_ffd2 * uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * 
+	i2c_ctrl_rxak
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * "uc_ctrl_madr<0>";
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<0>" := "i2c_ctrl_shift_reg<0>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_shift_reg<0>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<0>"
+	# "i2c_ctrl_shift_reg<0>" * !(i2c_ctrl_shift_reg_ld) * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * i2c_ctrl_sda_in * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_shift_reg_ld) := !(i2c_ctrl_master_slave) * !(i2c_ctrl_detect_start) * 
+	!(i2c_ctrl_state_ffd3)
+	# !(i2c_ctrl_detect_start) * i2c_ctrl_state_ffd3 * 
+	!(i2c_ctrl_state_ffd2)
+	# !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3) * 
+	!(n7426)
+	# !(i2c_ctrl_master_slave) * !(i2c_ctrl_detect_start) * 
+	!(i2c_ctrl_state_ffd1) * !("i2c_ctrl_i2c_header<0>")
+	# i2c_ctrl_master_slave * !(i2c_ctrl_detect_start) * 
+	i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * !(uc_ctrl_mtx);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_master_slave := uc_ctrl_msta;
+   CLK  =  clk;	GCK
+    CE = !(i2c_ctrl_bus_busy);
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+uc_ctrl_msta := uc_ctrl_msta * !(i2c_ctrl_msta_rst) * !(N_PZ_569)
+	# "data_bus<5>".PIN * !(i2c_ctrl_msta_rst) * N_PZ_569;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!(i2c_ctrl_msta_rst) := i2c_ctrl_master_slave * i2c_ctrl_arb_lost
+	# i2c_ctrl_master_slave * !(N_PZ_687)
+	# !(i2c_ctrl_master_slave) * !(i2c_ctrl_msta_rst)
+	# !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_scl_state_ffd3) * 
+	!(i2c_ctrl_scl_state_ffd2);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_arb_lost) := !(i2c_ctrl_master_slave) * !(i2c_ctrl_arb_lost)
+	# !(i2c_ctrl_arb_lost) * !(N_PZ_687)
+	# !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_scl_state_ffd3) * 
+	!(i2c_ctrl_scl_state_ffd2);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_scl_state_ffd1) := !(i2c_ctrl_scl_state_ffd1)
+	$ i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	i2c_ctrl_scl_state_ffd2
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	!(i2c_ctrl_scl_state_ffd2) * i2c_ctrl_scl_in
+	# i2c_ctrl_master_slave * !(i2c_ctrl_scl_state_ffd1) * 
+	!(i2c_ctrl_scl_state_ffd3) * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl_bus_busy) * 
+	i2c_ctrl_gen_start
+	# i2c_ctrl_scl_state_ffd1 * "i2c_ctrl_clk_cnt<0>" * 
+	!("i2c_ctrl_clk_cnt<1>") * i2c_ctrl_scl_state_ffd2 * i2c_ctrl__n0153 * 
+	!("i2c_ctrl_clk_cnt<2>");
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("i2c_ctrl_clk_cnt<0>".T) := !(i2c_ctrl_scl_state_ffd1) * !("i2c_ctrl_clk_cnt<0>") * 
+	!(i2c_ctrl_scl_state_ffd2)
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd1 * !("i2c_ctrl_clk_cnt<0>") * 
+	!(i2c_ctrl_scl_state_ffd3) * i2c_ctrl_scl_state_ffd2
+	# !("i2c_ctrl_clk_cnt<0>") * i2c_ctrl_scl_state_ffd3 * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl__n0153) * 
+	"i2c_ctrl_clk_cnt<2>" * uc_ctrl_rsta
+	# !("i2c_ctrl_clk_cnt<0>") * i2c_ctrl_scl_state_ffd3 * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl__n0153) * 
+	"i2c_ctrl_clk_cnt<2>" * i2c_ctrl_stop_scl_reg;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_scl_state_ffd3) := i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3)
+	# !(i2c_ctrl_scl_state_ffd3) * "i2c_ctrl_clk_cnt<1>"
+	# !(i2c_ctrl_scl_state_ffd3) * !(i2c_ctrl_scl_state_ffd2)
+	# !(i2c_ctrl_scl_state_ffd3) * !(i2c_ctrl__n0153)
+	# !(i2c_ctrl_scl_state_ffd3) * "i2c_ctrl_clk_cnt<2>"
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	i2c_ctrl_scl_state_ffd2
+	# "i2c_ctrl_clk_cnt<0>" * !("i2c_ctrl_clk_cnt<1>") * 
+	i2c_ctrl_scl_state_ffd2 * i2c_ctrl__n0153 * !("i2c_ctrl_clk_cnt<2>")
+	# i2c_ctrl_arb_lost * !(i2c_ctrl_scl_state_ffd3) * 
+	"i2c_ctrl_bit_cnt<0>" * "i2c_ctrl_bit_cnt<1>" * "i2c_ctrl_bit_cnt<2>" * 
+	!(i2c_ctrl__n0159)
+	# i2c_ctrl_scl_state_ffd1 * !("i2c_ctrl_clk_cnt<0>") * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * i2c_ctrl__n0153 * 
+	!("i2c_ctrl_clk_cnt<2>")
+	# i2c_ctrl_scl_state_ffd1 * !("i2c_ctrl_clk_cnt<0>") * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl__n0153) * 
+	"i2c_ctrl_clk_cnt<2>" * uc_ctrl_rsta;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("i2c_ctrl_clk_cnt<1>") := !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_scl_state_ffd2)
+	# "i2c_ctrl_clk_cnt<1>" * !(N_PZ_654)
+	# !("i2c_ctrl_clk_cnt<1>") * N_PZ_654
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	i2c_ctrl_scl_state_ffd2;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_scl_state_ffd2.T := !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd1 * !("i2c_ctrl_clk_cnt<0>") * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * i2c_ctrl__n0153 * 
+	!("i2c_ctrl_clk_cnt<2>")
+	# !(i2c_ctrl_scl_state_ffd1) * !("i2c_ctrl_clk_cnt<0>") * 
+	!("i2c_ctrl_clk_cnt<1>") * i2c_ctrl_scl_state_ffd2 * i2c_ctrl__n0153 * 
+	!("i2c_ctrl_clk_cnt<2>")
+	# "i2c_ctrl_clk_cnt<0>" * i2c_ctrl_scl_state_ffd3 * 
+	!("i2c_ctrl_clk_cnt<1>") * i2c_ctrl_scl_state_ffd2 * i2c_ctrl__n0153 * 
+	!("i2c_ctrl_clk_cnt<2>")
+	# i2c_ctrl_scl_state_ffd1 * !("i2c_ctrl_clk_cnt<0>") * 
+	i2c_ctrl_scl_state_ffd3 * !("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * 
+	!(i2c_ctrl__n0153) * "i2c_ctrl_clk_cnt<2>" * !(uc_ctrl_rsta) * 
+	i2c_ctrl_stop_scl_reg;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl__n0153) := !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_scl_state_ffd2)
+	# !("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl__n0153)
+	# !(i2c_ctrl__n0153) * !("i2c_ctrl_clk_cnt<2>")
+	# !(i2c_ctrl__n0153) * N_PZ_654
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	i2c_ctrl_scl_state_ffd2
+	# "i2c_ctrl_clk_cnt<1>" * i2c_ctrl__n0153 * 
+	"i2c_ctrl_clk_cnt<2>" * !(N_PZ_654);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("i2c_ctrl_clk_cnt<2>") := !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_scl_state_ffd2)
+	# !("i2c_ctrl_clk_cnt<1>") * !("i2c_ctrl_clk_cnt<2>")
+	# !("i2c_ctrl_clk_cnt<2>") * N_PZ_654
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	i2c_ctrl_scl_state_ffd2
+	# "i2c_ctrl_clk_cnt<1>" * "i2c_ctrl_clk_cnt<2>" * 
+	!(N_PZ_654)
+	# !("i2c_ctrl_clk_cnt<0>") * i2c_ctrl_scl_state_ffd3 * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl__n0153) * 
+	uc_ctrl_rsta
+	# !("i2c_ctrl_clk_cnt<0>") * i2c_ctrl_scl_state_ffd3 * 
+	!("i2c_ctrl_clk_cnt<1>") * !(i2c_ctrl_scl_state_ffd2) * !(i2c_ctrl__n0153) * 
+	i2c_ctrl_stop_scl_reg;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(uc_ctrl_rsta) := !(uc_ctrl_rsta) * !(N_PZ_569)
+	# !("data_bus<2>".PIN) * N_PZ_569
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	!(i2c_ctrl_scl_state_ffd2) * uc_ctrl_rsta;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+N_PZ_569 = !(r_w) * uc_ctrl_cntrl_en * N_PZ_665;
+
+uc_ctrl_cntrl_en := !("addr_bus<1>") * !("addr_bus<2>") * "addr_bus<4>" * 
+	!("addr_bus<6>") * !("addr_bus<3>") * "addr_bus<0>" * "addr_bus<7>" * 
+	!("addr_bus<5>") * uc_ctrl_address_match;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+uc_ctrl_address_match := !(as) * !("addr_bus<13>") * !("addr_bus<12>") * 
+	!("addr_bus<11>") * !("addr_bus<10>") * !("addr_bus<9>") * !("addr_bus<8>") * 
+	!("addr_bus<21>") * !("addr_bus<20>") * !("addr_bus<19>") * !("addr_bus<18>") * 
+	!("addr_bus<17>") * !("addr_bus<16>") * !("addr_bus<15>") * !("addr_bus<14>") * 
+	!("addr_bus<23>") * !("addr_bus<22>") * uc_ctrl_as_int_d1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+uc_ctrl_as_int_d1 := uc_ctrl_as_int;
+   CLK  =  clk;	GCK
+   AP = !(reset);	GSR
+   INIT = R;
+
+
+; Fast Input Register
+uc_ctrl_as_int := as;
+   CLK  =  clk;	GCK
+   AP = !(reset);	GSR
+   INIT = R;
+
+N_PZ_665 = uc_ctrl_prs_state_ffd2 * uc_ctrl_prs_state_ffd1;
+
+uc_ctrl_prs_state_ffd2 := uc_ctrl_address_match * uc_ctrl_prs_state_ffd2 * 
+	!(uc_ctrl_prs_state_ffd1)
+	# !(as) * uc_ctrl_as_int_d1 * !(uc_ctrl_prs_state_ffd2) * 
+	!(uc_ctrl_prs_state_ffd1);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!(uc_ctrl_prs_state_ffd1) := !(uc_ctrl_prs_state_ffd1)
+	$ uc_ctrl_address_match * uc_ctrl_prs_state_ffd2 * 
+	!(uc_ctrl_prs_state_ffd1) * !(uc_ctrl_ds_int)
+	# uc_ctrl_as_int_d1 * !(uc_ctrl_prs_state_ffd2) * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_ds_int;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+uc_ctrl_ds_int.COMB =  "uc_ctrl_madr<1>" * !("i2c_ctrl_i2c_header<1>")
+	# !("uc_ctrl_madr<1>") * "i2c_ctrl_i2c_header<1>"
+	# "uc_ctrl_madr<2>" * !("i2c_ctrl_i2c_header<2>")
+	# !("uc_ctrl_madr<2>") * "i2c_ctrl_i2c_header<2>"
+	# "uc_ctrl_madr<3>" * !("i2c_ctrl_i2c_header<3>")
+	# !("uc_ctrl_madr<3>") * "i2c_ctrl_i2c_header<3>"
+	# "uc_ctrl_madr<4>" * !("i2c_ctrl_i2c_header<4>")
+	# !("uc_ctrl_madr<4>") * "i2c_ctrl_i2c_header<4>"
+	# "uc_ctrl_madr<5>" * !("i2c_ctrl_i2c_header<5>")
+	# !("uc_ctrl_madr<5>") * "i2c_ctrl_i2c_header<5>"
+	# "uc_ctrl_madr<6>" * !("i2c_ctrl_i2c_header<6>")
+	# !("uc_ctrl_madr<6>") * "i2c_ctrl_i2c_header<6>"
+	# "uc_ctrl_madr<7>" * !("i2c_ctrl_i2c_header<7>")
+	# !("uc_ctrl_madr<7>") * "i2c_ctrl_i2c_header<7>";
+; Fast Input Register
+uc_ctrl_ds_int := ds;
+   CLK  =  clk;	GCK
+   AP = !(reset);	GSR
+   INIT = R;
+
+!(i2c_ctrl_stop_scl_reg) := i2c_ctrl_arb_lost * i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd1 * i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_stop_scl_reg)
+	# i2c_ctrl_scl_state_ffd3 * i2c_ctrl_scl_state_ffd2
+	# !(i2c_ctrl_scl_state_ffd3) * !(i2c_ctrl_scl_state_ffd2)
+	# !(i2c_ctrl_scl_state_ffd1) * !(i2c_ctrl_gen_stop) * 
+	!(i2c_ctrl_sm_stop)
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_state_ffd3 * 
+	!(n7426);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_gen_stop := i2c_ctrl_gen_stop * !(i2c_ctrl_detect_stop)
+	# !(uc_ctrl_msta) * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_msta_d1;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_detect_stop := scl.PIN;
+   CLK  =  sda.PIN;	GCK
+    AR = !(N_PZ_896);
+   INIT = R;
+
+N_PZ_896 = uc_ctrl_men * !(i2c_ctrl_detect_start);
+
+!(uc_ctrl_men) := N_PZ_569 * !("data_bus<7>".PIN)
+	# !(N_PZ_569) * !(uc_ctrl_men);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+i2c_ctrl_detect_start := scl.PIN;
+   CLK  =  !(sda.PIN);	GCK
+    AR = !(i2c_ctrl__n0073);
+   INIT = R;
+
+i2c_ctrl__n0073 = uc_ctrl_men * !(i2c_ctrl_state_ffd3)
+	# uc_ctrl_men * !(n7426);
+
+i2c_ctrl_state_ffd3 := i2c_ctrl_detect_start * !(i2c_ctrl_state_ffd3) * 
+	i2c_ctrl_state_ffd1
+	# i2c_ctrl_detect_start * !(i2c_ctrl_state_ffd1) * 
+	!(i2c_ctrl_state_ffd2)
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	!(i2c_ctrl_state_ffd2)
+	# !(i2c_ctrl_state_ffd3) * "i2c_ctrl_bit_cnt<0>" * 
+	i2c_ctrl_state_ffd1 * "i2c_ctrl_bit_cnt<1>" * "i2c_ctrl_bit_cnt<2>" * 
+	!(i2c_ctrl__n0159);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(N_PZ_897);
+   INIT = R;
+
+!("i2c_ctrl_bit_cnt<0>".T) := !("i2c_ctrl_bit_cnt<0>") * !(N_PZ_672)
+	# !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3) * 
+	!(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_state_ffd1 := !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3) * 
+	i2c_ctrl_state_ffd1
+	# i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1 * 
+	!(i2c_ctrl_state_ffd2)
+	# !(i2c_ctrl_arb_lost) * i2c_ctrl_state_ffd3 * 
+	i2c_ctrl_state_ffd1 * !(sda.PIN)
+	# i2c_ctrl_master_slave * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2 * 
+	!(i2c_ctrl_sda_in)
+	# !(i2c_ctrl_arb_lost) * i2c_ctrl_state_ffd3 * 
+	!(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2 * !(i2c_ctrl_sda_in) * 
+	!(uc_ctrl_ds_int.COMB);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(N_PZ_897);
+   INIT = R;
+
+i2c_ctrl_state_ffd2 := !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3) * 
+	i2c_ctrl_state_ffd1 * i2c_ctrl_state_ffd2
+	# !(i2c_ctrl_arb_lost) * i2c_ctrl_state_ffd3 * 
+	i2c_ctrl_state_ffd1 * !(sda.PIN) * i2c_ctrl_state_ffd2
+	# i2c_ctrl_state_ffd3 * "i2c_ctrl_bit_cnt<0>" * 
+	n7426 * "i2c_ctrl_bit_cnt<1>" * "i2c_ctrl_bit_cnt<2>" * 
+	!(i2c_ctrl__n0159)
+	# i2c_ctrl_master_slave * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2 * 
+	!(i2c_ctrl_sda_in) * uc_ctrl_mtx
+	# !(i2c_ctrl_master_slave) * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2 * 
+	!(i2c_ctrl_sda_in) * "i2c_ctrl_i2c_header<0>" * !(uc_ctrl_ds_int.COMB);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(N_PZ_897);
+   INIT = R;
+
+sda =  i2c_ctrl_master_slave * i2c_ctrl_arb_lost * 
+	!(i2c_ctrl_stop_scl_reg)
+	# i2c_ctrl_master_slave * !(i2c_ctrl_stop_scl_reg) * 
+	i2c_ctrl_sda_out_reg
+	# !(i2c_ctrl_master_slave) * !(i2c_ctrl_stop_scl_reg) * 
+	i2c_ctrl_slave_sda;
+; Fast Input Register
+i2c_ctrl_sda_in := sda.PIN;
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+!(uc_ctrl_mtx) := N_PZ_569 * !("data_bus<4>".PIN)
+	# !(N_PZ_569) * !(uc_ctrl_mtx);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_i2c_header<0>" := i2c_ctrl_sda_in;
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_i2c_header_en) := !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3)
+	# !(i2c_ctrl_detect_start) * !(n7426);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+n7426 = !(i2c_ctrl_state_ffd1) * !(i2c_ctrl_state_ffd2);
+
+"i2c_ctrl_bit_cnt<1>".T := "i2c_ctrl_bit_cnt<1>" * !(N_PZ_672)
+	# "i2c_ctrl_bit_cnt<0>" * N_PZ_672 * N_PZ_652;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+N_PZ_672 = !(i2c_ctrl_detect_start) * i2c_ctrl_state_ffd3 * 
+	n7426
+	# !(i2c_ctrl_detect_start) * !(i2c_ctrl_state_ffd3) * 
+	!(n7426);
+
+N_PZ_652 = !(i2c_ctrl_state_ffd3) * i2c_ctrl_state_ffd1
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	!(i2c_ctrl_state_ffd2);
+
+"i2c_ctrl_bit_cnt<2>".T := !(N_PZ_672) * "i2c_ctrl_bit_cnt<2>"
+	# !(i2c_ctrl_detect_start) * "i2c_ctrl_bit_cnt<0>" * 
+	"i2c_ctrl_bit_cnt<1>" * N_PZ_652;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl__n0159.T := !(N_PZ_672) * i2c_ctrl__n0159
+	# !(i2c_ctrl_detect_start) * "i2c_ctrl_bit_cnt<0>" * 
+	"i2c_ctrl_bit_cnt<1>" * N_PZ_652 * "i2c_ctrl_bit_cnt<2>";
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+N_PZ_897 = !(i2c_ctrl_detect_stop) * uc_ctrl_men;
+
+i2c_ctrl_msta_d1 := uc_ctrl_msta;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_sm_stop.T := !(i2c_ctrl_state_ffd3) * !(i2c_ctrl_state_ffd1) * 
+	i2c_ctrl_state_ffd2 * i2c_ctrl_sm_stop
+	# i2c_ctrl_master_slave * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1 * sda.PIN * 
+	i2c_ctrl_state_ffd2 * !(i2c_ctrl_sm_stop)
+	# i2c_ctrl_master_slave * !(i2c_ctrl_arb_lost) * 
+	i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * i2c_ctrl_state_ffd2 * 
+	i2c_ctrl_sda_in * !(i2c_ctrl_sm_stop);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(N_PZ_897);
+   INIT = R;
+
+N_PZ_654 = !("i2c_ctrl_clk_cnt<0>")
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3;
+
+i2c_ctrl_bus_busy := !(i2c_ctrl_detect_stop);
+   CLK  =  clk;	GCK
+    CE = !(N_PZ_892);
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+N_PZ_892 = !(i2c_ctrl_detect_stop) * !(i2c_ctrl_detect_start);
+
+i2c_ctrl_gen_start := uc_ctrl_msta * !(i2c_ctrl_msta_d1)
+	# !(i2c_ctrl_detect_start) * i2c_ctrl_gen_start;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_scl_in := scl.PIN;
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+N_PZ_687 = scl.PIN * !(i2c_ctrl_state_ffd1) * 
+	!(i2c_ctrl_state_ffd2) * i2c_ctrl_sda_in * i2c_ctrl_scl_in * 
+	!(i2c_ctrl_sda_out_reg_d1)
+	# scl.PIN * !(i2c_ctrl_state_ffd1) * 
+	!(i2c_ctrl_state_ffd2) * !(i2c_ctrl_sda_in) * i2c_ctrl_scl_in * 
+	i2c_ctrl_sda_out_reg_d1
+	# scl.PIN * i2c_ctrl_state_ffd2 * i2c_ctrl_sda_in * 
+	N_PZ_652 * i2c_ctrl_scl_in * !(i2c_ctrl_sda_out_reg_d1)
+	# scl.PIN * i2c_ctrl_state_ffd2 * !(i2c_ctrl_sda_in) * 
+	N_PZ_652 * i2c_ctrl_scl_in * i2c_ctrl_sda_out_reg_d1;
+
+i2c_ctrl_sda_out_reg_d1 := i2c_ctrl_sda_out_reg;
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_sda_out_reg) := i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	!(i2c_ctrl_scl_state_ffd2)
+	# i2c_ctrl_scl_state_ffd1 * !(i2c_ctrl_scl_state_ffd3) * 
+	!(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd3 * 
+	i2c_ctrl_scl_state_ffd2
+	# i2c_ctrl_scl_state_ffd3 * !(i2c_ctrl_scl_state_ffd2) * 
+	!(i2c_ctrl_sda_out_reg)
+	# i2c_ctrl_arb_lost * !(i2c_ctrl_scl_state_ffd1) * 
+	i2c_ctrl_scl_state_ffd2 * !(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_arb_lost) * !(i2c_ctrl_scl_state_ffd1) * 
+	i2c_ctrl_scl_state_ffd2 * i2c_ctrl_gen_stop * !(i2c_ctrl_state_ffd3)
+	# !(i2c_ctrl_arb_lost) * !(i2c_ctrl_scl_state_ffd1) * 
+	i2c_ctrl_scl_state_ffd2 * i2c_ctrl_gen_stop * n7426
+	# !(i2c_ctrl_arb_lost) * !(i2c_ctrl_scl_state_ffd1) * 
+	i2c_ctrl_scl_state_ffd2 * !(i2c_ctrl_state_ffd3) * i2c_ctrl_sm_stop
+	# !(i2c_ctrl_arb_lost) * !(i2c_ctrl_scl_state_ffd1) * 
+	i2c_ctrl_scl_state_ffd2 * n7426 * i2c_ctrl_sm_stop
+	# !(i2c_ctrl_scl_state_ffd1) * !("i2c_ctrl_clk_cnt<0>") * 
+	i2c_ctrl_scl_state_ffd2 * !(uc_ctrl_rsta) * !(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_scl_state_ffd1) * "i2c_ctrl_clk_cnt<1>" * 
+	i2c_ctrl_scl_state_ffd2 * !(uc_ctrl_rsta) * !(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd2 * 
+	i2c_ctrl__n0153 * !(uc_ctrl_rsta) * !(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd2 * 
+	"i2c_ctrl_clk_cnt<2>" * !(uc_ctrl_rsta) * !(i2c_ctrl_sda_out_reg)
+	# !(i2c_ctrl_arb_lost) * !(i2c_ctrl_scl_state_ffd1) * 
+	"i2c_ctrl_clk_cnt<0>" * !("i2c_ctrl_clk_cnt<1>") * i2c_ctrl_scl_state_ffd2 * 
+	!(i2c_ctrl__n0153) * !("i2c_ctrl_clk_cnt<2>") * !(uc_ctrl_rsta) * 
+	!(i2c_ctrl_master_sda);
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_master_sda) := i2c_ctrl_state_ffd3 * n7426 * !(i2c_ctrl_shift_out)
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd2) * 
+	!(n7426) * !(uc_ctrl_txak)
+	# !(i2c_ctrl_state_ffd3) * i2c_ctrl_state_ffd1 * 
+	i2c_ctrl_state_ffd2 * !(n7426) * !(i2c_ctrl_shift_out);
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_shift_out := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<7>"
+	# !(i2c_ctrl_shift_reg_ld) * i2c_ctrl_shift_out * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<6>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<7>") := !("data_bus<7>".PIN) * N_PZ_564
+	# !("uc_ctrl_mbdr_micro<7>") * !(N_PZ_564);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+N_PZ_564 = !(r_w) * N_PZ_665 * uc_ctrl_data_en;
+
+uc_ctrl_data_en := !("addr_bus<1>") * "addr_bus<2>" * "addr_bus<4>" * 
+	!("addr_bus<6>") * !("addr_bus<3>") * "addr_bus<0>" * "addr_bus<7>" * 
+	!("addr_bus<5>") * uc_ctrl_address_match;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<6>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<6>"
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<6>" * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<5>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<6>") := N_PZ_564 * !("data_bus<6>".PIN)
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<6>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<5>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<5>"
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<5>" * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<4>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<5>") := !("data_bus<5>".PIN) * N_PZ_564
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<5>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<4>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<4>"
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<4>" * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<3>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<4>") := !("data_bus<4>".PIN) * N_PZ_564
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<4>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<3>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<3>"
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<3>" * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<2>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<3>") := N_PZ_564 * !("data_bus<3>".PIN)
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<3>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<2>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<2>"
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<2>" * 
+	!(i2c_ctrl_shift_reg_en)
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<1>" * 
+	i2c_ctrl_shift_reg_en;
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<2>") := !("data_bus<2>".PIN) * N_PZ_564
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<2>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_shift_reg<1>" := i2c_ctrl_shift_reg_ld * "uc_ctrl_mbdr_micro<1>"
+	# "i2c_ctrl_shift_reg<0>" * !(i2c_ctrl_shift_reg_ld) * 
+	i2c_ctrl_shift_reg_en
+	# !(i2c_ctrl_shift_reg_ld) * "i2c_ctrl_shift_reg<1>" * 
+	!(i2c_ctrl_shift_reg_en);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<1>") := N_PZ_564 * !("data_bus<1>".PIN)
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<1>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+i2c_ctrl_shift_reg_en := !(i2c_ctrl_state_ffd3) * i2c_ctrl_state_ffd1
+	# i2c_ctrl_master_slave * i2c_ctrl_state_ffd3 * 
+	n7426;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(uc_ctrl_txak) := N_PZ_569 * !("data_bus<3>".PIN)
+	# !(N_PZ_569) * !(uc_ctrl_txak);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("uc_ctrl_mbdr_micro<0>") := N_PZ_564 * !("data_bus<0>".PIN)
+	# !(N_PZ_564) * !("uc_ctrl_mbdr_micro<0>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+uc_ctrl_stat_en := "addr_bus<1>" * !("addr_bus<2>") * "addr_bus<4>" * 
+	!("addr_bus<6>") * !("addr_bus<3>") * "addr_bus<0>" * "addr_bus<7>" * 
+	!("addr_bus<5>") * uc_ctrl_address_match;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+uc_ctrl_addr_en := !("addr_bus<1>") * "addr_bus<2>" * !("addr_bus<4>") * 
+	!("addr_bus<6>") * "addr_bus<3>" * "addr_bus<0>" * "addr_bus<7>" * 
+	!("addr_bus<5>") * uc_ctrl_address_match;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"uc_ctrl_madr<0>" := "uc_ctrl_madr<0>" * !(N_PZ_565);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+N_PZ_565 = !(r_w) * N_PZ_665 * uc_ctrl_addr_en;
+
+i2c_ctrl_rxak := i2c_ctrl_sda_in;
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_state_ffd3 * !(n7426);
+   INIT = R;
+
+N_PZ_562 = !(r_w)
+	# !(N_PZ_665)
+	# !(uc_ctrl_cntrl_en) * !(uc_ctrl_data_en) * 
+	!(uc_ctrl_stat_en) * !(uc_ctrl_addr_en);
+
+"data_bus<1>" := N_PZ_562 * "data_bus<1>"
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * "i2c_ctrl_mbdr_i2c<1>"
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * i2c_ctrl_mif
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * "uc_ctrl_madr<1>";
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<1>" := "i2c_ctrl_shift_reg<1>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_mif := !(uc_ctrl_mif_bit_reset);
+   CLK  =  clk;	GCK
+    CE = !(i2c_ctrl__n0171);
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(uc_ctrl_mif_bit_reset) := "data_bus<2>".PIN * !(uc_ctrl_mif_bit_reset)
+	# !(N_PZ_665) * !(uc_ctrl_mif_bit_reset)
+	# !(uc_ctrl_stat_en) * !(uc_ctrl_mif_bit_reset)
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_stat_en;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+i2c_ctrl__n0171 = !(uc_ctrl_mif_bit_reset) * !(mcf) * !(i2c_ctrl_mal)
+	$ !(i2c_ctrl_master_slave) * !("i2c_ctrl_i2c_header<0>") * 
+	!(uc_ctrl_mif_bit_reset) * !(mcf) * !(i2c_ctrl_mal) * i2c_ctrl_maas;
+
+mcf := "i2c_ctrl_bit_cnt<0>" * "i2c_ctrl_bit_cnt<1>" * 
+	"i2c_ctrl_bit_cnt<2>" * !(i2c_ctrl__n0159);
+   CLK  =  !(scl.PIN);	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_mal := !(uc_ctrl_mal_bit_reset);
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl__n0170;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!(uc_ctrl_mal_bit_reset) := !(N_PZ_665) * !(uc_ctrl_mal_bit_reset)
+	# "data_bus<4>".PIN * !(uc_ctrl_mal_bit_reset)
+	# !(uc_ctrl_stat_en) * !(uc_ctrl_mal_bit_reset)
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_stat_en;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+i2c_ctrl__n0170 = uc_ctrl_mal_bit_reset
+	# i2c_ctrl_master_slave * i2c_ctrl_arb_lost
+	# !(i2c_ctrl_master_slave) * uc_ctrl_rsta
+	# i2c_ctrl_master_slave * i2c_ctrl_gen_start * 
+	i2c_ctrl_bus_busy_d1
+	# i2c_ctrl_master_slave * !(i2c_ctrl_gen_stop) * 
+	i2c_ctrl_detect_stop * !(i2c_ctrl_sm_stop);
+
+i2c_ctrl_bus_busy_d1 := i2c_ctrl_bus_busy;
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_maas.T := i2c_ctrl_maas * uc_ctrl_mbcr_wr
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	i2c_ctrl_state_ffd2 * uc_ctrl_ds_int.COMB * i2c_ctrl_maas
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	i2c_ctrl_state_ffd2 * !(uc_ctrl_ds_int.COMB) * !(i2c_ctrl_maas) * 
+	!(uc_ctrl_mbcr_wr);
+   CLK  =  clk;	GCK
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+uc_ctrl_mbcr_wr := N_PZ_569
+	# uc_ctrl_prs_state_ffd2 * !(uc_ctrl_prs_state_ffd1) * 
+	uc_ctrl_mbcr_wr
+	# !(uc_ctrl_prs_state_ffd2) * uc_ctrl_prs_state_ffd1 * 
+	uc_ctrl_mbcr_wr;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("uc_ctrl_madr<1>") := !("data_bus<1>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<1>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("data_bus<2>") := N_PZ_562 * !("data_bus<2>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * !("i2c_ctrl_mbdr_i2c<2>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * !(i2c_ctrl_srw)
+	# r_w * !(uc_ctrl_rsta) * uc_ctrl_cntrl_en * 
+	uc_ctrl_prs_state_ffd2 * uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * 
+	!(uc_ctrl_stat_en)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * !("uc_ctrl_madr<2>");
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<2>" := "i2c_ctrl_shift_reg<2>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+i2c_ctrl_srw := "i2c_ctrl_i2c_header<0>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	i2c_ctrl_state_ffd2;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<2>") := !("data_bus<2>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<2>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"data_bus<3>" := N_PZ_562 * "data_bus<3>"
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * "i2c_ctrl_mbdr_i2c<3>"
+	# r_w * uc_ctrl_cntrl_en * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_txak * !(uc_ctrl_stat_en)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * "uc_ctrl_madr<3>";
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<3>" := "i2c_ctrl_shift_reg<3>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<3>") := !("data_bus<3>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<3>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("data_bus<4>") := N_PZ_562 * !("data_bus<4>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * !("i2c_ctrl_mbdr_i2c<4>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * !(i2c_ctrl_mal)
+	# r_w * uc_ctrl_cntrl_en * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_mtx) * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * !("uc_ctrl_madr<4>");
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<4>" := "i2c_ctrl_shift_reg<4>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<4>") := !("data_bus<4>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<4>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("data_bus<5>") := N_PZ_562 * !("data_bus<5>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * !("i2c_ctrl_mbdr_i2c<5>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(i2c_ctrl_bus_busy) * !(uc_ctrl_data_en) * 
+	uc_ctrl_stat_en
+	# r_w * !(uc_ctrl_msta) * uc_ctrl_cntrl_en * 
+	uc_ctrl_prs_state_ffd2 * uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * 
+	!(uc_ctrl_stat_en)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * !("uc_ctrl_madr<5>");
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<5>" := "i2c_ctrl_shift_reg<5>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<5>") := !("data_bus<5>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<5>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("data_bus<6>") := N_PZ_562 * !("data_bus<6>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * !("i2c_ctrl_mbdr_i2c<6>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * 
+	!(i2c_ctrl_maas)
+	# r_w * uc_ctrl_cntrl_en * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * !(uc_ctrl_mien)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * !("uc_ctrl_madr<6>");
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<6>" := "i2c_ctrl_shift_reg<6>";
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<6>") := !("data_bus<6>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<6>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!(uc_ctrl_mien) := N_PZ_569 * !("data_bus<6>".PIN)
+	# !(N_PZ_569) * !(uc_ctrl_mien);
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!("data_bus<7>") := N_PZ_562 * !("data_bus<7>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * uc_ctrl_data_en * !("i2c_ctrl_mbdr_i2c<7>")
+	# r_w * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * uc_ctrl_stat_en * !(mcf)
+	# r_w * uc_ctrl_cntrl_en * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_men) * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en)
+	# r_w * !(uc_ctrl_cntrl_en) * uc_ctrl_prs_state_ffd2 * 
+	uc_ctrl_prs_state_ffd1 * !(uc_ctrl_data_en) * !(uc_ctrl_stat_en) * 
+	uc_ctrl_addr_en * !("uc_ctrl_madr<7>");
+    OE = r_w * uc_ctrl_prs_state_ffd1;
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+"i2c_ctrl_mbdr_i2c<7>" := i2c_ctrl_shift_out;
+   CLK  =  clk;	GCK
+    CE = i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+!("uc_ctrl_madr<7>") := !("data_bus<7>".PIN) * N_PZ_565
+	# !(N_PZ_565) * !("uc_ctrl_madr<7>");
+   CLK  =  clk;	GCK
+   AR = !(reset);	GSR
+   INIT = R;
+
+!(dtack) := !(uc_ctrl_prs_state_ffd2) * uc_ctrl_prs_state_ffd1;
+    OE  =  uc_ctrl_prs_state_ffd1_MC.GLB;	GTS
+   CLK  =  clk;	GCK
+   AP = !(reset);	GSR
+   INIT = R;
+
+!(irq) = i2c_ctrl_mif * uc_ctrl_mien;
+
+!(scl) := !(i2c_ctrl_scl_state_ffd1) * i2c_ctrl_scl_state_ffd2
+	# !(i2c_ctrl_scl_state_ffd3) * i2c_ctrl_scl_state_ffd2;
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+!(i2c_ctrl_slave_sda) := i2c_ctrl_state_ffd3 * i2c_ctrl_state_ffd1 * 
+	!(i2c_ctrl_state_ffd2) * !(uc_ctrl_txak)
+	# !(i2c_ctrl_state_ffd3) * i2c_ctrl_state_ffd1 * 
+	i2c_ctrl_state_ffd2 * !(i2c_ctrl_shift_out)
+	# i2c_ctrl_state_ffd3 * !(i2c_ctrl_state_ffd1) * 
+	i2c_ctrl_state_ffd2 * !(uc_ctrl_txak) * i2c_ctrl_maas;
+   CLK  =  clk;	GCK
+    AP = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<1>" := "i2c_ctrl_i2c_header<0>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<2>" := "i2c_ctrl_i2c_header<1>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<3>" := "i2c_ctrl_i2c_header<2>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<4>" := "i2c_ctrl_i2c_header<3>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<5>" := "i2c_ctrl_i2c_header<4>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<6>" := "i2c_ctrl_i2c_header<5>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+"i2c_ctrl_i2c_header<7>" := "i2c_ctrl_i2c_header<6>";
+   CLK  =  !(scl.PIN);	GCK
+    CE = i2c_ctrl_i2c_header_en;
+    AR = !(uc_ctrl_men);
+   INIT = R;
+
+****************************  Device Pin Out ****************************
+
+Device : XC2C256-5-TQ144
+
+
+Pin Signal                         Pin Signal                        
+No. Name                           No. Name                          
+  1 VCC                              73 VCCIO-3.3                     
+  2 r_w                              74 KPR                           
+  3 dtack                            75 KPR                           
+  4 data_bus<0>                      76 KPR                           
+  5 data_bus<1>                      77 KPR                           
+  6 data_bus<3>                      78 KPR                           
+  7 data_bus<2>                      79 KPR                           
+  8 VCCAUX                           80 KPR                           
+  9 addr_bus<19>                     81 KPR                           
+ 10 addr_bus<20>                     82 KPR                           
+ 11 addr_bus<21>                     83 KPR                           
+ 12 addr_bus<22>                     84 VCC                           
+ 13 addr_bus<23>                     85 KPR                           
+ 14 addr_bus<8>                      86 KPR                           
+ 15 addr_bus<9>                      87 KPR                           
+ 16 KPR                              88 KPR                           
+ 17 KPR                              89 GND                           
+ 18 KPR                              90 GND                           
+ 19 addr_bus<7>                      91 KPR                           
+ 20 addr_bus<6>                      92 KPR                           
+ 21 addr_bus<5>                      93 VCCIO-3.3                     
+ 22 addr_bus<4>                      94 KPR                           
+ 23 addr_bus<3>                      95 KPR                           
+ 24 addr_bus<2>                      96 KPR                           
+ 25 addr_bus<1>                      97 KPR                           
+ 26 addr_bus<0>                      98 KPR                           
+ 27 VCCIO-3.3                        99 GND                           
+ 28 KPR                             100 KPR                           
+ 29 GND                             101 KPR                           
+ 30 scl                             102 KPR                           
+ 31 KPR                             103 KPR                           
+ 32 clk                             104 KPR                           
+ 33 KPR                             105 KPR                           
+ 34 data_bus<7>                     106 KPR                           
+ 35 data_bus<4>                     107 KPR                           
+ 36 GND                             108 GND                           
+ 37 VCC                             109 VCCIO-3.3                     
+ 38 sda                             110 KPR                           
+ 39 data_bus<5>                     111 KPR                           
+ 40 data_bus<6>                     112 mcf                           
+ 41 KPR                             113 irq                           
+ 42 KPR                             114 KPR                           
+ 43 KPR                             115 KPR                           
+ 44 KPR                             116 KPR                           
+ 45 KPR                             117 KPR                           
+ 46 KPR                             118 KPR                           
+ 47 GND                             119 KPR                           
+ 48 KPR                             120 KPR                           
+ 49 KPR                             121 KPR                           
+ 50 KPR                             122 TDO                           
+ 51 KPR                             123 GND                           
+ 52 KPR                             124 KPR                           
+ 53 KPR                             125 KPR                           
+ 54 KPR                             126 KPR                           
+ 55 VCCIO-3.3                       127 VCCIO-3.3                     
+ 56 KPR                             128 KPR                           
+ 57 KPR                             129 KPR                           
+ 58 KPR                             130 KPR                           
+ 59 KPR                             131 addr_bus<15>                  
+ 60 KPR                             132 addr_bus<14>                  
+ 61 KPR                             133 addr_bus<13>                  
+ 62 GND                             134 addr_bus<12>                  
+ 63 TDI                             135 addr_bus<11>                  
+ 64 KPR                             136 addr_bus<10>                  
+ 65 TMS                             137 addr_bus<18>                  
+ 66 KPR                             138 addr_bus<17>                  
+ 67 TCK                             139 addr_bus<16>                  
+ 68 KPR                             140 ds                            
+ 69 KPR                             141 VCCIO-3.3                     
+ 70 KPR                             142 as                            
+ 71 KPR                             143 reset                         
+ 72 GND                             144 GND                           
+
+
+Legend :  NC  = Not Connected, unbonded pin
+        PGND  = Unused I/O configured as additional Ground pin
+         KPR  = Unused I/O with weak keeper (leave unconnected)
+         WPU  = Unused I/O with weak pull up (leave unconnected)
+         TIE  = Unused I/O floating -- must tie to VCC, GND or other signal
+         VCC  = Dedicated Power Pin
+      VCCAUX  = Power supply for JTAG pins
+   VCCIO-3.3  = I/O supply voltage for LVTTL, LVCMOS33, SSTL3_I
+   VCCIO-2.5  = I/O supply voltage for LVCMOS25, SSTL2_I
+   VCCIO-1.8  = I/O supply voltage for LVCMOS18
+   VCCIO-1.5  = I/O supply voltage for LVCMOS15, HSTL_I
+        VREF  = Reference voltage for indicated input standard
+         GND  = Dedicated Ground Pin
+         TDI  = Test Data In, JTAG pin
+         TDO  = Test Data Out, JTAG pin
+         TCK  = Test Clock, JTAG pin
+         TMS  = Test Mode Select, JTAG pin
+  PROHIBITED  = User reserved pin
+****************************  Compiler Options  ****************************
+
+Following is a list of all global compiler options used by the fitter run.
+
+Device(s) Specified                         : XC2C256-5-TQ144
+Optimization Method                         : DENSITY
+Multi-Level Logic Optimization              : ON
+Ignore Timing Specifications                : OFF
+Default Register Power Up Value             : LOW
+Slew Rate                                   : FAST
+Keep User Location Constraints              : ON
+What-You-See-Is-What-You-Get                : OFF
+Exhaustive Fitting                          : OFF
+Keep Unused Inputs                          : OFF
+Set Unused I/O Pin Termination              : KEEPER
+Global Clock Optimization                   : ON
+Global Set/Reset Optimization               : ON
+Global Ouput Enable Optimization            : ON
+Enable Input Registers                      : ON
+Function Block Fan-in Limit                 : 38
+Use DATA_GATE Attribute                     : ON
+Set Tristate Outputs to Termination Mode    : KEEPER
+Default Voltage Standard for All Outputs    : LVCMOS33
+Pterm Limit                                 : 28
+Input Limit                                 : 32

@@ -1,0 +1,46 @@
+(MASTR_ADDR),	-- write master's I2C address
+(SLAVE_ADDR),	-- write slave's I2C address
+(MASTR_MBCR_TX),	-- enable the master to transmit
+(SLAVE_MBCR),	-- enable the slave
+(TST_ADDR_OUT_HEADER), -- write the header
+(START_TX),		-- generate START
+(DE),			-- write the data to the Master
+(AD),
+(BE),
+(EF),
+(FA),
+(DE),
+(STOP_TX),
+(ALL_ONES),
+(ALL_ONES),
+(ALL_ONES),		-- dummy for status register read
+(MASTR_MBCR_RX),	-- enable the master to receive
+(MASTR_RD_HEADER), -- write the header with slave to transmit
+(START_RX),		-- generate START
+(DE),			-- write the data to the slave
+(AD),
+(BE),
+(EF),
+(FA),			
+(DE),
+(NO_ACK),		-- turn off Master's acknowledge to end cycle
+(STOP_RX),		-- generate STOP
+--beginning of repeat start test 
+(ALL_ONES),
+(ALL_ONES),
+(ALL_ONES),		-- dummy for status register read
+(MASTR_MBCR_TX),	-- enable the master to transmit
+(TST_ADDR_OUT_HEADER), -- write the header
+(START_TX),		-- generate START
+(BE),			-- write the data to the Master
+(MASTR_MBCR_RX_REPEAT),	-- enable the master to receive
+(MASTR_RD_HEADER), -- write the header with slave to transmit
+(REPEAT_START_RX),	-- generate repeated START
+(AD),			-- write the data to the slave
+(BE),
+(EF),
+(FA),			
+(DE),
+(AD),
+(NO_ACK),		-- turn off Master's acknowledge to end cycle
+(STOP_RX)		-- generate STOP  
