@@ -171,12 +171,13 @@ begin
     wait for (10 * c_CLK_PERIOD); -- for reset to be turned off  		
     
     wishbone_write(WISHBONE_VVCT, 1, "111", x"5a", "write 0x5a to 111");
+    wait until ack_test = '0';
     wishbone_check(WISHBONE_VVCT, 1, "111", x"5a", "read 111");
-    
+    wait until ack_test = '0';
     -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
-    wait for 100 us;              -- to allow some time for completion
+    --wait for 100 us;              -- to allow some time for completion
     report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
     log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 

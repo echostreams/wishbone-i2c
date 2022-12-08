@@ -75,11 +75,13 @@ begin
         end loop;
       end if;
 
-      -- We always read.
-      for k in 0 to C_PARTS_PER_WORD-1 loop
-        o_dat(GRANULARITY*(k+1)-1 downto GRANULARITY*k) <= s_mem(k)(v_adr);
-      end loop;
-
+      -- read?
+      if v_req = '1' then
+        for k in 0 to C_PARTS_PER_WORD-1 loop
+          o_dat(GRANULARITY*(k+1)-1 downto GRANULARITY*k) <= s_mem(k)(v_adr);
+        end loop;
+      end if;
+      
       -- Ack that we have dealt with the request.
       o_ack <= v_req;
     end if;

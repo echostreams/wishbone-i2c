@@ -224,30 +224,30 @@ begin
 			-- Check that this module is being address
 			if address_match = '1' then
 		        -- Wait for ds to be asserted, active low
-		        	if ds_int = '0' then
+		        if ds_int = '0' then
 			        next_state <= DATA_TRS;
 			  	else
 				  next_state <= ADDR;
 			  	end if;
 			else
 				-- this module is not being addressed
-				  next_state <= IDLE;
+				next_state <= IDLE;
 			end if;
 	
 			
 		---------- DATA_TRS State (10) ------------
 		when DATA_TRS =>
 
-		        -- Read or write from enabled register
-		        next_state <= ASSERT_DTACK;
-			  dtack_oe <= '1';
+		    -- Read or write from enabled register
+		    next_state <= ASSERT_DTACK;
+			dtack_oe <= '1';
 			  			
 		-------- ASSERT_DTACK State (11) ----------
 		when ASSERT_DTACK =>
 		        
-		        -- Assert dtack to uProcessor
-		        dtack_com <= '0';
-			  dtack_oe <= '1';
+		    -- Assert dtack to uProcessor
+		    dtack_com <= '0';
+			dtack_oe <= '1';
 			  
 			
 			-- Wait for rising edge of as and ds
@@ -257,7 +257,7 @@ begin
 			  next_state <= IDLE;
 			end if;
 		
-	         end case;
+	    end case;
 		
 	end process;
 
@@ -266,7 +266,7 @@ begin
 	-- Function:  Mapping address from uProc to enable appropriate register
 	ADDR_DECODE: process (reset, clk, prs_state)
 	begin
-	        if reset = RESET_ACTIVE then
+	    if reset = RESET_ACTIVE then
 		  	addr_en <= '0';
 			cntrl_en <= '0';
 			stat_en <= '0';
@@ -394,7 +394,7 @@ begin
 			  else
 				-- uC read
 			       mbcr_wr <= '0';
-			  	 data_out <= men & mien & msta & mtx & 
+			  	   data_out <= men & mien & msta & mtx & 
 				       txak & rsta & "0" & "0";
 			  
 			  end if;
