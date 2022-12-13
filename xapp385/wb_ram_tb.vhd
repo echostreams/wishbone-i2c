@@ -1,187 +1,190 @@
-----------------------------------------------------------------------------------------------------
--- Copyright (c) 2020 Marcus Geelnard
---
--- This software is provided 'as-is', without any express or implied warranty. In no event will the
--- authors be held liable for any damages arising from the use of this software.
---
--- Permission is granted to anyone to use this software for any purpose, including commercial
--- applications, and to alter it and redistribute it freely, subject to the following restrictions:
---
---  1. The origin of this software must not be misrepresented; you must not claim that you wrote
---     the original software. If you use this software in a product, an acknowledgment in the
---     product documentation would be appreciated but is not required.
---
---  2. Altered source versions must be plainly marked as such, and must not be misrepresented as
---     being the original software.
---
---  3. This notice may not be removed or altered from any source distribution.
-----------------------------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
---use work.test.all;
---library vunit_lib;
---context vunit_lib.vunit_context;
+use ieee.numeric_std.all;
+
+library uvvm_util;
+use uvvm_util.types_pkg.all;
+use uvvm_util.global_signals_and_shared_variables_pkg.all;
+use uvvm_util.hierarchy_linked_list_pkg.all;
+use uvvm_util.string_methods_pkg.all;
+use uvvm_util.adaptations_pkg.all;
+use uvvm_util.methods_pkg.all;
+use uvvm_util.bfm_common_pkg.all;
+use uvvm_util.alert_hierarchy_pkg.all;
+use uvvm_util.license_pkg.all;
+use uvvm_util.protected_types_pkg.all;
+use uvvm_util.rand_pkg.all;
+use uvvm_util.func_cov_pkg.all;
+
+library uvvm_vvc_framework;
+use uvvm_vvc_framework.ti_vvc_framework_support_pkg.all;
+
+library bitvis_vip_sbi;
+use bitvis_vip_sbi.vvc_methods_pkg.all;
+use bitvis_vip_sbi.td_vvc_framework_common_methods_pkg.all;
+
+library bitvis_vip_i2c;
+use bitvis_vip_i2c.vvc_methods_pkg.all;
+use bitvis_vip_i2c.td_vvc_framework_common_methods_pkg.all;
+use bitvis_vip_i2c.i2c_bfm_pkg.all;
+
+library bitvis_vip_wishbone;
+use bitvis_vip_wishbone.vvc_methods_pkg.all;
+use bitvis_vip_wishbone.td_vvc_framework_common_methods_pkg.all;
+use bitvis_vip_wishbone.wishbone_bfm_pkg.all;
+
+library bitvis_vip_clock_generator;
+use bitvis_vip_clock_generator.vvc_cmd_pkg.all;
+use bitvis_vip_clock_generator.vvc_methods_pkg.all;
+use bitvis_vip_clock_generator.td_vvc_framework_common_methods_pkg.all;
 
 entity wb_ram_tb is
-  generic (runner_cfg : string);
 end wb_ram_tb;
 
-architecture tb of wb_ram_tb is
-  constant CLK_PERIOD : time := 1.0 ns;
-  constant CLK_HALF_PERIOD : time := CLK_PERIOD / 2.0;
+architecture arch of wb_ram_tb is
+    constant c_SCOPE : string := "WHISHBONE RAM CORE";
+    constant c_CLK_PERIOD : time := 20 ns;
+    constant c_CLOCK_GEN: natural := 1;
+	constant c_ADDR_WIDTH : natural := 3;
+	constant c_WIDTH : natural := 32;
+	
+    -- Define value for the Wishbone BFM config
+    constant c_WISHBONE_BFM_CONFIG : t_wishbone_bfm_config := (
+        max_wait_cycles             => 10,
+        max_wait_cycles_severity    => failure,
+        clock_period                => c_CLK_PERIOD,
+        clock_period_margin         => 0 ns,
+        clock_margin_severity       => TB_ERROR,
+        setup_time                  => 1 ns,
+        hold_time                   => 1 ns,
+        match_strictness            => MATCH_EXACT,
+        id_for_bfm                  => ID_BFM,
+        id_for_bfm_wait             => ID_BFM_WAIT,
+        id_for_bfm_poll             => ID_BFM_POLL
+    );
+    
+    signal clk_test    : std_logic;
+  signal rst_test    : std_logic;
+  signal we_test     : std_logic;
+  signal addr_test   : std_logic_vector((c_ADDR_WIDTH - 1) downto 0);
+  signal addr_test_u : unsigned((c_ADDR_WIDTH - 1) downto 0);
+  signal data_i_test : std_logic_vector((c_WIDTH - 1) downto 0);
+  signal data_o_test : std_logic_vector((c_WIDTH - 1) downto 0);
+  signal stb_test    : std_logic;
+  signal cyc_test    : std_logic;
+  signal ack_test    : std_logic;
 
-  signal s_rst : std_logic;
-  signal s_clk : std_logic;
-  signal s_adr : std_logic_vector(7 downto 0);
-  signal s_dat_w : std_logic_vector(15 downto 0);
-  signal s_we : std_logic;
-  signal s_sel : std_logic_vector(1 downto 0);
-  signal s_cyc : std_logic;
-  signal s_stb : std_logic;
-  signal s_dat : std_logic_vector(15 downto 0);
-  signal s_ack : std_logic;
-  signal s_stall : std_logic;
-  signal s_rty : std_logic;
-  signal s_err : std_logic;
-  
-
+    
 begin
 
-  
+    -----------------------------------------------------------------------------
+  -- Instantiate the concurrent procedure that initializes UVVM
+  -----------------------------------------------------------------------------
+  i_ti_uvvm_engine : entity uvvm_vvc_framework.ti_uvvm_engine;
 
-  -- DUT.
+  addr_test_u <= unsigned(addr_test);
+  
   ram : entity work.wb_ram
-    generic map (
-      ADR_WIDTH => s_adr'length,
-      DAT_WIDTH => s_dat'length,
-      GRANULARITY => s_dat'length / s_sel'length
+  	generic map (
+  		ADR_WIDTH => c_ADDR_WIDTH,
+  		DAT_WIDTH => c_WIDTH,
+  		GRANULARITY => 8
+  	)
+  	port map (
+  		i_rst => rst_test,
+  		i_clk => clk_test,
+  		i_adr => addr_test,
+  		i_dat => data_i_test,
+  		i_we  => we_test,
+  		i_sel => "1111",
+		i_cyc => cyc_test,
+		i_stb => stb_test,
+		o_dat => data_o_test,
+		o_ack => ack_test
+--		o_stall
+--		o_rty
+--		o_err
+  	);
+  	
+  -----------------------------------------------------------------------------
+  -- Wishbone
+  -----------------------------------------------------------------------------
+  i1_wishbone_vvc : entity bitvis_vip_wishbone.wishbone_vvc
+    generic map
+    (
+      Gc_ADDR_WIDTH          => c_ADDR_WIDTH,
+      GC_DATA_WIDTH          => c_WIDTH,
+      Gc_WISHBONE_BFM_CONFIG => c_WISHBONE_BFM_CONFIG
     )
-    port map (
-      i_rst => s_rst,
-      i_clk => s_clk,
-      i_adr => s_adr,
-      i_dat => s_dat_w,
-      i_we => s_we,
-      i_sel => s_sel,
-      i_cyc => s_cyc,
-      i_stb => s_stb,
-      o_dat => s_dat,
-      o_ack => s_ack,
-      o_stall => s_stall,
-      o_rty => s_rty,
-      o_err => s_err
+    port map
+    (
+      clk                          => clk_test,
+      wishbone_vvc_master_if.dat_i => data_o_test,
+      wishbone_vvc_master_if.ack_i => ack_test,
+      wishbone_vvc_master_if.adr_o => addr_test,
+      wishbone_vvc_master_if.dat_o => data_i_test,
+      wishbone_vvc_master_if.we_o  => we_test,
+      wishbone_vvc_master_if.cyc_o => cyc_test,
+      wishbone_vvc_master_if.stb_o => stb_test
     );
 
-  -- Test process.
-  main : process
-
-    function to_vector(x: integer; size: integer) return std_logic_vector is
-    begin
-      return std_logic_vector(to_unsigned(x, size));
-    end function;
-
-    type T_INPUTS is record
-      adr : integer;
-      dat : std_logic_vector(s_dat_w'range);
-      we : std_logic;
-      sel : std_logic_vector(s_sel'range);
-      cyc : std_logic;
-      stb : std_logic;
-    end record;
-
-    type T_OUTPUTS is record
-      dat : std_logic_vector(s_dat'range);
-      ack : std_logic;
-      stall : std_logic;
-      rty : std_logic;
-      err : std_logic;
-    end record;
-
-    type T_SIGNALS is record
-      i : T_INPUTS;
-      o : T_OUTPUTS;
-    end record;
-
-    type T_SIGNALS_ARRAY is array (natural range <>) of T_SIGNALS;
-    constant C_SIGNALS_ARRAY : T_SIGNALS_ARRAY := (
-      -- Write to the memory.
-      ((0, x"0005", '1', "11", '1', '1'), (x"----", '0', '0', '0', '0')),
-      ((1, x"3b13", '1', "11", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((2, x"0000", '1', "11", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((2, x"3b13", '1', "10", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((3, x"0000", '1', "11", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((3, x"3b13", '1', "01", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((4, x"0099", '1', "11", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((5, x"ff00", '1', "11", '1', '1'), (x"----", '1', '0', '0', '0')),
-      ((0, x"0000", '0', "11", '1', '0'), (x"----", '1', '0', '0', '0')),
-      ((0, x"0000", '0', "11", '0', '0'), (x"----", '0', '0', '0', '0')),
-
-      -- Read from the memory.
-      ((0, x"0000", '0', "11", '1', '1'), (x"----", '0', '0', '0', '0')),
-      ((1, x"0000", '0', "11", '1', '1'), (x"0005", '1', '0', '0', '0')),
-      ((2, x"0000", '0', "10", '1', '1'), (x"3b13", '1', '0', '0', '0')),
-      ((3, x"0000", '0', "01", '1', '1'), (x"3b00", '1', '0', '0', '0')),
-      ((4, x"0000", '0', "11", '1', '1'), (x"0013", '1', '0', '0', '0')),
-      ((5, x"0000", '0', "11", '1', '1'), (x"0099", '1', '0', '0', '0')),
-      ((0, x"0000", '0', "11", '1', '0'), (x"ff00", '1', '0', '0', '0')),
-      ((0, x"0000", '0', "11", '0', '0'), (x"----", '0', '0', '0', '0'))
+  -----------------------------------------------------------------------------
+  -- Clock Generator VVC
+  -----------------------------------------------------------------------------
+  i_clock_generator_vvc : entity bitvis_vip_clock_generator.clock_generator_vvc
+    generic map
+    (
+      GC_INSTANCE_IDX    => c_CLOCK_GEN,
+      GC_CLOCK_NAME      => "Clock",
+      GC_CLOCK_PERIOD    => c_CLK_PERIOD,
+      GC_CLOCK_HIGH_TIME => c_CLK_PERIOD / 2
+    )
+    port map
+    (
+      clk => clk_test
     );
 
-    variable v_in : T_INPUTS;
-    variable v_out : T_OUTPUTS;
-  begin
-    test_runner_setup(runner, runner_cfg);
+  rst_test <= '1', '0' after (5 * c_CLK_PERIOD);
   
-    -- Clear & reset.
-    s_clk <= '0';
-    s_rst <= '1';
-    s_adr <= (others => '0');
-    s_dat_w <= (others => '0');
-    s_we <= '0';
-    s_sel <= (others => '0');
-    s_cyc <= '0';
-    s_stb <= '0';
-    wait for CLK_HALF_PERIOD;
-    s_clk <= '1';
-    wait for CLK_HALF_PERIOD;
-    s_clk <= '0';
-    s_rst <= '0';
-    wait for CLK_HALF_PERIOD;
-    s_clk <= '1';
-    wait for CLK_HALF_PERIOD;
-    s_clk <= '0';
-    wait for CLK_HALF_PERIOD;
-    s_clk <= '1';
+  -- main process
+  process
+  
+  begin
+    -- Wait for UVVM to finish initialization
+    await_uvvm_initialization(VOID);
 
-    for k in C_SIGNALS_ARRAY'range loop
-      wait until s_clk = '1';
+    start_clock(CLOCK_GENERATOR_VVCT, 1, "Start clock generator");
 
-      -- Set inputs.
-      v_in := C_SIGNALS_ARRAY(k).i;
-      s_adr <= to_vector(v_in.adr, s_adr'length);
-      s_dat_w <= v_in.dat;
-      s_we <= v_in.we;
-      s_sel <= v_in.sel;
-      s_cyc <= v_in.cyc;
-      s_stb <= v_in.stb;
+    -- Print the configuration to the log
+    report_global_ctrl(VOID);
+    report_msg_id_panel(VOID);
 
-      wait for CLK_HALF_PERIOD;
+    disable_log_msg(ALL_MESSAGES);
+    enable_log_msg(ID_LOG_HDR);
+    enable_log_msg(ID_SEQUENCER);
+    enable_log_msg(ID_UVVM_SEND_CMD);
 
-      -- Check outputs.
-      v_out := C_SIGNALS_ARRAY(k).o;
-      check_match(s_dat, v_out.dat, result("for o_dat @ " & to_string(k)));
-      check_equal(s_ack, v_out.ack, result("for o_ack @ " & to_string(k)));
-      check_equal(s_stall, v_out.stall, result("for o_stall @ " & to_string(k)));
-      check_equal(s_rty, v_out.rty, result("for o_rty @ " & to_string(k)));
-      check_equal(s_err, v_out.err, result("for o_err @ " & to_string(k)));
+    log(ID_LOG_HDR, "Starting simulation of TB for Wishbone-RAM using VVCs", c_SCOPE);
+    ------------------------------------------------------------
 
-      s_clk <= '0';
-      wait for CLK_HALF_PERIOD;
-      s_clk <= '1';
-    end loop;
+    log("Wait 10 clock period for reset to be turned off");
+    wait for (10 * c_CLK_PERIOD); -- for reset to be turned off  		
+    
+    wishbone_write(WISHBONE_VVCT, 1, "111", x"5a", "write 0x5a to 111");
+    wishbone_check(WISHBONE_VVCT, 1, "111", x"5a", "read 111");
+    
+    wait for 500 us;
+    -----------------------------------------------------------------------------
+    -- Ending the simulation
+    -----------------------------------------------------------------------------
+    wait for 500 us;              -- to allow some time for completion
+    report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
+    log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 
-    -- End of simulation.
-    test_runner_cleanup(runner);
+    -- Finish the simulation
+    std.env.stop;
+    wait;  -- to stop completely
+
   end process;
-end architecture;
+
+end arch;
