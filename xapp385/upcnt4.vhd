@@ -1,18 +1,15 @@
--- File:     upcnt4.vhd
--- 
--- Author:   Jennifer Jenkins
---	     Philips Semiconductor
+-- File: upcnt4.vhd
+--
+-- Author: Jennifer Jenkins
+-- Philips Semiconductor
 -- Purpose:  Up 4-bit counter
 --
 -- Created:  5-3-99 JLJ
 -- Revised:  6-15-99 ALS
-	
-
 
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;
-
 
 entity upcnt4 is
 	port(

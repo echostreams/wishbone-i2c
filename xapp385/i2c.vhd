@@ -22,8 +22,8 @@
 -- Revised: 6/29/00 ALS
 --	Modified code to support repeated start
 
-library IEEE;
-use IEEE.std_logic_1164.all;
+library ieee;
+  use ieee.std_logic_1164.all;
 
 entity i2c is 
   generic (I2C_ADDRESS	: std_logic_vector(15 downto 0):= "0000000000000000" );
@@ -33,26 +33,22 @@ entity i2c is
 		scl	: inout	std_logic;
 
 		-- uC interface signals
-		addr_bus	: in		std_logic_vector(23 downto 0);
-		data_bus	: inout	std_logic_vector(7 downto 0);
-		as		: in		std_logic;	-- address strobe, active low
-		ds		: in		std_logic;	-- data strobe, active low
-		r_w		: in		std_logic;	-- read/write
-		dtack		: out		std_logic;	-- data transfer acknowledge
-		irq		: out		std_logic;	-- interrupt request
-		
-		mcf		: inout		std_logic;  -- temporary output for testing 
+		addr_bus : in	 std_logic_vector(23 downto 0);
+		data_bus : inout std_logic_vector(7 downto 0);
+		as		 : in	 std_logic;	-- address strobe, active low
+		ds		 : in	 std_logic;	-- data strobe, active low
+		r_w		 : in	 std_logic;	-- read/write
+		dtack	 : out   std_logic;	-- data transfer acknowledge
+		irq		 : out   std_logic;	-- interrupt request	
+		mcf		 : inout std_logic; -- temporary output for testing 
 
 
 		-- clock and reset
-		clk		: in		std_logic;
-		reset		: in		std_logic
+		clk		 : in	 std_logic;
+		reset	 : in    std_logic
 	);
-end i2c;
+end entity i2c;
 		
-library IEEE;
-use IEEE.std_logic_1164.all;
-
 architecture behave of i2c is
 
 -- ****************************** Component Definitions ****************************
@@ -62,7 +58,7 @@ component i2c_control
   port(
 	-- I2C bus signals
 	sda : inout std_logic;
-        scl : inout std_logic;
+    scl : inout std_logic;
 	
 	-- interface signals from uP interface
 	txak		: in		std_logic;	-- value for acknowledge when xmit
@@ -70,15 +66,15 @@ component i2c_control
 	msta_rst	: out		std_logic;	-- resets MSTA bit if arbitration is lost
 	rsta		: in		std_logic;	-- repeated start 
 	rsta_rst	: out		std_logic;	-- reset for repeated start bit in control register
-	mtx		: in		std_logic;	-- master read/write 
+	mtx		    : in		std_logic;	-- master read/write 
 	mbdr_micro	: in		std_logic_vector(7 downto 0);	-- uP data to output on I2C bus
 	madr		: in		std_logic_vector(7 downto 0); -- I2C slave address
-	mbb		: out		std_logic;	-- bus busy
-	mcf		: inout		std_logic;	-- data transfer
+	mbb		    : out		std_logic;	-- bus busy
+	mcf		    : inout		std_logic;	-- data transfer
 	maas		: inout		std_logic;	-- addressed as slave
-	mal		: inout		std_logic;	-- arbitration lost
-	srw		: inout		std_logic;	-- slave read/write
-	mif		: out		std_logic; 	-- interrupt pending
+	mal		    : inout		std_logic;	-- arbitration lost
+	srw		    : inout		std_logic;	-- slave read/write
+	mif		    : out		std_logic; 	-- interrupt pending
 	rxak		: out		std_logic;	-- received acknowledge
 	mbdr_i2c	: inout		std_logic_vector(7 downto 0); -- I2C data for uP
 	mbcr_wr		: in		std_logic;	-- indicates that MCBR register was written
@@ -86,9 +82,9 @@ component i2c_control
 	mal_bit_reset 	: in		std_logic;	-- indicates that the MAL bit should be reset
 	
 
-      	sys_clk 	: in 		std_logic;
-	reset 		: in 		std_logic);
-
+    sys_clk 	: in 		std_logic;
+	reset 		: in 		std_logic
+  );
 end component;
 
 -- Define the uC interface
@@ -158,12 +154,12 @@ signal msta			: std_logic;		-- i2c master/slave select
 signal mtx			: std_logic;		-- master read/write
 signal txak			: std_logic;		-- value of acknowledge to be transmitted
 signal rsta			: std_logic;		-- generate a repeated start
-signal rsta_rst			: std_logic;		-- reset for repeated start bit
+signal rsta_rst		: std_logic;		-- reset for repeated start bit
 
 signal mbcr_wr		: std_logic;		-- indicates the uC has written the MBCR
 
 -- status register
---signal mcf			: std_logic;		-- indicates a completed data byte transfer
+-- signal mcf		: std_logic;		-- indicates a completed data byte transfer
 signal maas			: std_logic;		-- indicates the chip has been addressed as I2c slave
 signal mbb			: std_logic;		-- indicates the i2c bus is busy
 signal mal			: std_logic;		-- indicates that arbitration for the i2c bus is lost
@@ -174,16 +170,16 @@ signal rxak			: std_logic;		-- value of received acknowledge
 -- resets for certain status and control register bits
 signal mal_bit_reset	: std_logic;		-- resets arbitration lost indicator 
 signal mif_bit_reset	: std_logic;		-- resets interrupt pending bit
-signal msta_rst		: std_logic;		-- resets master/slave select when arbitration is lost
+signal msta_rst		    : std_logic;		-- resets master/slave select when arbitration is lost
 
 -- data registers
 -- there are two data registers, one to hold the uC data when the chip is transmitting on I2C
 -- and one to hold the I2C data when the chip is receiving. This allows the two registers to 
 -- be clocked by different clocks
-signal mbdr_micro		: std_logic_vector(7 downto 0); -- uC data register
+signal mbdr_micro	: std_logic_vector(7 downto 0); -- uC data register
 signal mbdr_i2c		: std_logic_vector(7 downto 0); -- i2c data register
 
-signal mbdr_read		: std_logic;		-- indicates the mbdr_i2c register has been
+signal mbdr_read	: std_logic;		-- indicates the mbdr_i2c register has been
 								-- read by the uC
 
 begin
@@ -197,7 +193,7 @@ I2C_CTRL: i2c_control
 	port map (
 			-- I2C bus signals
 			sda => sda,
-      			scl => scl,
+      		scl => scl,
 	
 			-- interface signals from uP interface
 			txak		=> txak,
@@ -205,22 +201,22 @@ I2C_CTRL: i2c_control
 			msta_rst	=> msta_rst,
 			rsta		=> rsta,
 			rsta_rst	=> rsta_rst,
-			mtx		=> mtx,
+			mtx		    => mtx,
 			mbdr_micro	=> mbdr_micro,
 			madr		=> madr,
-			mbb		=> mbb,
-			mcf		=> mcf,
+			mbb		    => mbb,
+			mcf		    => mcf,
 			maas		=> maas,
-			mal		=> mal,
-			srw		=> srw,
-			mif		=> mif,
+			mal		    => mal,
+			srw		    => srw,
+			mif		    => mif,
 			rxak		=> rxak,
 			mbdr_i2c	=> mbdr_i2c,
-			mbcr_wr	=> mbcr_wr,
+			mbcr_wr	    => mbcr_wr,
 			mif_bit_reset => mif_bit_reset,
 			mal_bit_reset => mal_bit_reset,
 
-      			sys_clk => clk,
+      		sys_clk => clk,
 			reset => men 
 		);
 
@@ -240,14 +236,14 @@ uC_CTRL: uc_interface
 		
 		-- Directional pins
 		r_w		=> r_w, 
-		dtack 		=> dtack, 
+		dtack 	=> dtack, 
 		irq		=> irq,
 	
 		-- Internal I2C Bus Registers
 		-- Address Register (Contains slave address)
-		madr	      => madr,
+		madr	=> madr,
 
-                -- Control Register		
+        -- Control Register		
 		men		=> men,
 		mien        => mien,
 		msta        => msta,
@@ -258,7 +254,7 @@ uC_CTRL: uc_interface
 		mbcr_wr     => mbcr_wr,
 		rsta_rst    =>	rsta_rst,
 
-                -- Status Register
+        -- Status Register
 		mcf             => mcf,
 		maas            => maas,
 		mbb             => mbb,
@@ -272,7 +268,7 @@ uC_CTRL: uc_interface
 		msta_rst	    => msta_rst,
 		
 
-                -- Data Register 
+        -- Data Register 
 		mbdr_micro      => mbdr_micro,
 		mbdr_i2c        => mbdr_i2c,
 
