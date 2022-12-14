@@ -92,54 +92,54 @@ component uc_interface
       generic (UC_ADDRESS : std_logic_vector(15 downto 0):= "0000000000000000" );
 	port(
 		-- 68000 parallel bus interface
-		clk		: in STD_LOGIC;
-		reset 	: in STD_LOGIC;	 
+		clk		: in std_logic;
+		reset 	: in std_logic;	 
 		
-		addr_bus	: in STD_LOGIC_VECTOR (23 downto 0);
-		data_bus	: inout STD_LOGIC_VECTOR (7 downto 0);
-		as 		: in STD_LOGIC; 	-- Address strobe, active low	
-		ds 		: in STD_LOGIC; 	-- Data strobe, active low
+		addr_bus	: in std_logic_vector(23 downto 0);
+		data_bus	: inout std_logic_vector (7 downto 0);
+		as 		: in std_logic; 	-- Address strobe, active low	
+		ds 		: in std_logic; 	-- Data strobe, active low
 		
 		-- Directional pins
-		r_w		: in STD_LOGIC;	-- Active low write, 
+		r_w		: in std_logic;	-- Active low write, 
 							--  active high read
-		dtack 	: out STD_LOGIC;	-- Data transfer acknowledge 
-		irq		: out STD_LOGIC;	-- Interrupt request
+		dtack 	: out std_logic;	-- Data transfer acknowledge 
+		irq		: out std_logic;	-- Interrupt request
 	
 		-- Internal I2C Bus Registers
 		-- Address Register (Contains slave address)
-		madr	      : inout STD_LOGIC_VECTOR(7 downto 0);
+		madr	      : inout std_logic_vector(7 downto 0);
    
                 -- Control Register		
-		men             : inout STD_LOGIC;  -- I2C Enable bit
-		mien            : inout STD_LOGIC;	-- interrupt enable
-		msta            : inout STD_LOGIC;	-- Master/Slave bit
-		mtx             : inout STD_LOGIC;	-- Master read/write
-		txak            : inout STD_LOGIC;	-- acknowledge bit
-		rsta            : inout STD_LOGIC;	-- repeated start
+		men             : inout std_logic;  -- I2C Enable bit
+		mien            : inout std_logic;	-- interrupt enable
+		msta            : inout std_logic;	-- Master/Slave bit
+		mtx             : inout std_logic;	-- Master read/write
+		txak            : inout std_logic;	-- acknowledge bit
+		rsta            : inout std_logic;	-- repeated start
 	
-		mbcr_wr         : out STD_LOGIC;	-- indicates that the control reg has been written
-		rsta_rst	: in	STD_LOGIC;	-- reset for repeated start bit in control register
+		mbcr_wr         : out std_logic;	-- indicates that the control reg has been written
+		rsta_rst	: in	std_logic;	-- reset for repeated start bit in control register
 
-                -- Status Register
-		mcf             : in STD_LOGIC;	-- end of data transfer
-		maas            : in STD_LOGIC;	-- addressed as slave
-		mbb             : in STD_LOGIC;	-- bus busy
-		mal             : in STD_LOGIC;	-- arbitration lost
-		srw             : in STD_LOGIC;	-- slave read/write
-		mif             : in STD_LOGIC;	-- interrupt pending
-		rxak            : in STD_LOGIC;	-- received acknowledge
+        -- Status Register
+		mcf             : in std_logic;	-- end of data transfer
+		maas            : in std_logic;	-- addressed as slave
+		mbb             : in std_logic;	-- bus busy
+		mal             : in std_logic;	-- arbitration lost
+		srw             : in std_logic;	-- slave read/write
+		mif             : in std_logic;	-- interrupt pending
+		rxak            : in std_logic;	-- received acknowledge
 
-		mal_bit_reset   : out STD_LOGIC;	-- indicates that the MAL bit should be reset
-		mif_bit_reset   : out STD_LOGIC;	-- indicates that the MIF bit should be reset
-		msta_rst	    : in STD_LOGIC;	-- resets the MSTA bit if arbitration is lost
+		mal_bit_reset   : out std_logic;	-- indicates that the MAL bit should be reset
+		mif_bit_reset   : out std_logic;	-- indicates that the MIF bit should be reset
+		msta_rst	    : in std_logic;	-- resets the MSTA bit if arbitration is lost
 		
 
-                -- Data Register 
-		mbdr_micro      : inout STD_LOGIC_VECTOR (7 downto 0);
-		mbdr_i2c        : in STD_LOGIC_VECTOR (7 downto 0);
+        -- Data Register 
+		mbdr_micro      : inout std_logic_vector(7 downto 0);
+		mbdr_i2c        : in std_logic_vector(7 downto 0);
 
-		mbdr_read       : out STD_LOGIC
+		mbdr_read       : out std_logic
 		
 		);
 end component;
@@ -188,7 +188,7 @@ begin
  
 -- Instantiate the I2C Controller and connect it
 
-I2C_CTRL: i2c_control
+i2c_ctrl: i2c_control
 
 	port map (
 			-- I2C bus signals
@@ -222,7 +222,7 @@ I2C_CTRL: i2c_control
 
 -- Instantiate the uC interface and connect it
 
-uC_CTRL: uc_interface 
+uc_ctrl: uc_interface 
 	generic map ( UC_ADDRESS => I2C_ADDRESS)
 	port map(
 		-- 68000 parallel bus interface

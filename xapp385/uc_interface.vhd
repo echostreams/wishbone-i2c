@@ -31,8 +31,8 @@ entity uC_interface is
 		clk		: in STD_LOGIC;
 		reset 	: in STD_LOGIC;	 
 		
-		addr_bus	: in STD_LOGIC_VECTOR (23 downto 0);
-		data_bus	: inout STD_LOGIC_VECTOR (7 downto 0);
+		addr_bus	: in std_logic_vector(23 downto 0);
+		data_bus	: inout std_logic_vector(7 downto 0);
 		as 		: in STD_LOGIC; 	-- Address strobe, active low	
 		ds 		: in STD_LOGIC; 	-- Data strobe, active low
 		
@@ -44,9 +44,9 @@ entity uC_interface is
 	
 		-- Internal I2C Bus Registers
 		-- Address Register (Contains slave address)
-		madr	      : inout STD_LOGIC_VECTOR(7 downto 0);
+		madr	      : inout std_logic_vector(7 downto 0);
    
-                -- Control Register		
+        -- Control Register		
 		men             : inout STD_LOGIC;  -- I2C Enable bit
 		mien            : inout STD_LOGIC;	-- interrupt enable
 		msta            : inout STD_LOGIC;	-- Master/Slave bit
@@ -55,9 +55,10 @@ entity uC_interface is
 		rsta            : inout STD_LOGIC;	-- repeated start
 	
 		mbcr_wr         : out STD_LOGIC;	-- indicates that the control reg has been written
-		rsta_rst	: in  STD_LOGIC;	-- resets the repeated start bit in the 
-							-- control register
-                -- Status Register
+		rsta_rst	    : in  STD_LOGIC;	-- resets the repeated start bit in the 
+		-- control register
+        
+		-- Status Register
 		mcf             : in STD_LOGIC;	-- end of data transfer
 		maas            : in STD_LOGIC;	-- addressed as slave
 		mbb             : in STD_LOGIC;	-- bus busy
@@ -71,21 +72,16 @@ entity uC_interface is
 		msta_rst	    : in STD_LOGIC;	-- resets the MSTA bit if arbitration is lost
 		
 
-                -- Data Register 
-		mbdr_micro      : inout STD_LOGIC_VECTOR (7 downto 0);
-		mbdr_i2c        : in STD_LOGIC_VECTOR (7 downto 0);
+        -- Data Register 
+		mbdr_micro      : inout std_logic_vector (7 downto 0);
+		mbdr_i2c        : in std_logic_vector (7 downto 0);
 
-		mbdr_read       : out STD_LOGIC
+		mbdr_read       : out std_logic
 		
 		);
-		
+end entity uC_interface;
 
-end uC_interface;
-
-
-
-
-architecture BEHAVIOUR of uC_interface is
+architecture behaviour of uC_interface is
 
 -- Constant Declarations
 constant RESET_ACTIVE : STD_LOGIC := '0';
@@ -138,8 +134,8 @@ signal data_en		: std_logic;	-- data register is selected
 
 begin
 
-        -- Interrupt signal to uProcessor
-        irq <= '0' when (mien = '1') and (mif = '1') else 'Z';
+    -- Interrupt signal to uProcessor
+    irq <= '0' when (mien = '1') and (mif = '1') else 'Z';
 	
 	-- DTACK signal to uProcession
 	dtack <= dtack_int when (dtack_oe = '1') else 'Z';
@@ -212,7 +208,7 @@ begin
 		when IDLE =>
 
 		        -- Wait for falling edge of as
-			if as_int_d1 = '1' and as = '0' then
+			if (as_int_d1 = '1' and as = '0') then
 				-- falling edge of AS
 				next_state <= ADDR;
 			end if;
@@ -222,9 +218,9 @@ begin
 		when ADDR =>
 			
 			-- Check that this module is being address
-			if address_match = '1' then
+			if (address_match = '1') then
 		        -- Wait for ds to be asserted, active low
-		        if ds_int = '0' then
+		        if (ds_int = '0') then
 			        next_state <= DATA_TRS;
 			  	else
 				  next_state <= ADDR;
@@ -251,9 +247,9 @@ begin
 			  
 			
 			-- Wait for rising edge of as and ds
-			if (as_int_d1 = '0') and (ds_int = '0') then
+			if ((as_int_d1 = '0') and (ds_int = '0')) then
 			  next_state <= ASSERT_DTACK;
-			elsif (as_int_d1 = '1') and (ds_int = '1') then
+			elsif ((as_int_d1 = '1') and (ds_int = '1')) then
 			  next_state <= IDLE;
 			end if;
 		
@@ -266,14 +262,14 @@ begin
 	-- Function:  Mapping address from uProc to enable appropriate register
 	ADDR_DECODE: process (reset, clk, prs_state)
 	begin
-	    if reset = RESET_ACTIVE then
-		  	addr_en <= '0';
+	    if (reset = RESET_ACTIVE) then
+		  	addr_en  <= '0';
 			cntrl_en <= '0';
-			stat_en <= '0';
-			data_en <= '0';
+			stat_en  <= '0';
+			data_en  <= '0';
 		  
 		-- Synchronize with rising edge of clock
-		elsif clk'event and (clk = '1') then
+		elsif (clk'event and (clk = '1')) then
 
 		  -- I2C bus is specified by uProc and address is stable
 		  if address_match = '1' then
@@ -283,8 +279,8 @@ begin
 		      
 		      when MADR_ADDR =>  addr_en <= '1';
 					   	cntrl_en <= '0';
-					   	stat_en <= '0';
-					   	data_en <= '0';
+					   	stat_en  <= '0';
+					   	data_en  <= '0';
 
 		      when MBCR_ADDR =>  cntrl_en <= '1';
 						addr_en <= '0';
@@ -297,22 +293,22 @@ begin
 					   	data_en <= '0';
 
 		      when MBDR_ADDR =>  data_en <= '1';
-						addr_en <= '0';
+						addr_en  <= '0';
 					   	cntrl_en <= '0';
-					   	stat_en <= '0';
+					   	stat_en  <= '0';
 
 		      when others => addr_en <= '0';
 					   cntrl_en <= '0';
-					   stat_en <= '0';
-					   data_en <= '0';
+					   stat_en  <= '0';
+					   data_en  <= '0';
 				     
 		    end case;
 		  else
 			-- this device is not addressed
-			addr_en <= '0';
+			addr_en  <= '0';
 			cntrl_en <= '0';
-			stat_en <= '0';
-			data_en <= '0';
+			stat_en  <= '0';
+			data_en  <= '0';
 	
 		  end if;
 		  
@@ -328,7 +324,7 @@ begin
 	begin
 
 		-- Initialize all internal registers upon reset
-		if reset = RESET_ACTIVE then
+		if (reset = RESET_ACTIVE) then
 		
 			-- Address Register
 			madr <= (others => '0');
@@ -355,7 +351,7 @@ begin
 			data_out <= (others => '0');
 	
 		-- Check for rising edge of clock
-		elsif clk'event and (clk = '1') then
+		elsif (clk'event and (clk = '1')) then
 
 		  if (prs_state = IDLE) then
 			-- reset signals that indicate read from mbdr or write to mbcr
@@ -384,12 +380,12 @@ begin
 			  if r_w = '0' then
 				-- uC write		       
 			       mbcr_wr <= '1';
-			       men  <= data_in(7);
-			       mien <= data_in(6);
-			       msta <= data_in(5);
-			       mtx  <= data_in(4);
-			       txak <= data_in(3);
-			       rsta <= data_in(2);
+			       men     <= data_in(7);
+			       mien    <= data_in(6);
+			       msta    <= data_in(5);
+			       mtx     <= data_in(4);
+			       txak    <= data_in(3);
+			       rsta    <= data_in(2);
 		       
 			  else
 				-- uC read
@@ -403,15 +399,15 @@ begin
 			end if;
 
 		    	-- Status Register
-		    	if stat_en = '1' then
-			  if r_w = '0' then
+		    	if (stat_en = '1') then
+			  if (r_w = '0') then
 			       
                           -- uC write to these bits generates a reset
-			       if data_in(4) = '0' then
+			       if (data_in(4) = '0') then
 				    mal_bit_reset <= '1';
 			       end if;
 
-			       if data_in(2) = '0' then
+			       if (data_in(2) = '0') then
 				    mif_bit_reset <= '1';
 			       end if;
 			  else
@@ -449,15 +445,13 @@ begin
 			msta <= '0';
 		  end if;
 
-		  if rsta_rst = RESET_ACTIVE then
+		  if (rsta_rst = RESET_ACTIVE) then
 			rsta <= '0';
 		  end if;
 
 		end if;
 	
 	end process;
-	
 
-
-end BEHAVIOUR;
+end architecture behaviour;
   
