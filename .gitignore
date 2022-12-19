@@ -35,3 +35,6 @@
 *.cf
 _Log.txt
 _Alert.txt
+**/work
+*.vcd
+
