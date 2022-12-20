@@ -192,6 +192,7 @@ begin
       if (lbk_out.dmac_l_load_o = '1') then
         lbk_in.dmac_l_i <= lbk_out.dmac_l_o;
       end if;
+      mbdr_i2c <= mbdr_micro;
   end process sync;
   
   -- main process
@@ -244,6 +245,15 @@ begin
     wait for c_CLK_PERIOD;
 
     wishbone_check(WISHBONE_VVCT, 1, "010", x"00", "read MBSR, expect 0x00");
+    wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
+
+    wishbone_write(WISHBONE_VVCT, 1, "011", x"55", "write 0x55 to MBDR");
+    wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
+    wishbone_check(WISHBONE_VVCT, 1, "011", x"55", "read MBDR, expect 0x55");
     wait until ack_test = '0';
     wait for c_CLK_PERIOD;
 

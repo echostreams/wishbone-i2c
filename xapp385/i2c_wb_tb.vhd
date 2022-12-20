@@ -100,11 +100,11 @@ begin
   --addr_test_u <= unsigned(addr_test);
   
   i2c : entity work.i2c_wb
-  	generic map (
-  		I2C_ADDRESS => "0000000000001111"
-  	)
-  	port map (
-  		sda   => sda_test,
+	generic map (
+		I2C_ADDRESS => "0000000000001111"
+	)
+	port map (
+		sda   => sda_test,
       scl   => scl_test,
 
       --wishbone_in  => wb_in_test,
@@ -126,8 +126,8 @@ begin
 		  -- clock and reset
 		  clk   => clk_test,
       reset => rst_test
-  	);
-  	
+	);
+	
   -----------------------------------------------------------------------------
   -- Wishbone
   -----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ begin
     ------------------------------------------------------------
 
     log("Wait 10 clock period for reset to be turned off");
-    wait for (10 * c_CLK_PERIOD); -- for reset to be turned off  		
+    wait for (10 * c_CLK_PERIOD); -- for reset to be turned off
     
     wishbone_write(WISHBONE_VVCT, 1, "000000000000111110001101", x"5a", "write 0x5a to 10001101");
     --wait until wb_out_test.ack = '0';

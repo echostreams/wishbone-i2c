@@ -2,8 +2,8 @@
 --
 -- Created: 6/3/99 ALS
 --
--- 	This code implements the control of the i2c bus with a MC68000 type interface. It is 
--- 	modeled from the M-bus component in certain Motorola uC.
+--	This code implements the control of the i2c bus with a MC68000 type interface. It is 
+--	modeled from the M-bus component in certain Motorola uC.
 --	The I2C control is done in the component i2c_control and the uC interface is implemented
 --	in the component uC_interface. This file does not contain any logic descriptions, it simply
 --	instantiates the two components and hooks them together.
@@ -81,7 +81,7 @@ component i2c_control
 	
 	-- interface signals from uP interface
 	txak		: in		std_logic;	-- value for acknowledge when xmit
-	msta		: in		std_logic; 	-- master/slave select
+	msta		: in		std_logic;	-- master/slave select
 	msta_rst	: out		std_logic;	-- resets MSTA bit if arbitration is lost
 	rsta		: in		std_logic;	-- repeated start 
 	rsta_rst	: out		std_logic;	-- reset for repeated start bit in control register
@@ -93,16 +93,16 @@ component i2c_control
 	maas		: inout		std_logic;	-- addressed as slave
 	mal		    : inout		std_logic;	-- arbitration lost
 	srw		    : inout		std_logic;	-- slave read/write
-	mif		    : out		std_logic; 	-- interrupt pending
+	mif		    : out		std_logic;	-- interrupt pending
 	rxak		: out		std_logic;	-- received acknowledge
 	mbdr_i2c	: inout		std_logic_vector(7 downto 0); -- I2C data for uP
 	mbcr_wr		: in		std_logic;	-- indicates that MCBR register was written
-	mif_bit_reset 	: in	std_logic;	-- indicates that the MIF bit should be reset
-	mal_bit_reset 	: in	std_logic;	-- indicates that the MAL bit should be reset
+	mif_bit_reset	: in	std_logic;	-- indicates that the MIF bit should be reset
+	mal_bit_reset	: in	std_logic;	-- indicates that the MAL bit should be reset
 	
 
-    sys_clk 	: in 		std_logic;
-	reset 		: in 		std_logic
+    sys_clk	: in		std_logic;
+	reset		: in		std_logic
   );
 end component;
 
@@ -112,12 +112,12 @@ component wb_interface
 	port(
 		-- 68000 parallel bus interface
 		clk		: in std_logic;
-		reset 	: in std_logic;	 
+		reset	: in std_logic;	 
 		
 		--addr_bus	: in std_logic_vector(23 downto 0);
 		--data_bus	: inout std_logic_vector(7 downto 0);
-		--as 		: in STD_LOGIC; 	-- Address strobe, active low	
-		--ds 		: in STD_LOGIC; 	-- Data strobe, active low
+		--as		: in STD_LOGIC;	-- Address strobe, active low	
+		--ds		: in STD_LOGIC;	-- Data strobe, active low
 		
 		-- Directional pins
 		--r_w		: in STD_LOGIC;	-- Active low write, 
@@ -136,7 +136,7 @@ component wb_interface
         o_ack   : out   std_ulogic;
         --o_stall : out   std_ulogic;
 
-		dtack 	: out std_logic;	-- Data transfer acknowledge 
+		dtack	: out std_logic;	-- Data transfer acknowledge 
 		irq		: out std_logic;	-- Interrupt request
 	
 		-- Internal I2C Bus Registers
@@ -226,7 +226,7 @@ i2c_ctrl: i2c_control
 	port map (
 			-- I2C bus signals
 			sda => sda,
-      		scl => scl,
+		scl => scl,
 	
 			-- interface signals from uP interface
 			txak		=> txak,
@@ -249,23 +249,23 @@ i2c_ctrl: i2c_control
 			mif_bit_reset => mif_bit_reset,
 			mal_bit_reset => mal_bit_reset,
 
-      		sys_clk => clk,
+		sys_clk => clk,
 			reset => men 
 		);
 
 -- Instantiate the uC interface and connect it
-
+/*
 wb_ctrl: wb_interface 
 	generic map ( UC_ADDRESS => I2C_ADDRESS)
 	port map(
 		-- 68000 parallel bus interface
 		clk		=> clk,
-		reset 		=> reset,	 
+		reset		=> reset,	 
 		
 		--addr_bus	=> addr_bus,
 		--data_bus	=> data_bus,
-		--as 		=> as,	
-		--ds 		=> ds,
+		--as		=> as,	
+		--ds		=> ds,
 		
 		-- Directional pins
 		--r_w		=> r_w, 
@@ -285,7 +285,7 @@ wb_ctrl: wb_interface
         --o_stall : out   std_ulogic;
         
 
-		dtack 	=> dtack, 
+		dtack	=> dtack, 
 		irq		=> irq,
 	
 		-- Internal I2C Bus Registers
@@ -324,6 +324,76 @@ wb_ctrl: wb_interface
 		mbdr_read       => mbdr_read
 		
 		);
-		
+*/		
+
+wb_ctrl: i2c_wishbone_controller 
+generic map ( UC_ADDRESS => I2C_ADDRESS)
+port map(
+	-- 68000 parallel bus interface
+	clk		=> clk,
+	reset		=> reset,	 
+	
+	--addr_bus	=> addr_bus,
+	--data_bus	=> data_bus,
+	--as		=> as,	
+	--ds		=> ds,
+	
+	-- Directional pins
+	--r_w		=> r_w, 
+	--wishbone_in => wishbone_in,
+	--wishbone_in  : in    wb_io_master_out;
+	wb_adr_i => i_adr,
+	wb_dat_i => i_dat,
+	--i_sel : in    wishbone_sel_type;
+	wb_cyc_i => i_cyc,
+	wb_stb_i => i_stb,
+	wb_we_i  => i_we,
+
+	--wishbone_out : out   wb_io_slave_out;
+	--wishbone_out => wishbone_out,
+	wb_dat_o => o_dat,
+	wb_ack_o => o_ack,
+	--o_stall : out   std_ulogic;
+	
+
+	dtack	=> dtack, 
+	irq		=> irq,
+
+	-- Internal I2C Bus Registers
+	-- Address Register (Contains slave address)
+	madr	=> madr,
+
+	-- Control Register		
+	men		=> men,
+	mien        => mien,
+	msta        => msta,
+	mtx         => mtx,
+	txak        => txak,
+	rsta        => rsta,
+
+	mbcr_wr     => mbcr_wr,
+	rsta_rst    =>	rsta_rst,
+
+	-- Status Register
+	mcf             => mcf,
+	maas            => maas,
+	mbb             => mbb,
+	mal             => mal,
+	srw             => srw,
+	mif             => mif,
+	rxak            => rxak,
+
+	mal_bit_reset   => mal_bit_reset,
+	mif_bit_reset   => mif_bit_reset,
+	msta_rst	    => msta_rst,
+	
+
+	-- Data Register 
+	mbdr_micro      => mbdr_micro,
+	mbdr_i2c        => mbdr_i2c,
+
+	mbdr_read       => mbdr_read
+	
+	);
 
 end behave;

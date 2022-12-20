@@ -75,8 +75,8 @@ entity i2c_wishbone_controller is
     irq        : out   std_logic;
 
     -- Internal I2C Bus Registers
-		-- Address Register (Contains slave address)
-		madr	   : inout std_logic_vector(7 downto 0);
+    -- Address Register (Contains slave address)
+    madr       : inout std_logic_vector(7 downto 0);
 
     -- Control Register		
 		men      : inout std_logic;  -- I2C Enable bit
@@ -111,8 +111,6 @@ entity i2c_wishbone_controller is
 
     regs_i   : in     t_lbk_in_registers;
     regs_o   : out    t_lbk_out_registers
-
-
   );
 end i2c_wishbone_controller;
 
