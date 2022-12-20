@@ -37,4 +37,4 @@ _Log.txt
 _Alert.txt
 **/work
 *.vcd
-
+*.ghw

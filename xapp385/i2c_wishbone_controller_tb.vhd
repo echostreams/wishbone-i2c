@@ -80,6 +80,22 @@ architecture arch of i2c_wishbone_controller_tb is
   signal lbk_in  : t_lbk_in_registers;  
   signal lbk_out : t_lbk_out_registers;
 
+  signal rsta_rst : std_logic;
+  signal mcf : std_logic;
+  signal maas : std_logic;
+  signal mbb : std_logic;
+  signal mal : std_logic;
+  signal srw : std_logic;
+  signal mif : std_logic;
+  signal rxak : std_logic;
+  signal mal_bit_reset : std_logic;
+  signal mif_bit_reset : std_logic;
+  signal msta_rst : std_logic;
+
+  signal mbdr_micro : std_logic_vector(7 downto 0);
+  signal mbdr_i2c : std_logic_vector(7 downto 0);
+  signal mbdr_read : std_logic;
+
 begin
 
     -----------------------------------------------------------------------------
@@ -110,6 +126,23 @@ begin
 --		o_stall
 --		o_rty
 --		o_err
+
+        rsta_rst  => rsta_rst,
+        mcf => mcf,
+        maas => maas,
+        mbb => mbb,
+        mal => mal,
+        srw => srw,
+        mif => mif,
+        rxak => rxak,
+        mal_bit_reset => mal_bit_reset,
+        mif_bit_reset => mif_bit_reset,
+        msta_rst => msta_rst,
+
+        mbdr_micro => mbdr_micro,
+        mbdr_i2c => mbdr_i2c,
+        mbdr_read => mbdr_read,
+
         regs_i    => lbk_in,
         regs_o    => lbk_out
   	);
@@ -180,20 +213,44 @@ begin
     enable_log_msg(ID_SEQUENCER);
     enable_log_msg(ID_UVVM_SEND_CMD);
 
+    mcf <= '0';
+    maas <= '0';
+    mbb <= '0';
+    mal <= '0';
+    srw <= '0';
+    mif <= '0';
+    rxak <= '0';
+
     log(ID_LOG_HDR, "Starting simulation of TB for Wishbone-RAM using VVCs", c_SCOPE);
     ------------------------------------------------------------
 
     log("Wait 10 clock period for reset to be turned off");
     wait for (10 * c_CLK_PERIOD); -- for reset to be turned off
     
-    wishbone_write(WISHBONE_VVCT, 1, "001", x"5a", "write 0x5a to 001");
+    wishbone_write(WISHBONE_VVCT, 1, "001", x"5a", "write 0x5a to MBCR");
     wait until ack_test = '0';
-    wishbone_check(WISHBONE_VVCT, 1, "001", x"5a", "read 001");
+    wait for c_CLK_PERIOD;
+
+    wishbone_check(WISHBONE_VVCT, 1, "001", x"58", "read MBCR, expect 0x58");
     wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
+    wishbone_write(WISHBONE_VVCT, 1, "000", x"a5", "write 0xa5 to MADR");
+    wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
+    wishbone_check(WISHBONE_VVCT, 1, "000", x"a4", "read MADR, expect 0xa4");
+    wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
+    wishbone_check(WISHBONE_VVCT, 1, "010", x"00", "read MBSR, expect 0x00");
+    wait until ack_test = '0';
+    wait for c_CLK_PERIOD;
+
     -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
-    wait for 100 us;              -- to allow some time for completion
+    --wait for 100 us;              -- to allow some time for completion
     report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
     log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 

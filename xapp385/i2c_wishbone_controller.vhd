@@ -74,8 +74,45 @@ entity i2c_wishbone_controller is
 
     irq        : out   std_logic;
 
+    -- Internal I2C Bus Registers
+		-- Address Register (Contains slave address)
+		madr	   : inout std_logic_vector(7 downto 0);
+
+    -- Control Register		
+		men      : inout std_logic;  -- I2C Enable bit
+		mien     : inout std_logic;	-- interrupt enable
+		msta     : inout std_logic;	-- Master/Slave bit
+		mtx      : inout std_logic;	-- Master read/write
+		txak     : inout std_logic;	-- acknowledge bit
+		rsta     : inout std_logic;	-- repeated start
+	
+		mbcr_wr  : out   std_logic;	-- indicates that the control reg has been written
+		rsta_rst : in    std_logic;	-- resets the repeated start bit in the control register
+
+    -- Status Register
+		mcf           : in    std_logic;	-- end of data transfer
+		maas          : in    std_logic;	-- addressed as slave
+		mbb           : in    std_logic;	-- bus busy
+		mal           : in    std_logic;	-- arbitration lost
+		-- 
+		srw           : in    std_logic;	-- slave read/write
+		mif           : in    std_logic;	-- interrupt pending
+		rxak          : in    std_logic;	-- received acknowledge
+
+		mal_bit_reset : out   std_logic;	-- indicates that the MAL bit should be reset
+		mif_bit_reset : out   std_logic;	-- indicates that the MIF bit should be reset
+		msta_rst	    : in    std_logic;	-- resets the MSTA bit if arbitration is lost
+
+    -- Data Register
+		mbdr_micro    : inout std_logic_vector(7 downto 0);
+		mbdr_i2c      : in    std_logic_vector(7 downto 0);
+
+		mbdr_read     : out   std_logic;
+
     regs_i   : in     t_lbk_in_registers;
     regs_o   : out    t_lbk_out_registers
+
+
   );
 end i2c_wishbone_controller;
 
@@ -123,6 +160,22 @@ begin
       regs_o.rcv_cnt_load_o <= '0';
       regs_o.drp_cnt_load_o <= '0';
       regs_o.fwd_cnt_load_o <= '0';
+      -- Address Register
+      madr    <= (others => '0');
+      -- Control Register
+      men     <= '0';
+			mien    <= '0';
+			msta    <= '0';
+			mtx     <= '0';
+			txak    <= '0';
+			rsta    <= '0';
+      mbcr_wr <= '0';
+      -- Status Register
+			mal_bit_reset <= '0';
+			mif_bit_reset <= '0';
+      -- Data Register
+			mbdr_micro <= (others => '0');
+			mbdr_read  <= '0';
     elsif rising_edge(clk_sys_i) then
       -- advance the ACK generator shift register
       ack_sreg(8 downto 0) <= ack_sreg(9 downto 1);
@@ -130,6 +183,7 @@ begin
       if (ack_in_progress = '1') then
         if (ack_sreg(0) = '1') then
           lbk_mcr_clr_int <= '0';
+          mbcr_wr <= '0';
           regs_o.dmac_l_load_o  <= '0';
           regs_o.dmac_h_load_o  <= '0';
           regs_o.rcv_cnt_load_o <= '0';
@@ -146,20 +200,25 @@ begin
       else
         if ((wb_cyc_i = '1') and (wb_stb_i = '1')) then
           case rwaddr_reg(2 downto 0) is
-          when "000" => 
+          when "000" =>
+
+            -- Address Register (MADR) 
             if (wb_we_i = '1') then
               lbk_mcr_ena_int   <= wrdata_reg(0);
               lbk_mcr_clr_int   <= wrdata_reg(1);
               lbk_mcr_fdmac_int <= wrdata_reg(2);
+              madr <= wrdata_reg(7 downto 1) & '0';
             end if;
-            rddata_reg(0)  <= lbk_mcr_ena_int;
-            rddata_reg(1)  <= '0';
-            rddata_reg(2)  <= lbk_mcr_fdmac_int;
-            rddata_reg(3)  <= 'X';
-            rddata_reg(4)  <= 'X';
-            rddata_reg(5)  <= 'X';
-            rddata_reg(6)  <= 'X';
-            rddata_reg(7)  <= 'X';
+            --rddata_reg(0)  <= lbk_mcr_ena_int;
+            --rddata_reg(1)  <= '0';
+            --rddata_reg(2)  <= lbk_mcr_fdmac_int;
+            --rddata_reg(3)  <= 'X';
+            --rddata_reg(4)  <= 'X';
+            --rddata_reg(5)  <= 'X';
+            --rddata_reg(6)  <= 'X';
+            --rddata_reg(7)  <= 'X';
+            rddata_reg(7 downto 0) <= madr;
+            /*
             rddata_reg(8)  <= 'X';
             rddata_reg(9)  <= 'X';
             rddata_reg(10) <= 'X';
@@ -184,19 +243,48 @@ begin
             rddata_reg(29) <= 'X';
             rddata_reg(30) <= 'X';
             rddata_reg(31) <= 'X';
-            ack_sreg(2)    <= '1';
+            */
+            --ack_sreg(2)    <= '1';
+            ack_sreg(0)     <= '1';
             ack_in_progress <= '1';
+          
           when "001" => 
+
+            -- Control Register (MBCR)
             if (wb_we_i = '1') then
               regs_o.dmac_l_load_o <= '1';
+              mbcr_wr <= '1';
+              men     <= wrdata_reg(7);
+			        mien    <= wrdata_reg(6);
+			        msta    <= wrdata_reg(5);
+			        mtx     <= wrdata_reg(4);
+			        txak    <= wrdata_reg(3);
+			        rsta    <= wrdata_reg(2);
+            else
+              mbcr_wr <= '0';
             end if;
-            rddata_reg(31 downto 0) <= regs_i.dmac_l_i;
+            --rddata_reg(31 downto 0) <= regs_i.dmac_l_i;
+            rddata_reg(7 downto 0) <= men & mien & msta & mtx & 
+                                      txak & rsta & "0" & "0";
             ack_sreg(0) <= '1';
             ack_in_progress <= '1';
           when "010" => 
+
+            -- Status Register (MBSR)
             if (wb_we_i = '1') then
               regs_o.dmac_h_load_o <= '1';
+              -- uC write to these bits generates a reset
+              if (wrdata_reg(4) = '0') then
+                mal_bit_reset <= '1';
+              end if;
+              if (wrdata_reg(1) = '0') then
+                mif_bit_reset <= '1';
+              end if;
+            else
+              mal_bit_reset <= '0';
+			        mif_bit_reset <= '0';
             end if;
+            /*
             rddata_reg(15 downto 0) <= regs_i.dmac_h_i;
             rddata_reg(16) <= 'X';
             rddata_reg(17) <= 'X';
@@ -214,13 +302,23 @@ begin
             rddata_reg(29) <= 'X';
             rddata_reg(30) <= 'X';
             rddata_reg(31) <= 'X';
+            */
+            rddata_reg(7 downto 0) <= mcf & maas & mbb & mal & 
+                                      "0" & srw & mif & rxak;
             ack_sreg(0) <= '1';
             ack_in_progress <= '1';
-          when "011" => 
+          when "011" =>
+          
+            -- Data Register (MBDR)
             if (wb_we_i = '1') then
               regs_o.rcv_cnt_load_o <= '1';
+              mbdr_read <= '0';
+              mbdr_micro <= wrdata_reg(7 downto 0);
+            else
+              mbdr_read <= '1';
             end if;
-            rddata_reg(31 downto 0) <= regs_i.rcv_cnt_i;
+            --rddata_reg(31 downto 0) <= regs_i.rcv_cnt_i;
+            rddata_reg(7 downto 0) <= mbdr_i2c;
             ack_sreg(0) <= '1';
             ack_in_progress <= '1';
           when "100" => 
@@ -242,9 +340,22 @@ begin
             ack_in_progress <= '1';
             ack_sreg(0) <= '1';
           end case;
-        end if;
+        end if; -- wb_cyc_i and wb_stb_i
+      end if; -- ack_in_progress
+
+      -- if arbitration is lost, the I2C Control component will generate a reset for the
+		  -- MSTA bit to force the design to slave mode 
+		  -- will do this reset synchronously
+
+		  if (msta_rst = '1') then
+          msta <= '0';
       end if;
-    end if;
+  
+      if (rsta_rst = '1') then
+          rsta <= '0';
+      end if;
+
+    end if; -- reset
   end process;
   
   
