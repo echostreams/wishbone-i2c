@@ -114,7 +114,7 @@ constant NO_ACK	              : std_logic_vector(7 downto 0) := "11101000";
 constant STOP_TX	            : std_logic_vector(7 downto 0) := "11010000";
 constant STOP_RX	            : std_logic_vector(7 downto 0) := "11001000";
 constant TST_ADDR_OUT_HEADER  : std_logic_vector(7 downto 0) := "10010000";
-constant MASTR_RD_HEADER      : std_logic_vector(7 downto 0) := "00001111";
+constant MASTR_RD_HEADER      : std_logic_vector(7 downto 0) := "10010001";
 
    
 begin
@@ -126,11 +126,11 @@ begin
 
   --addr_test_u <= unsigned(addr_test);
   
-  --master0 : entity work.i2c_wb
-  master0 : entity work.i2c_wb_wrapper
+  master0 : entity work.i2c_wb
+  --master0 : entity work.i2c_wb_wrapper
 	generic map (
-		I2C_ADDRESS => MASTR0_MBASE,
-    ADDR_WIDTH => 30
+		I2C_ADDRESS => MASTR0_MBASE--,
+    --ADDR_WIDTH => 30
 	)
 	port map (
 		sda   => sda_test,
@@ -234,7 +234,9 @@ begin
     report_global_ctrl(VOID);
     report_msg_id_panel(VOID);
 
-    disable_log_msg(ALL_MESSAGES);
+    --disable_log_msg(ALL_MESSAGES);
+    enable_log_msg(ALL_MESSAGES);
+    disable_log_msg(ID_POS_ACK);        --make output a bit cleaner
     enable_log_msg(ID_LOG_HDR);
     enable_log_msg(ID_SEQUENCER);
     enable_log_msg(ID_UVVM_SEND_CMD);
@@ -263,10 +265,23 @@ begin
     wait until ack_test = '0';
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
     wait until ack_test = '0';
+    wait until mcf_test = '1';
+
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000001", "Pointer Address: Configuration register");
     wait until ack_test = '0';
-    --wishbone_write(WISHBONE_VCCT, 1, unsigned(MBCR), REPEAT_START_RX, "Repeated START");
-    --wait until ack_test = '0';
+    wait until mcf_test = '1';
+
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT,	"enable the master to receive");
+    wait until ack_test = '0';
+		wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
+    wait until ack_test = '0';
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
+    wait until ack_test = '0';
+    wait until mcf_test = '1';
+
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+    wait until ack_test = '0';
+    
 		wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
     wait until ack_test = '0';
 
