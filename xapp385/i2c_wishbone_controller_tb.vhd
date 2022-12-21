@@ -38,8 +38,8 @@ use bitvis_vip_clock_generator.vvc_cmd_pkg.all;
 use bitvis_vip_clock_generator.vvc_methods_pkg.all;
 use bitvis_vip_clock_generator.td_vvc_framework_common_methods_pkg.all;
 
-library work;
-  use work.i2c_wb_pkg.all;
+--library work;
+--  use work.i2c_wb_pkg.all;
 
 entity i2c_wishbone_controller_tb is
 end i2c_wishbone_controller_tb;
@@ -77,8 +77,8 @@ architecture arch of i2c_wishbone_controller_tb is
   signal cyc_test    : std_logic;
   signal ack_test    : std_logic;
 
-  signal lbk_in  : t_lbk_in_registers;  
-  signal lbk_out : t_lbk_out_registers;
+  --signal lbk_in  : t_lbk_in_registers;  
+  --signal lbk_out : t_lbk_out_registers;
 
   signal rsta_rst : std_logic;
   signal mcf : std_logic;
@@ -105,7 +105,7 @@ begin
 
   addr_test_u <= unsigned(addr_test);
   
-  ram : entity work.i2c_wishbone_controller
+  i2c : entity work.i2c_wishbone_controller
   	generic map (
   		ADDR_WIDTH => c_ADDR_WIDTH,
   		DATA_WIDTH => c_WIDTH,
@@ -141,10 +141,10 @@ begin
 
         mbdr_micro => mbdr_micro,
         mbdr_i2c => mbdr_i2c,
-        mbdr_read => mbdr_read,
+        mbdr_read => mbdr_read --,
 
-        regs_i    => lbk_in,
-        regs_o    => lbk_out
+        --regs_i    => lbk_in,
+        --regs_o    => lbk_out
   	);
   	
   -----------------------------------------------------------------------------
@@ -189,9 +189,9 @@ begin
 
   sync: process(clk_test)
   begin
-      if (lbk_out.dmac_l_load_o = '1') then
-        lbk_in.dmac_l_i <= lbk_out.dmac_l_o;
-      end if;
+      --if (lbk_out.dmac_l_load_o = '1') then
+      --  lbk_in.dmac_l_i <= lbk_out.dmac_l_o;
+      --end if;
       mbdr_i2c <= mbdr_micro;
   end process sync;
   

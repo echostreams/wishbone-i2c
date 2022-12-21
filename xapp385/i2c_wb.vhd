@@ -326,12 +326,15 @@ wb_ctrl: wb_interface
 		);
 */		
 
-wb_ctrl: i2c_wishbone_controller 
-generic map ( UC_ADDRESS => I2C_ADDRESS)
+wb_ctrl: entity work.i2c_wishbone_controller 
+generic map ( 
+	UC_ADDRESS => I2C_ADDRESS,
+	ADDR_WIDTH => 30
+	)
 port map(
 	-- 68000 parallel bus interface
-	clk		=> clk,
-	reset		=> reset,	 
+	clk_sys_i	=> clk,
+	rst_n_i		=> reset,	 
 	
 	--addr_bus	=> addr_bus,
 	--data_bus	=> data_bus,
@@ -344,7 +347,7 @@ port map(
 	--wishbone_in  : in    wb_io_master_out;
 	wb_adr_i => i_adr,
 	wb_dat_i => i_dat,
-	--i_sel : in    wishbone_sel_type;
+	wb_sel_i => "1111",
 	wb_cyc_i => i_cyc,
 	wb_stb_i => i_stb,
 	wb_we_i  => i_we,

@@ -10,6 +10,7 @@ library ieee;
 library work;
   use work.wishbone_types.all;
 
+/*
 package i2c_wb_pkg is
 -- Input registers (user design -> WB slave)
   
@@ -51,6 +52,7 @@ library ieee;
 
 library work;
   use work.i2c_wb_pkg.all;
+*/
 
 entity i2c_wishbone_controller is
   generic (
@@ -73,6 +75,7 @@ entity i2c_wishbone_controller is
     wb_stall_o : out   std_logic;
 
     irq        : out   std_logic;
+    dtack      : out   std_logic;
 
     -- Internal I2C Bus Registers
     -- Address Register (Contains slave address)
@@ -107,10 +110,10 @@ entity i2c_wishbone_controller is
 		mbdr_micro    : inout std_logic_vector(7 downto 0);
 		mbdr_i2c      : in    std_logic_vector(7 downto 0);
 
-		mbdr_read     : out   std_logic;
+		mbdr_read     : out   std_logic --;
 
-    regs_i   : in     t_lbk_in_registers;
-    regs_o   : out    t_lbk_out_registers
+    --regs_i   : in     t_lbk_in_registers;
+    --regs_o   : out    t_lbk_out_registers
   );
 end i2c_wishbone_controller;
 
@@ -153,11 +156,11 @@ begin
       lbk_mcr_ena_int <= '0';
       lbk_mcr_clr_int <= '0';
       lbk_mcr_fdmac_int <= '0';
-      regs_o.dmac_l_load_o  <= '0';
-      regs_o.dmac_h_load_o  <= '0';
-      regs_o.rcv_cnt_load_o <= '0';
-      regs_o.drp_cnt_load_o <= '0';
-      regs_o.fwd_cnt_load_o <= '0';
+      --regs_o.dmac_l_load_o  <= '0';
+      --regs_o.dmac_h_load_o  <= '0';
+      --regs_o.rcv_cnt_load_o <= '0';
+      --regs_o.drp_cnt_load_o <= '0';
+      --regs_o.fwd_cnt_load_o <= '0';
       -- Address Register
       madr    <= (others => '0');
       -- Control Register
@@ -182,18 +185,18 @@ begin
         if (ack_sreg(0) = '1') then
           lbk_mcr_clr_int <= '0';
           mbcr_wr <= '0';
-          regs_o.dmac_l_load_o  <= '0';
-          regs_o.dmac_h_load_o  <= '0';
-          regs_o.rcv_cnt_load_o <= '0';
-          regs_o.drp_cnt_load_o <= '0';
-          regs_o.fwd_cnt_load_o <= '0';
+          --regs_o.dmac_l_load_o  <= '0';
+          --regs_o.dmac_h_load_o  <= '0';
+          --regs_o.rcv_cnt_load_o <= '0';
+          --regs_o.drp_cnt_load_o <= '0';
+          --regs_o.fwd_cnt_load_o <= '0';
           ack_in_progress       <= '0';
         else
-          regs_o.dmac_l_load_o  <= '0';
-          regs_o.dmac_h_load_o  <= '0';
-          regs_o.rcv_cnt_load_o <= '0';
-          regs_o.drp_cnt_load_o <= '0';
-          regs_o.fwd_cnt_load_o <= '0';
+          --regs_o.dmac_l_load_o  <= '0';
+          --regs_o.dmac_h_load_o  <= '0';
+          --regs_o.rcv_cnt_load_o <= '0';
+          --regs_o.drp_cnt_load_o <= '0';
+          --regs_o.fwd_cnt_load_o <= '0';
         end if;
       else
         if ((wb_cyc_i = '1') and (wb_stb_i = '1')) then
@@ -250,7 +253,7 @@ begin
 
             -- Control Register (MBCR)
             if (wb_we_i = '1') then
-              regs_o.dmac_l_load_o <= '1';
+              --regs_o.dmac_l_load_o <= '1';
               mbcr_wr <= '1';
               men     <= wrdata_reg(7);
 			        mien    <= wrdata_reg(6);
@@ -270,7 +273,7 @@ begin
 
             -- Status Register (MBSR)
             if (wb_we_i = '1') then
-              regs_o.dmac_h_load_o <= '1';
+              --regs_o.dmac_h_load_o <= '1';
               -- uC write to these bits generates a reset
               if (wrdata_reg(4) = '0') then
                 mal_bit_reset <= '1';
@@ -309,7 +312,7 @@ begin
           
             -- Data Register (MBDR)
             if (wb_we_i = '1') then
-              regs_o.rcv_cnt_load_o <= '1';
+              --regs_o.rcv_cnt_load_o <= '1';
               mbdr_read <= '0';
               mbdr_micro <= wrdata_reg(7 downto 0);
             else
@@ -319,20 +322,7 @@ begin
             rddata_reg(7 downto 0) <= mbdr_i2c;
             ack_sreg(0) <= '1';
             ack_in_progress <= '1';
-          when "100" => 
-            if (wb_we_i = '1') then
-              regs_o.drp_cnt_load_o <= '1';
-            end if;
-            rddata_reg(31 downto 0) <= regs_i.drp_cnt_i;
-            ack_sreg(0) <= '1';
-            ack_in_progress <= '1';
-          when "101" => 
-            if (wb_we_i = '1') then
-              regs_o.fwd_cnt_load_o <= '1';
-            end if;
-            rddata_reg(31 downto 0) <= regs_i.fwd_cnt_i;
-            ack_sreg(0) <= '1';
-            ack_in_progress <= '1';
+                    
           when others =>
 -- prevent the slave from hanging the bus on invalid address
             ack_in_progress <= '1';
@@ -360,36 +350,38 @@ begin
 -- Drive the data output bus
   wb_dat_o <= rddata_reg;
 -- Enable Loopback
-  regs_o.mcr_ena_o <= lbk_mcr_ena_int;
+  --regs_o.mcr_ena_o <= lbk_mcr_ena_int;
 -- Clear counters
   process (clk_sys_i, rst_n_i)
   begin
     if (rst_n_i = RESET_ACTIVE) then 
       lbk_mcr_clr_dly0 <= '0';
-      regs_o.mcr_clr_o <= '0';
+      --regs_o.mcr_clr_o <= '0';
     elsif rising_edge(clk_sys_i) then
       lbk_mcr_clr_dly0 <= lbk_mcr_clr_int;
-      regs_o.mcr_clr_o <= lbk_mcr_clr_int and (not lbk_mcr_clr_dly0);
+      --regs_o.mcr_clr_o <= lbk_mcr_clr_int and (not lbk_mcr_clr_dly0);
     end if;
   end process;
   
   
 -- Force DMAC
-  regs_o.mcr_fdmac_o <= lbk_mcr_fdmac_int;
+  --regs_o.mcr_fdmac_o <= lbk_mcr_fdmac_int;
 -- MAC
-  regs_o.dmac_l_o <= wrdata_reg(31 downto 0);
+  --regs_o.dmac_l_o <= wrdata_reg(31 downto 0);
 -- MAC
-  regs_o.dmac_h_o <= wrdata_reg(15 downto 0);
+  --regs_o.dmac_h_o <= wrdata_reg(15 downto 0);
 -- Value
-  regs_o.rcv_cnt_o <= wrdata_reg(31 downto 0);
+  --regs_o.rcv_cnt_o <= wrdata_reg(31 downto 0);
 -- Value
-  regs_o.drp_cnt_o <= wrdata_reg(31 downto 0);
+  --regs_o.drp_cnt_o <= wrdata_reg(31 downto 0);
 -- Value
-  regs_o.fwd_cnt_o <= wrdata_reg(31 downto 0);
+  --regs_o.fwd_cnt_o <= wrdata_reg(31 downto 0);
 
   rwaddr_reg <= wb_adr_i;
   wb_stall_o <= (not ack_sreg(0)) and (wb_stb_i and wb_cyc_i);
 -- ACK signal generation. Just pass the LSB of ACK counter.
   wb_ack_o <= ack_sreg(0);
+
+  dtack <= (not ack_sreg(0));
 
 end syn;
