@@ -48,8 +48,8 @@ architecture arch of i2c_wb_tb is
     constant c_SCOPE : string := "WHISHBONE I2C CORE";
     constant c_CLK_PERIOD : time := 20 ns;
     constant c_CLOCK_GEN: natural := 1;
-	  constant c_ADDR_WIDTH : natural := 30;
-	  constant c_WIDTH : natural := 32;
+    constant c_ADDR_WIDTH : natural := 30;
+    constant c_WIDTH : natural := 32;
 	
     -- Define value for the Wishbone BFM config
     constant c_WISHBONE_BFM_CONFIG : t_wishbone_bfm_config := (
@@ -91,15 +91,15 @@ architecture arch of i2c_wb_tb is
 	signal mcf_test		 : std_logic; -- temporary output for testing 
 
   -- register addresses
-constant MASTR0_MBASE	: std_logic_vector(15 downto 0) := "0000000000001111"; -- Base Address (addr_bus[23:8])
-constant SLAVE0_MBASE	: std_logic_vector(15 downto 0) := "0000000000001101"; -- Base Address (addr_bus[23:8])
-constant MADR_ADDR 	  : std_logic_vector(7 downto 0) := "00000000"; -- Address Register (MBASE + 141h)
-constant MBCR_ADDR 	  : std_logic_vector(7 downto 0) := "00000001"; -- Control Register (MBASE + 145h)
-constant MBSR_ADDR 	  : std_logic_vector(7 downto 0) := "00000010"; -- Status Register (MBASE + 147h)
-constant MBDR_ADDR 	  : std_logic_vector(7 downto 0) := "00000011"; -- Data I/O Register (MBASE + 149h)
+constant MASTR0_MBASE  : std_logic_vector(15 downto 0) := "0000000000001111"; -- Base Address (addr_bus[23:8])
+constant SLAVE0_MBASE  : std_logic_vector(15 downto 0) := "0000000000001101"; -- Base Address (addr_bus[23:8])
+constant MADR_ADDR     : std_logic_vector(7 downto 0) := "00000000"; -- Address Register (MBASE + 141h)
+constant MBCR_ADDR     : std_logic_vector(7 downto 0) := "00000001"; -- Control Register (MBASE + 145h)
+constant MBSR_ADDR     : std_logic_vector(7 downto 0) := "00000010"; -- Status Register (MBASE + 147h)
+constant MBDR_ADDR     : std_logic_vector(7 downto 0) := "00000011"; -- Data I/O Register (MBASE + 149h)
 
 -- data words
-constant ALL_ONES	            : std_logic_vector(7 downto 0) := "11111111";
+constant ALL_ONES	          : std_logic_vector(7 downto 0) := "11111111";
 constant ALL_ZEROS            : std_logic_vector(7 downto 0) := "00000000";
 constant MASTR_ADDR           : std_logic_vector(7 downto 0) := "11110000";
 constant SLAVE_ADDR           : std_logic_vector(7 downto 0) := "00001110";
@@ -107,12 +107,12 @@ constant MASTR_MBCR_TX        : std_logic_vector(7 downto 0) := "11010000";
 constant MASTR_MBCR_RX        : std_logic_vector(7 downto 0) := "11000000";
 constant MASTR_MBCR_RX_REPEAT : std_logic_vector(7 downto 0) := "11100000";
 constant SLAVE_MBCR           : std_logic_vector(7 downto 0) := "11000000";
-constant START_TX	            : std_logic_vector(7 downto 0) := "11110000";
-constant START_RX	            : std_logic_vector(7 downto 0) := "11100000";
-constant REPEAT_START_RX	    : std_logic_vector(7 downto 0) := "11100100";
+constant START_TX	          : std_logic_vector(7 downto 0) := "11110000";
+constant START_RX	          : std_logic_vector(7 downto 0) := "11100000";
+constant REPEAT_START_RX	  : std_logic_vector(7 downto 0) := "11100100";
 constant NO_ACK	              : std_logic_vector(7 downto 0) := "11101000";
-constant STOP_TX	            : std_logic_vector(7 downto 0) := "11010000";
-constant STOP_RX	            : std_logic_vector(7 downto 0) := "11001000";
+constant STOP_TX	          : std_logic_vector(7 downto 0) := "11010000";
+constant STOP_RX	          : std_logic_vector(7 downto 0) := "11001000";
 constant TST_ADDR_OUT_HEADER  : std_logic_vector(7 downto 0) := "10010000";
 constant MASTR_RD_HEADER      : std_logic_vector(7 downto 0) := "10010001";
 
@@ -234,12 +234,16 @@ begin
     report_global_ctrl(VOID);
     report_msg_id_panel(VOID);
 
-    --disable_log_msg(ALL_MESSAGES);
-    enable_log_msg(ALL_MESSAGES);
+    disable_log_msg(ALL_MESSAGES);
+    --enable_log_msg(ALL_MESSAGES);
     disable_log_msg(ID_POS_ACK);        --make output a bit cleaner
+    disable_log_msg(ID_CMD_INTERPRETER);
+    disable_log_msg(ID_CMD_INTERPRETER_WAIT);
+    --enable_log_msg(ID_LOG_HDR);
+    --enable_log_msg(ID_SEQUENCER);
+    --enable_log_msg(ID_UVVM_SEND_CMD);
+    enable_log_msg(ID_SEQUENCER_SUB);
     enable_log_msg(ID_LOG_HDR);
-    enable_log_msg(ID_SEQUENCER);
-    enable_log_msg(ID_UVVM_SEND_CMD);
 
     log(ID_LOG_HDR, "Starting simulation of TB for Wishbone-RAM using VVCs", c_SCOPE);
     ------------------------------------------------------------
@@ -247,43 +251,57 @@ begin
     log("Wait 10 clock period for reset to be turned off");
     wait for (10 * c_CLK_PERIOD); -- for reset to be turned off
     
-
+    -- Preform check of write/read MADR register
+    log(ID_LOG_HDR, "Setting and check MADR register", C_SCOPE);
     wishbone_write(WISHBONE_VVCT, 1, unsigned(std_logic_vector'(MASTR0_MBASE & MADR_ADDR)), x"5a", "write 0x5a to MADR");
-    --wait until wb_out_test.ack = '0';
-    wait until ack_test = '0';
-    --wait for c_CLK_PERIOD;
-
     wishbone_check(WISHBONE_VVCT, 1, unsigned(std_logic_vector'(MASTR0_MBASE & MADR_ADDR)), x"5a", "read MADR, expect 0x5a");
-    --wait until wb_out_test.ack = '0';
-    wait until ack_test = '0';
-    --wait for c_CLK_PERIOD;
 
-    --wishbone_check(WISHBONE_VVCT, 1, unsigned(MBSR_ADDR), "0000000X", "Read Status Register Bits");
+    log(ID_LOG_HDR, "Setting TMP175 config register", C_SCOPE);
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000001", "Pointer Address: Configuration register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "01100000", "Setting configuration register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    
+    -- reading configuration register
+    log(ID_LOG_HDR, "Checking TMP175 config register", C_SCOPE);
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
     wait until ack_test = '0';
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
     wait until ack_test = '0';
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
     wait until ack_test = '0';
-    wait until mcf_test = '1';
-
+    wait until mcf_test = '1';  -- wait for transfer completed
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000001", "Pointer Address: Configuration register");
     wait until ack_test = '0';
-    wait until mcf_test = '1';
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
 
-    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT,	"enable the master to receive");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
     wait until ack_test = '0';
-		wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
+
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
     wait until ack_test = '0';
+
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
     wait until ack_test = '0';
+   
     wait until mcf_test = '1';
+    wait until mcf_test = '0';  -- wait for ack
+    
 
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
-    wait until ack_test = '0';
+    --wait until ack_test = '0';
+    wait until mcf_test = '0';  -- wait for ack   
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "01100000", "Check configuration register");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+    --wait until ack_test = '0';
     
-		wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
-    wait until ack_test = '0';
 
     -----------------------------------------------------------------------------
     -- Ending the simulation

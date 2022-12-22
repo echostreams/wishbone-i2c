@@ -43,7 +43,10 @@ entity i2c_control is
     mal_bit_reset : in    std_logic;                    -- indicates that the MAL bit should be reset
     -- system signals
     sys_clk : in    std_logic;
-    reset   : in    std_logic
+    reset   : in    std_logic;
+
+    -- i2c status
+    i2c_status    : out   std_logic_vector(7 downto 0)  -- i2c status code
   );
 end entity i2c_control;
 
@@ -130,9 +133,9 @@ architecture behave of i2c_control is
   signal i2c_shiftout                 : std_logic;
 
   -- Used to check slave address detected
-  signal addr_match : std_logic;
-  signal arb_lost   : std_logic; -- 1 if arbitration is lost
-  signal msta_d1    : std_logic; -- delayed sample of msta
+  signal addr_match   : std_logic;
+  signal arb_lost     : std_logic; -- 1 if arbitration is lost
+  signal msta_d1      : std_logic; -- delayed sample of msta
 
   signal detect_start : std_logic; -- indicates that a START condition has been detected
   signal detect_stop  : std_logic; -- indicates that a STOP condition has been detected
@@ -147,22 +150,22 @@ architecture behave of i2c_control is
   signal stop_scl_reg : std_logic; -- registered version of STOP_SCL
 
   -- Bit counter 0 to 7
-  signal bit_cnt     : std_logic_vector(3 downto 0);
-  signal bit_cnt_ld  : std_logic;
-  signal bit_cnt_clr : std_logic;
-  signal bit_cnt_en  : std_logic;
+  signal bit_cnt      : std_logic_vector(3 downto 0);
+  signal bit_cnt_ld   : std_logic;
+  signal bit_cnt_clr  : std_logic;
+  signal bit_cnt_en   : std_logic;
 
   -- Clock Counter
-  signal clk_cnt     : std_logic_vector(3 downto 0);
-  signal clk_cnt_rst : std_logic;
-  signal clk_cnt_en  : std_logic;
+  signal clk_cnt      : std_logic_vector(3 downto 0);
+  signal clk_cnt_rst  : std_logic;
+  signal clk_cnt_en   : std_logic;
 
   -- the following signals are only here because Viewlogic's VHDL compiler won't allow a constant
   -- to be used in a component instantiation
-  signal reg_clr   : std_logic_vector(7 downto 0);
-  signal zero_sig  : std_logic;
-  signal cnt_zero  : std_logic_vector(3 downto 0);
-  signal cnt_start : std_logic_vector(3 downto 0);
+  signal reg_clr      : std_logic_vector(7 downto 0);
+  signal zero_sig     : std_logic;
+  signal cnt_zero     : std_logic_vector(3 downto 0);
+  signal cnt_start    : std_logic_vector(3 downto 0);
 
 begin
 
@@ -565,6 +568,32 @@ begin
     end if;
 
   end process mcf_bit;
+
+  status0 : process (sys_clk, reset)
+  begin
+    if (reset = RESET_ACTIVE) then
+      i2c_status <= x"f8";
+    elsif (sys_clk'event and sys_clk = '1') then
+      -- master mode
+      if (master_slave = '1') then
+        if (arb_lost = '1') then
+          i2c_status <= x"38";
+        elsif (detect_start = '1') then
+          if (gen_start = '1') then        
+            i2c_status <= x"08";
+          else
+            i2c_status <= x"10";
+          end if;
+        elsif (state = WAIT_ACK and scl = '1') then
+          
+
+        end if;
+      else -- slave mode
+
+      end if;
+    end if;    
+  end process status0;
+  
 
   -- MAAS - Addressed As Slave Bit
   -- When its own specific address (MADR) matches the I2C Address, this bit is set. The CPU is

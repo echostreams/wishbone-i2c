@@ -339,7 +339,7 @@ begin
           msta <= '0';
       end if;
   
-      if (rsta_rst = '1') then
+      if (rsta_rst = '0') then
           rsta <= '0';
       end if;
 
