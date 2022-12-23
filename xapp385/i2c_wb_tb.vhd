@@ -351,6 +351,82 @@ begin
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
 
     -----------------------------------------------------------------------------
+    log(ID_LOG_HDR, "Setting TMP175 LOW Register", C_SCOPE);
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000010", "Pointer Address: TLOW register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "10101010", "Setting TLOW MSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "01010101", "Setting TLOW LSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    -- reading configuration register
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000010", "Pointer Address: TLOW register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wait until mcf_test = '0';  -- wait for ack
+    wait until mcf_test = '1';  -- wait for MSB
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "10101010", "Check TLOW MSB");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+    --wait until ack_test = '0';
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack   
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "01010101", "Check TLOW LSB");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+
+    -----------------------------------------------------------------------------
+    log(ID_LOG_HDR, "Setting TMP175 Thigh Register", C_SCOPE);
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000011", "Pointer Address: Thigh register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "11110000", "Setting Thigh MSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00001111", "Setting Thigh LSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    -- reading configuration register
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000011", "Pointer Address: Thigh register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wait until mcf_test = '0';  -- wait for ack
+    wait until mcf_test = '1';  -- wait for MSB
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "11110000", "Check Thigh MSB");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+    --wait until ack_test = '0';
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack   
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00001111", "Check Thigh LSB");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+
+    -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
     wait for (20 * c_CLK_PERIOD); -- to allow some time for completion
