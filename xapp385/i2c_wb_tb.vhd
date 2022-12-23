@@ -46,7 +46,8 @@ end i2c_wb_tb;
 
 architecture arch of i2c_wb_tb is
     constant c_SCOPE : string := "WHISHBONE I2C CORE";
-    constant c_CLK_PERIOD : time := 20 ns;
+    --constant c_CLK_PERIOD : time := 20 ns; -- 50MHz
+    constant c_CLK_PERIOD : time := 500 ns; -- 2MHz
     constant c_CLOCK_GEN: natural := 1;
     constant c_ADDR_WIDTH : natural := 30;
     constant c_WIDTH : natural := 32;
@@ -230,6 +231,9 @@ begin
 
     start_clock(CLOCK_GENERATOR_VVCT, 1, "Start clock generator");
 
+    -- Increase alert counter as two warning is expected when writing to temperature register
+    increment_expected_alerts(warning, 2);
+
     -- Print the configuration to the log
     report_global_ctrl(VOID);
     report_msg_id_panel(VOID);
@@ -291,22 +295,65 @@ begin
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
     wait until ack_test = '0';
    
-    wait until mcf_test = '1';
+    wait until mcf_test = '1';  -- wait for header completed
     wait until mcf_test = '0';  -- wait for ack
     
 
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
     --wait until ack_test = '0';
+    wait until mcf_test = '1';  -- wait for transfer completed
     wait until mcf_test = '0';  -- wait for ack   
     wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "01100000", "Check configuration register");
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
     --wait until ack_test = '0';
+
+    ----------------------------------------------------
     
+    log(ID_LOG_HDR, "Checking TMP175 temperature register", C_SCOPE);
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000000", "Pointer Address: temperature register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), MASTR_RD_HEADER, "write the header with slave to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wait until mcf_test = '0';  -- wait for ack
+    wait until mcf_test = '1';  -- wait for MSB completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), x"a5", "Check temperature MSB");
+    -- setup NACK for LSB
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+    wait until mcf_test = '1';  -- wait for LSB completed    
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), x"5a", "Check temperature LSB");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    ----------------------------------------------------
+    
+    log(ID_LOG_HDR, "Setting TMP175 temperature register", C_SCOPE);
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "enable the master to transmit");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), TST_ADDR_OUT_HEADER, "write the header");
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+    wait until mcf_test = '1';  -- wait for header completed
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00000000", "Pointer Address: temperature register");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "11110000", "Write TEMP MSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00001111", "Write TEMP LSB");
+    wait until mcf_test = '1';  -- wait for transfer completed
+    wait until mcf_test = '0';  -- wait for ack
+    wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
 
     -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
-    wait for 10 us;              -- to allow some time for completion
+    wait for (20 * c_CLK_PERIOD); -- to allow some time for completion
     report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
     log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 

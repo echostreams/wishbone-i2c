@@ -100,9 +100,7 @@ architecture behave of i2c_control is
   -- I2C Interface Main State Machine Type
   type   state_type is (
     IDLE, HEADER, ACK_HEADER, RCV_DATA, ACK_DATA, XMIT_DATA, WAIT_ACK);
-  signal state : state_type;
-
-  signal state_int : integer := 0;
+  signal state : state_type;  
 
   -- SCL, SDA, START, and STOP Generation State Machine Type
   type   scl_state_type is (
@@ -175,8 +173,6 @@ begin
   scl     <= '0' when scl_out_reg = '0' else
              'Z';
   scl_not <= not(scl);
-
-  state_int <= state_type'POS(state);
 
   -- sda_oe is set when master and arbitration is not lost and data to be output = 0 or
   -- when slave and data to be output is 0
@@ -578,21 +574,25 @@ begin
       if (master_slave = '1') then
         if (arb_lost = '1') then
           i2c_status <= x"38";
-        elsif (detect_start = '1') then
-          if (gen_start = '1') then        
-            i2c_status <= x"08";
-          else
-            i2c_status <= x"10";
-          end if;
-        elsif (state = WAIT_ACK and scl = '1') then
-          
-
+        elsif (gen_start = '1') then
+          i2c_status <= x"08";
+        elsif (rep_start = '1') then
+          i2c_status <= x"10";        
+        else
+          --i2c_status <= i2c_status;
         end if;
       else -- slave mode
 
       end if;
     end if;    
   end process status0;
+
+  status1 : process (state)
+  begin
+    if (state = IDLE) then
+      i2c_status <= x"f8";
+    end if;
+  end process;
   
 
   -- MAAS - Addressed As Slave Bit
