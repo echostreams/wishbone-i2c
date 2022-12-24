@@ -14,9 +14,14 @@
 
 library ieee;
   use ieee.std_logic_1164.all;
-  use ieee.std_logic_arith.all;
+  --use ieee.std_logic_arith.all;
+  use ieee.numeric_std.all;
 
 entity i2c_control is
+  generic (
+    SYS_CLK_HZ : integer := 10000000;  -- 10 MHz
+    I2C_CLK_HZ : integer :=   100000   -- 100KHz
+  );
   port (
     -- I2C bus signals
     sda : inout std_logic;
@@ -52,22 +57,30 @@ end entity i2c_control;
 
 architecture behave of i2c_control is
 
-  constant CNT_100KHZ : std_logic_vector(4 downto 0) := "10100"; -- number of 2MHz clocks in 100KHz
-  constant HIGH_CNT   : std_logic_vector(3 downto 0) := "1000";  -- number of 2MHz clocks in half
+  --constant CNT_100KHZ : std_logic_vector(4 downto 0) := "10100"; -- number of 2MHz clocks in 100KHz
+  constant CNT_100KHZ : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(SYS_CLK_HZ/I2C_CLK_HZ, 8)); -- number of system clocks in i2c
+  --constant HIGH_CNT   : std_logic_vector(3 downto 0) := "1000";  -- number of 2MHz clocks in half
+  constant HIGH_CNT   : std_logic_vector(7 downto 0) := std_logic_vector(unsigned(CNT_100KHZ)/2-2);
   -- 100KHz period -1 since count from 0
   -- and -1 for "edge" state
-  constant LOW_CNT : std_logic_vector(3 downto 0)    := "1000"; -- number of 2Mhz clocks in half
+  --constant LOW_CNT : std_logic_vector(3 downto 0)    := "1000"; -- number of 2Mhz clocks in half
+  constant LOW_CNT : std_logic_vector(7 downto 0)    := std_logic_vector(unsigned(CNT_100KHZ)/2-2);
   -- 100KHZ period -1 since count from 0
   -- and -1 for "edge" state
-  constant HIGH_CNT_2 : std_logic_vector(3 downto 0) := "0100"; -- half of HIGH_CNT 
+  --constant HIGH_CNT_2 : std_logic_vector(3 downto 0) := "0100"; -- half of HIGH_CNT 
+  constant HIGH_CNT_2 : std_logic_vector(7 downto 0) := std_logic_vector(unsigned(HIGH_CNT)/2);
 
-  constant TBUF         : std_logic_vector(3 downto 0) := "1001"; -- number of 2MHz clocks in 4.7uS
-  constant DATA_HOLD    : std_logic_vector(3 downto 0) := "0001"; -- number of 2MHz clocks in 300ns
-  constant START_HOLD   : std_logic_vector(3 downto 0) := "1000"; -- number of 2MHz clocks in 4.0uS
+  --constant TBUF         : std_logic_vector(3 downto 0) := "1001"; -- number of 2MHz clocks in 4.7uS
+  constant TBUF         : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(47, 8)); -- number of 10MHz clocks in 4.7uS  
+  --constant DATA_HOLD    : std_logic_vector(3 downto 0) := "0001"; -- number of 2MHz clocks in 300ns
+  constant DATA_HOLD    : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(3, 8)); -- number of 10MHz clocks in 300ns
+  --constant START_HOLD   : std_logic_vector(3 downto 0) := "1000"; -- number of 2MHz clocks in 4.0uS
+  constant START_HOLD   : std_logic_vector(7 downto 0) := std_logic_vector(to_unsigned(40, 8)); -- number of 2MHz clocks in 4.0uS
+
   constant CLR_REG      : std_logic_vector(7 downto 0) := "00000000";
   constant START_CNT    : std_logic_vector(3 downto 0) := "0000";
   constant CNT_DONE     : std_logic_vector(3 downto 0) := "0111";
-  constant ZERO_CNT     : std_logic_vector(3 downto 0) := "0000";
+  constant ZERO_CNT     : std_logic_vector(7 downto 0) := "00000000";
   constant ZERO         : std_logic                    := '0';
   constant RESET_ACTIVE : std_logic                    := '0';
 
@@ -87,13 +100,16 @@ architecture behave of i2c_control is
 
   -- Up counter - 4 bit
   component upcnt4 is
+    generic (
+      DATA_WIDTH : integer := 4
+    );
     port (
-      data   : in    std_logic_vector(3 downto 0);
+      data   : in    std_logic_vector((DATA_WIDTH-1) downto 0);
       cnt_en : in    std_logic;
       load   : in    std_logic;
       clr    : in    std_logic;
       clk    : in    std_logic;
-      qout   : inout std_logic_vector(3 downto 0)
+      qout   : inout std_logic_vector((DATA_WIDTH-1) downto 0)
     );
   end component upcnt4;
 
@@ -154,7 +170,7 @@ architecture behave of i2c_control is
   signal bit_cnt_en   : std_logic;
 
   -- Clock Counter
-  signal clk_cnt      : std_logic_vector(3 downto 0);
+  signal clk_cnt      : std_logic_vector(7 downto 0);
   signal clk_cnt_rst  : std_logic;
   signal clk_cnt_en   : std_logic;
 
@@ -162,7 +178,7 @@ architecture behave of i2c_control is
   -- to be used in a component instantiation
   signal reg_clr      : std_logic_vector(7 downto 0);
   signal zero_sig     : std_logic;
-  signal cnt_zero     : std_logic_vector(3 downto 0);
+  signal cnt_zero     : std_logic_vector(7 downto 0);
   signal cnt_start    : std_logic_vector(3 downto 0);
 
 begin
@@ -410,6 +426,9 @@ begin
   -- creation of SCL. Control lines for this counter are set in SCL state machine
 
   clkcnt : component upcnt4
+    generic map (
+      DATA_WIDTH => 8
+    )
     port map (
       data   => cnt_zero,
       cnt_en => clk_cnt_en,

@@ -47,7 +47,8 @@ end i2c_wb_tb;
 architecture arch of i2c_wb_tb is
     constant c_SCOPE : string := "WHISHBONE I2C CORE";
     --constant c_CLK_PERIOD : time := 20 ns; -- 50MHz
-    constant c_CLK_PERIOD : time := 500 ns; -- 2MHz
+    --constant c_CLK_PERIOD : time := 500 ns; -- 2MHz
+    constant c_CLK_PERIOD : time := 100 ns; -- 10MHz
     constant c_CLOCK_GEN: natural := 1;
     constant c_ADDR_WIDTH : natural := 30;
     constant c_WIDTH : natural := 32;
@@ -429,7 +430,7 @@ begin
     -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
-    wait for (20 * c_CLK_PERIOD); -- to allow some time for completion
+    wait for 10 us; -- to allow some time for completion
     report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
     log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 

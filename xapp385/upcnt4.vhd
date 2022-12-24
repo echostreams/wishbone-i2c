@@ -12,14 +12,17 @@ use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;
 
 entity upcnt4 is
+	generic (
+		DATA_WIDTH : integer := 4
+	);
 	port(
 	      
-	     data         : in STD_LOGIC_VECTOR (3 downto 0);    -- Serial data in
+	     data         : in STD_LOGIC_VECTOR ((DATA_WIDTH-1) downto 0);    -- Serial data in
 	     cnt_en       : in STD_LOGIC;                        -- Count enable
 	     load         : in STD_LOGIC;                        -- Load line enable
  	     clr          : in STD_LOGIC;                        -- Active low clear
 	     clk          : in STD_LOGIC;                        -- Clock
-	     qout         : inout STD_LOGIC_VECTOR (3 downto 0)
+	     qout         : inout STD_LOGIC_VECTOR ((DATA_WIDTH-1) downto 0)
 		
 	     );
 		
@@ -31,7 +34,7 @@ architecture DEFINITION of upcnt4 is
 
 constant RESET_ACTIVE : std_logic := '0';
 
-signal q_int : UNSIGNED (3 downto 0);
+signal q_int : UNSIGNED ((DATA_WIDTH-1) downto 0);
 
 begin
 
