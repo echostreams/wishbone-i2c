@@ -45,6 +45,9 @@ entity i2c_wb_tb is
 end i2c_wb_tb;
 
 architecture arch of i2c_wb_tb is
+
+  type t_array_byte is array (0 to 15) of std_logic_vector(7 downto 0);
+
     constant c_SCOPE : string := "WHISHBONE I2C CORE";
     --constant c_CLK_PERIOD : time := 20 ns; -- 50MHz
     --constant c_CLK_PERIOD : time := 500 ns; -- 2MHz
@@ -118,8 +121,11 @@ constant STOP_RX	          : std_logic_vector(7 downto 0) := "11001000";
 constant TST_ADDR_OUT_HEADER  : std_logic_vector(7 downto 0) := "10010000";
 constant MASTR_RD_HEADER      : std_logic_vector(7 downto 0) := "10010001";
 
-   
+signal test_byte_array : t_array_byte;
+
 begin
+
+  
 
     -----------------------------------------------------------------------------
   -- Instantiate the concurrent procedure that initializes UVVM
@@ -163,6 +169,20 @@ begin
         port map(sda => sda_test,
                  scl => scl_test);
 
+  eeprom : entity work.i2c_eeprom
+    generic map (
+      device => "24C01"
+    )
+    port map (
+      STRETCH => 5 ns,
+      E0      => 'L',
+      E1      => 'L',
+      E2      => 'L',
+      WC      => 'L',
+      SCL     => scl_test,
+      SDA     => sda_test
+    );
+         
   cpullup: entity work.pullup
         port map(v101 => scl_test);
     
@@ -225,6 +245,131 @@ begin
   
   -- main process
   process
+
+    procedure i2c_byte_write (
+      constant slave : in std_logic_vector(6 downto 0);
+      constant addr_value : in std_logic_vector(7 downto 0);
+      constant data_value : in std_logic_vector(7 downto 0)) is
+    begin
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "Enable the master to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "0", "Write the header");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+      wait until mcf_test = '1';  -- wait for header completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), addr_value, "Write address");
+      wait until mcf_test = '1';  -- wait for transfer completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), data_value, "Write data");
+      wait until mcf_test = '1';  -- wait for transfer completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    end procedure i2c_byte_write;
+
+    procedure i2c_page_write (
+      constant slave : in std_logic_vector(6 downto 0);
+      constant addr_value : in std_logic_vector(7 downto 0);
+      constant data_value : in t_array_byte;
+      constant data_cnt : in integer
+      ) is
+    begin
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "Enable the master to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "0", "Write the header");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+      wait until mcf_test = '1';  -- wait for header completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), addr_value, "Write address");
+      wait until mcf_test = '1';  -- wait for transfer completed
+
+      for i in 0 to (data_cnt - 1) loop
+
+        wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), data_value(i), "Write data");
+        wait until mcf_test = '1';  -- wait for transfer completed
+
+      end loop;
+
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+
+    end procedure i2c_page_write;
+
+
+    procedure i2c_current_address_read (
+      constant slave : in std_logic_vector(6 downto 0);
+      constant check_value : in std_logic_vector(7 downto 0)) is
+    begin
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "Enable the master to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "1", "Write the header");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+      wait until mcf_test = '1';  -- wait for header completed
+      --wait until mcf_test = '0';  -- wait for ack
+      --wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "Enable the master to receive");
+      --wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), "11101000",	"Enable master receive and send NACK");
+
+      wait until mcf_test = '1';  -- wait for transfer completed
+      wait until mcf_test = '0';  -- wait for ack   
+      wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), check_value, "Current Address Read");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");    
+
+    end procedure i2c_current_address_read;
+
+    procedure i2c_random_read (
+      constant slave : in std_logic_vector(6 downto 0);
+      constant addr_value : in std_logic_vector(7 downto 0);
+      constant check_value : in std_logic_vector(7 downto 0)) is
+    begin
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "Enable the master to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "0", "Write the header");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+      wait until mcf_test = '1';  -- wait for header completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), addr_value, "Write address");
+      wait until mcf_test = '1';  -- wait for transfer completed 
+      wait until mcf_test = '0';  -- wait for ack
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "1", "write the header with slave to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");   
+      wait until mcf_test = '1';  -- wait for header completed
+      wait until mcf_test = '0';  -- wait for ack
+    
+
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+     
+      wait until mcf_test = '1';  -- wait for transfer completed
+      wait until mcf_test = '0';  -- wait for ack   
+      wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), check_value, "Random Read");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");    
+
+    end procedure i2c_random_read;
+
+    procedure i2c_sequential_read (
+      constant slave : in std_logic_vector(6 downto 0);
+      constant addr_value : in std_logic_vector(7 downto 0);
+      constant check_value : in t_array_byte;
+      constant data_cnt : in integer
+      ) is
+    begin
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_TX, "Enable the master to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "0", "Write the header");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), START_TX, "Generate START");
+      wait until mcf_test = '1';  -- wait for header completed
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), addr_value, "Write address");
+      wait until mcf_test = '1';  -- wait for transfer completed 
+      wait until mcf_test = '0';  -- wait for ack
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), MASTR_MBCR_RX_REPEAT, "enable the master to receive");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), slave & "1", "write the header with slave to transmit");
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), REPEAT_START_RX, "Repeated START");   
+      wait until mcf_test = '1';  -- wait for header completed
+      wait until mcf_test = '0';  -- wait for ack
+
+      for i in 0 to (data_cnt - 1) loop
+        if (i = (data_cnt - 1)) then
+          wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), NO_ACK,	"turn off Master's acknowledge to end cycle");
+        end if;
+        wait until mcf_test = '1';  -- wait for transfer completed
+        wait until mcf_test = '0';  -- wait for ack   
+        wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), check_value(i), "Sequential Read");
+      
+      end loop;
+
+      wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");    
+
+    end procedure i2c_sequential_read;
   
   begin
     -- Wait for UVVM to finish initialization
@@ -244,6 +389,9 @@ begin
     disable_log_msg(ID_POS_ACK);        --make output a bit cleaner
     disable_log_msg(ID_CMD_INTERPRETER);
     disable_log_msg(ID_CMD_INTERPRETER_WAIT);
+    disable_log_msg(ID_CMD_EXECUTOR);
+    disable_log_msg(ID_CMD_EXECUTOR_WAIT);
+    
     --enable_log_msg(ID_LOG_HDR);
     --enable_log_msg(ID_SEQUENCER);
     --enable_log_msg(ID_UVVM_SEND_CMD);
@@ -425,12 +573,26 @@ begin
     wait until mcf_test = '0';  -- wait for ack   
     wishbone_check(WISHBONE_VVCT, 1, unsigned(MBDR_ADDR), "00001111", "Check Thigh LSB");
     wishbone_write(WISHBONE_VVCT, 1, unsigned(MBCR_ADDR), STOP_TX, "Stop TX");
+    
+    -- i2c eeprom test
+    i2c_byte_write ("1010000", "00000011", "11001100");
+    i2c_random_read("1010000", "00000011", "11001100");
+    test_byte_array(0) <= x"e1";
+    test_byte_array(1) <= x"f2";
+    i2c_page_write("1010000", "00000100", test_byte_array, 2);
+    i2c_random_read("1010000", "00000011", "11001100");
+    i2c_current_address_read("1010000", x"e1");
+    i2c_current_address_read("1010000", x"f2");
 
+    test_byte_array(0) <= "11001100";
+    test_byte_array(1) <= x"e1";
+    test_byte_array(2) <= x"f2";
+    i2c_sequential_read("1010000", "00000011", test_byte_array, 3);
 
     -----------------------------------------------------------------------------
     -- Ending the simulation
     -----------------------------------------------------------------------------
-    wait for 10 us; -- to allow some time for completion
+    wait for 100 us; -- to allow some time for completion
     report_alert_counters(FINAL); -- Report final counters and print conclusion for simulation (Success/Fail)
     log(ID_LOG_HDR, "SIMULATION COMPLETED", c_SCOPE);
 
